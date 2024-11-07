@@ -1,0 +1,19 @@
+body{
+    height: 100vh;
+    background-image: repeating-conic-gradient( black 4%, green 8%);
+}
+main{
+
+}
+button{
+    background-image: linear-gradient(to bottom right , green, black);
+
+}
+.messageDiv{
+    color: red;
+    opacity:0;
+    
+}
+input:focus{
+    outline: none;
+}

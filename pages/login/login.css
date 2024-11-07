@@ -1,0 +1,23 @@
+body{
+    height: 100vh;
+    background-image: repeating-conic-gradient( black 4%, green 8%);
+}
+main{
+    width: 25rem;
+}
+#loginBtn{
+    background-image: linear-gradient(to bottom right , green, black);
+
+}
+#GoogleLoginBtn{
+    /* background: blue; */
+    /* width: 80%; */
+}
+.messageDiv{
+    color: red;
+    opacity:0;
+    
+}
+input:focus{
+    outline: none;
+}

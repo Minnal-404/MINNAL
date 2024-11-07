@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="create.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script type="module" defer src="create.js">
+    </script>
+</head>
+
+<body class="d-flex flex-column justify-content-evenly align-items-center text-light">
+    <main class="border border-0 p-5 bg-black">
+
+        <h1 class="fw-bolder">Create an account</h1>
+        <form class="d-flex flex-column gap-2 fw-bolder">
+            <div id="signUpMessage" class="messageDiv" ></div>
+            <label>Name :</label>
+            <input id="name" class="" type="text" required>
+            
+            <label>Email :</label>
+            <input id="email" class="" type="email" required>
+            <label>Password :</label>
+            <input id="password" class="" type="password" minlength="6" required>
+            <div class="d-flex m-3 justify-content-center">
+                <button id="createBtn" class="btn btn-success">Create Account</button>
+            </div>
+        </form>
+        <p class="text-center">Already have an Account</p>
+        <a class="d-flex justify-content-center" style="color: greenyellow;" href="../login/login.html">Login</a>
+        <!-- <button id="loginBtn" class="bg-primary">Sign up with Google</button> -->
+    </main>
+</body>
+
+</html>

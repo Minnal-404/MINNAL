@@ -1,0 +1,32 @@
+#videoDiv{
+    width: ;
+}
+header{
+    /* height: rem; */
+    padding: 0.5% 5%;
+    /* padding-right: 5%; */
+}
+#search{
+    width: 100%;
+    padding-left: 5%;
+
+}
+input:focus{
+    outline: none;
+}
+#search::placeholder{
+    /* padding-left: 5%; */
+}
+#searchDiv{
+    height: 2.5rem;
+}
+#user{
+    width: 3rem;
+}
+#userDiv{
+}
+
+#info{
+    width: 20rem;
+    background: black;
+}

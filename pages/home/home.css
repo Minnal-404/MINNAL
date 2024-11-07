@@ -1,0 +1,106 @@
+*{
+    box-sizing: border-box;
+}
+
+header{
+    /* height: rem; */
+    padding: 0.5% 5%;
+    /* padding-right: 5%; */
+}
+main{
+    padding: 0 5%;
+
+}
+#search{
+    width: 100%;
+    padding-left: 5%;
+
+}
+input:focus{
+    outline: none;
+}
+#search::placeholder{
+    /* padding-left: 5%; */
+}
+#searchDiv{
+    height: 2.5rem;
+}
+#user{
+    width: 3rem;
+}
+#userDiv{
+}
+.movie {
+    border: 1px solid ;
+    margin: 1rem;
+    padding: 1rem;
+    height: 35rem;
+    min-width: 20rem;
+    max-width: 20rem;
+    text-align: center;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px green; /* Add shadow on hover */
+
+}
+h2{
+    text-align: center;
+    text-wrap: wrap;
+
+}
+
+img{
+    width: 100%;
+    height: 80%;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px grey; /* Add shadow on hover */
+
+}
+
+a{
+    color: black;
+    text-decoration: none;
+}
+
+.content{
+    overflow-x: scroll;
+    white-space: nowrap;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+}
+
+
+
+.content div:hover {
+    transform: scale(1.05); /* Slightly enlarge the image */
+    box-shadow: 0 4px 20px white; /* Add shadow on hover */
+    transition: transform 0.5s;
+    
+
+}
+
+.carousel-item {
+    /* height: 80vh;
+    width: 90vw; Set a fixed height for the images */
+}
+.carousel-item img {
+    height: 40rem;
+    /* margin: 1%; */
+
+    border-radius: 0.5rem; /* Make images fill the carousel item */
+    /* object-fit:fill;  */
+    /* width: 80vw; */
+}
+
+.dupe{
+    /* width: 80vw; */
+    /* margin: auto 5%; */
+    border: 1px solid white;
+    background: white;
+    padding: 1%;
+    border-radius: 0.5rem;
+    /* height: 90vh; */
+    /* object-fit: fill; */
+    /* display: flex; */
+    /* justify-content: center; */
+}
