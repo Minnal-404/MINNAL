@@ -57,35 +57,3 @@ async function checkAndPushMovies() {
     }
 }
 checkAndPushMovies();
-
-async function fetchMovies(container, head, text) {
-    // const loaderDiv = document.getElementById("loader")
-        // loaderDiv.style.display = 'block'; // Show the loader
-
-    const movieContainer = document.getElementById(container);
-
-    try {
-        const querySnapshot = await getDocs(collection(db, 'movies'));
-        querySnapshot.forEach(doc => {
-            const movie = doc.data();
-            //  const atag = document.createElement("a");
-            //  atag.href = "../play/play.html"
-            const heading = document.getElementById(head);
-            heading.innerHTML = text;
-            const movieDiv = document.createElement('div');
-
-            movieDiv.className = 'movie';
-            movieDiv.innerHTML = `<img src=${movie.poster}><h2>${movie.title}</h2><p>${movie.year}</p>`;
-            // atag.appendChild(movieDiv);
-            movieContainer.appendChild(movieDiv);
-        });
-    } catch (error) {
-        console.error("Error fetching movies: ", error);
-    }
-    // loaderDiv.style.display = 'none';
-}
-
-// fetchMovies("trendingDiv", "trendingH1", "Trending Now");
-fetchMovies("recommendedDiv", "recommendedH1", "Recommended for You");
-fetchMovies("recentlyDiv", "recentlyH1", "Recently Added");
-

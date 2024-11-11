@@ -156,6 +156,41 @@ loadImagesFromFirestore();
 //     }
 // }
 
+
+
+async function fetchMovies(container, head, text) {
+  // const loaderDiv = document.getElementById("loader")
+      // loaderDiv.style.display = 'block'; // Show the loader
+
+  const movieContainer = document.getElementById(container);
+
+  try {
+      const querySnapshot = await getDocs(collection(db, 'movies'));
+      querySnapshot.forEach(doc => {
+          const movie = doc.data();
+          //  const atag = document.createElement("a");
+          //  atag.href = "../play/play.html"
+          const heading = document.getElementById(head);
+          heading.innerHTML = text;
+          const movieDiv = document.createElement('div');
+
+          movieDiv.className = 'movie';
+          movieDiv.innerHTML = `<img src=${movie.poster}><h2>${movie.title}</h2><p>${movie.year}</p>`;
+          // atag.appendChild(movieDiv);
+          movieContainer.appendChild(movieDiv);
+      });
+  } catch (error) {
+      console.error("Error fetching movies: ", error);
+  }
+  // loaderDiv.style.display = 'none';
+}
+
+// fetchMovies("trendingDiv", "trendingH1", "Trending Now");
+fetchMovies("recommendedDiv", "recommendedH1", "Recommended for You");
+fetchMovies("recentlyDiv", "recentlyH1", "Recently Added");
+
+
+
 function scrollRecommended() {
   const scrollWidth = recommendedDiv.scrollWidth;
   const scrollLeft = recommendedDiv.scrollLeft;
@@ -252,6 +287,8 @@ if (checkUserExists()) {
 
 function showMessage(message, divId) {
   var messageDiv = document.getElementById(divId);
+  const loading = document.getElementById("loading");
+  loading.style.display = "none";
   messageDiv.style.display = "block";
   messageDiv.innerHTML = message;
   messageDiv.style.opacity = 1;
@@ -262,6 +299,8 @@ function showMessage(message, divId) {
 
 function greenMessage(message, divId) {
   var messageDiv = document.getElementById(divId);
+  const loading = document.getElementById("loading");
+  loading.style.display = "none";
   messageDiv.style.display = "block";
   messageDiv.style.color = "greenyellow";
   messageDiv.innerHTML = message;
@@ -274,7 +313,9 @@ function greenMessage(message, divId) {
 const loginBtn = document.getElementById("loginBtn");
 loginBtn.addEventListener("click", (event) => {
   event.preventDefault();
-
+  document.getElementById("loading").style.display = "flex";
+  document.getElementById("loadMessage").textContent = "Please Wait...";
+  // loading.innerHTML = "Please Wait...";
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value; // Fixed typo here: "vlaue" to "value"
 
@@ -291,9 +332,14 @@ loginBtn.addEventListener("click", (event) => {
       // window.location.replace("../home/home.html");
       setTimeout(function () {
         // Change the location to the next page
-
+        
         window.location.replace("pages/home/home.html");
       }, 3000);
+      document.getElementById('name').value = '';
+  document.getElementById('newEmail').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('email').value = '';
+  document.getElementById('password').value = '';
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -307,7 +353,7 @@ loginBtn.addEventListener("click", (event) => {
       // }
 
       if (errorCode === "auth/invalid-email") {
-        showMessage("Email cannot be empty", "signInMessage");
+        showMessage("Please enter a valid Email", "signInMessage");
       }
       else if (errorCode === "auth/missing-password") {
         showMessage("Password cannot be empty", "signInMessage");
@@ -323,6 +369,7 @@ loginBtn.addEventListener("click", (event) => {
       // }
       console.log(error);
     });
+    
 });
 
 document.getElementById("createNavigator").addEventListener("click", () => {
@@ -357,7 +404,6 @@ const createBtn = document.getElementById("createBtn");
 
 createBtn.addEventListener("click", (event) => {
   event.preventDefault();
-
   const name = document.getElementById("name").value;
   const email = document.getElementById("newEmail").value;
   const password = document.getElementById("newPassword").value;
@@ -394,7 +440,7 @@ createBtn.addEventListener("click", (event) => {
       
         // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
         // icon: 'warning';
-        showMessage("Your password is weak", "signUpMessage");
+        showMessage("Password must contains an upper case, an lower csase, a special character and a number", "signUpMessage");
       
       
       return;  // Stop execution if the password is not strong enough
