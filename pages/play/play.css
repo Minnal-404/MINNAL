@@ -1,10 +1,14 @@
-#videoDiv{
-    width: ;
-}
+/* .video-js .vjs-poster {
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/login-…=media&token=e5e4e820-4388-465c-932b-5b5eab9c48b3');
+    background-size: cover;  /* Ensures the poster covers the video area */
+  /* }  */
 header{
     /* height: rem; */
     padding: 0.5% 5%;
     /* padding-right: 5%; */
+}
+main{
+    padding: 3% 0 0 5%;
 }
 #search{
     width: 100%;
@@ -30,3 +34,7 @@ input:focus{
     width: 20rem;
     background: black;
 }
+.video-container{
+    margin: 3% 0 0 5%;
+}
+

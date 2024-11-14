@@ -1,3 +1,8 @@
+document.getElementById("loading").style.display = "flex";
+document.getElementById("loadMessage").textContent = "Please Wait...";
+
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 // import { getAuth, GoogleAuthProvider, signInWithPopup} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
@@ -22,94 +27,80 @@ const app = initializeApp(firebaseConfig);
 // const auth = getAuth();
 const db = getFirestore();
 
+
+
 async function loadImagesFromFirestore() {
   const imageUrls = [];
+  const data = [];
   try {
-    // Reference to the "movies" collection in Firestore
-    const moviesCollectionRef = collection(db, "movies");
+      // Reference to the "movies" collection in Firestore
+      const moviesCollectionRef = collection(db, "movies");
 
-    // Get the documents from the collection
-    const querySnapshot = await getDocs(moviesCollectionRef);
+      // Get the documents from the collection
+      const querySnapshot = await getDocs(moviesCollectionRef);
 
-    // Loop through each document and get the 'thumbnails' URL
-    querySnapshot.forEach((doc) => {
-      const movieData = doc.data();
-      const thumbnailUrl = movieData.thumbnails;  // Assuming 'thumbnails' contains the image URL
+      // Loop through each document and get the 'thumbnails' URL
+      querySnapshot.forEach((doc) => {
+          const movieData = doc.data();
+          const thumbnailUrl = movieData.thumbnails;  // Assuming 'thumbnails' contains the image URL
 
-      if (thumbnailUrl) {
-        imageUrls.push(thumbnailUrl);  // Add the thumbnail URL to the imageUrls array
-      }
-    });
+          if (thumbnailUrl) {
+              imageUrls.push(thumbnailUrl);  // Add the thumbnail URL to the imageUrls array
+          }
+          if (movieData) {
+              data.push(movieData);  // Add the thumbnail URL to the imageUrls array
+          }
+      });
 
-    // Once all image URLs are fetched, preload and render the carousel
-    preloadImages(imageUrls);
-    renderCarousel(imageUrls);
-
+      // Once all image URLs are fetched, preload and render the carousel
+      preloadImages(imageUrls, data);
+      // datas(data);
+      // console.log(data)
+      // renderCarousel(imageUrls);
+      // console.log(data)
+      // return data;
   } catch (error) {
-    console.error("Error fetching movie thumbnails from Firestore:", error);
+      console.error("Error fetching movie thumbnails from Firestore:", error);
   }
 }
 
-function preloadImages(imageUrls) {
-  // Preload each image to ensure they're ready to be displayed without delay
-  imageUrls.forEach(url => {
-    const img = new Image();
-    img.src = url;
-  });
+
+
+function preloadImages(imageUrls, data){
+  console.log(data);
+  console.log(imageUrls);
+  let div = document.getElementById("carousel-inner");
+
+  while (true){
+      
+  div.innerHTML += `<div class="carousel-item active one">
+  <div class="carousel-caption">
+        <h1>${data[0].title}</h1>
+                  <h4 class="description">${data[0].description}</h4>
+
+      </div>
+  <img src="${imageUrls[0]}" class="d-block w-100 carousel-inners" alt="Slide 1" <h1></h1>>
+    </div><div id="under"></div>       `;
+    break;
+  }
+  for (let i = 1; i < imageUrls.length; i++){
+  div.innerHTML += `<div  class="carousel-item  one">
+  <div class="carousel-caption">
+        <h1>${data[i].title}</h1>
+        <h4 class="description">${data[i].description}</h4>
+      </div>
+  <img src="${imageUrls[i]}" class="d-block w-100 carousel-inners" alt="Slide 1" >
+    </div> <div id="under"></div>       `;
+  }
+  
+  
+  // document.getElementById("two").innerHTML += `        <img src="${imageUrls[1]}" class="d-block w-100 carousel-inners" alt="Slide 1">`;
+  // document.getElementById("three").innerHTML += `        <img src="${imageUrls[2]}" class="d-block w-100 carousel-inners" alt="Slide 1">`;
+  // document.getElementById("four").innerHTML += `        <img src="${imageUrls[3]}" class="d-block w-100 carousel-inners" alt="Slide 1">`;
+  // document.getElementById("five").innerHTML += `        <img src="${imageUrls[4]}" class="d-block w-100 carousel-inners" alt="Slide 1">`;
+
 }
-
-function renderCarousel(imageUrls) {
-  const carouselInner = document.querySelector('#carousel-inner');
-  const carouselIndicators = document.querySelector('#carousel-indicators');
-
-  carouselInner.innerHTML = ''; // Clear any existing items
-  carouselIndicators.innerHTML = ''; // Clear existing indicators
-
-  // Loop through the image URLs and create carousel items and indicators
-  imageUrls.forEach((url, index) => {
-    console.log(`Adding image ${index + 1}: ${url}`);
-
-    // Create the carousel item
-    const item = document.createElement('div');
-    item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
-    item.style.backgroundImage = `url('${url}')`; // Set the background image to the thumbnail
-    carouselInner.appendChild(item);
-
-    // Create the carousel indicator
-    const indicator = document.createElement('li');
-    indicator.setAttribute('data-target', '#carouselExampleIndicators');
-    indicator.setAttribute('data-slide-to', index);
-    if (index === 0) {
-      indicator.classList.add('active');
-    }
-    carouselIndicators.appendChild(indicator);
-  });
-
-  // Log the inner HTML to ensure the items are being added
-  console.log('Carousel inner HTML:', carouselInner.innerHTML);
-}
-
-
-  // Trigger the carousel sliding effect after the images are rendered
-  setTimeout(() => {
-    const items = document.querySelectorAll('.carousel-item');
-    
-    if (items.length > 1) {  // Ensure there are at least two items
-      // Slide out the first image and slide in the second image
-      items[1].classList.add('active');
-      items[0].classList.remove('active');
-      items[0].classList.add('prev'); // Move the first image to the left
-
-      // After transition is complete, clear the carousel content
-      setTimeout(() => {
-        carouselInner.innerHTML = '';  // Clear the carousel after the second image is fully visible
-      }, 500);  // Adjust this timing if needed
-    }
-  }, 100); // Small delay to allow images to render properly
-
-
-// Call the function to load images from Firestore
-loadImagesFromFirestore();
+loadImagesFromFirestore()
 
 
 
@@ -182,7 +173,8 @@ async function fetchMovies(container, head, text) {
   } catch (error) {
       console.error("Error fetching movies: ", error);
   }
-  // loaderDiv.style.display = 'none';
+  document.getElementById("loading").style.display = "none";
+
 }
 
 // fetchMovies("trendingDiv", "trendingH1", "Trending Now");
@@ -404,6 +396,8 @@ const createBtn = document.getElementById("createBtn");
 
 createBtn.addEventListener("click", (event) => {
   event.preventDefault();
+  document.getElementById("loading").style.display = "flex";
+  document.getElementById("loadMessage").textContent = "Please Wait...";
   const name = document.getElementById("name").value;
   const email = document.getElementById("newEmail").value;
   const password = document.getElementById("newPassword").value;

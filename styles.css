@@ -151,7 +151,13 @@ a{
     scrollbar-width: none; /* For Firefox */
     -ms-overflow-style: none;
 }
+.content div:hover {
+    transform: scale(1.05); /* Slightly enlarge the image */
+    box-shadow: 0 4px 20px white; /* Add shadow on hover */
+    transition: transform 0.5s;
+    
 
+}
 .overlay {
     position: fixed;
     top: 0;
@@ -179,63 +185,34 @@ a{
     display: none; /* Hidden by default */
     z-index: 3; /* Ensure it's on top of other content */
   }
-.content div:hover {
-    transform: scale(1.05); /* Slightly enlarge the image */
-    box-shadow: 0 4px 20px white; /* Add shadow on hover */
-    transition: transform 0.5s;
-}
 
-.carousel-item {
-    /* width: 80vw; */
+  .carousel-inners{
+    height: 25rem;  /* Set a fixed height for images */
+    object-fit: fill; /* Ensures the image covers the container without distortion */
+    /* position: relative; */
+    box-shadow: ;
+  }
+  .one{
+      padding-left: 40%;
+  }
+  /* #under{
+    position: absolute;
+  } */
 
-     /* Set a fixed height for the images */
-}
-.carousel-item img {
-     /* Make images fill the carousel item */
-     /* height: 40rem;
-     border-radius: 0.5rem; */
-width: auto;
-    /* object-fit: cover; Cover the item while maintaining aspect ratio */
-}
+  .carousel-caption {
+    position: absolute;
+    top: 0%;  /* Adjust to position text above the image */
+    left: 20%;
+    transform: translateX(-50%);  /* Center the text */
+    /* font-size: ; */
+    color: green;
+    font-weight: bolder;
+    width: 30rem;
+    /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Add shadow for better readability */
+  }
 
-.dupe{
-    /* width: 80vw;
-    margin: auto 5%;
-    border: 1px solid white;
-    background: white;
-    padding: 1%;
-    border-radius: 0.5rem; */
-    /* height: 90vh; */
-    /* object-fit: fill; */
-    /* display: flex; */
-    /* justify-content: center; */
-}
-/* The container that holds the carousel items */
-/* Make the carousel container a flex container */
-.carousel-inner {
-  position: relative;
-  width: 100%;
-  height: 30rem; /* Adjust this height as needed */
-  overflow: hidden;
-  display: flex; /* Flexbox to make sliding work */
-  transition: transform 0.5s ease; /* Smooth sliding transition */
-}
-
-.carousel-item {
-    transition: transform 0.5s ease-in-out; /* Smooth transition for sliding */
-    background-size: cover;
-    background-position: center;
+  .description{
+    /* width: 20rem; */
+    /* padding-top: 3rem; */
+    line-height: 3rem;
   }
-  
-  .carousel-item.slide-left {
-    transform: translateX(-100%); /* Slide the item to the left */
-  }
-  
-  .carousel-item.slide-in {
-    transform: translateX(0); /* Bring the second item into view */
-  }
-  
-  .carousel-item.inactive {
-    display: none; /* Hide the first item after transition */
-  }
-  

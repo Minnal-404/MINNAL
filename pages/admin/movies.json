@@ -1,59 +1,64 @@
 {
     "movies": [
       {
-        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/%24_57.jpg?alt=media&token=89428305-e0e9-48b9-bca9-4e79116d6e11",
-        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Fight_Club_poster.jpg?alt=media&token=6c0d709b-e98b-4487-bea8-f53245223161",
+        "id": "1",
+        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/inception.png?alt=media&token=7df0f64b-e303-46c6-b015-dfee85cbf186",
+        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Inception_(2010)_theatrical_poster.jpg?alt=media&token=e5e4e820-4388-465c-932b-5b5eab9c48b3",
         "title": "Inception",
         "year": 2010,
         "genre": ["Sci-Fi", "Action"],
         "description": "A skilled thief is given a chance to have his criminal history erased if he can successfully perform inception.",
         "rating": 8.8,
         "duration": "2h 28m",
-        "video": ""
+        "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
       },
       {
-        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/10-enders-game-movie-poster-designs.jpg?alt=media&token=27f0460c-1fdd-450b-8662-c91790747297",
-        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Fight_Club_poster.jpg?alt=media&token=6c0d709b-e98b-4487-bea8-f53245223161",
+        "id": "2",
+        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/hq720.jpg?alt=media&token=8dccc84d-eebe-4c02-93ca-5e7b5a835a04",
+        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/The_Dark_Knight_(2008_film).jpg?alt=media&token=c88b9826-82eb-49d9-9a70-72cdc1478c5e",
         "title": "The Dark Knight",
         "year": 2008,
         "genre": ["Action", "Crime", "Drama"],
         "description": "Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
         "rating": 9.0,
         "duration": "2h 32m",
-        "video": ""
+        "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
       },
       {
-        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/%24_57.jpg?alt=media&token=89428305-e0e9-48b9-bca9-4e79116d6e11",
-        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Fight_Club_poster.jpg?alt=media&token=6c0d709b-e98b-4487-bea8-f53245223161",
+        "id": "3",
+        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/interstellar.jpg?alt=media&token=e986749e-13b6-472f-834b-abb771536a70",
+        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Interstellar_film_poster.jpg?alt=media&token=4733f559-ecd9-4ce8-94f0-433b7de9aeb0",
         "title": "Interstellar",
         "year": 2014,
         "genre": ["Sci-Fi", "Adventure"],
         "description": "A team of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.",
         "rating": 8.6,
         "duration": "2h 49m",
-        "video": ""
+        "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
       },
       {
-        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/10-enders-game-movie-poster-designs.jpg?alt=media&token=27f0460c-1fdd-450b-8662-c91790747297",
-        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Fight_Club_poster.jpg?alt=media&token=6c0d709b-e98b-4487-bea8-f53245223161",
+        "id": "4",
+        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/matrixjpeg.jpeg?alt=media&token=e6f76820-e124-41e1-98f3-66f8bb94b9e27",
+        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/The_Matrix_Poster.jpg?alt=media&token=0fe8fd2a-80fc-412c-8137-87fabe4bdfd3",
         "title": "The Matrix",
         "year": 1999,
         "genre": ["Sci-Fi", "Action"],
         "description": "A computer hacker learns about the true nature of his reality and his role in the war against its controllers.",
         "rating": 8.7,
         "duration": "2h 16m",
-        "video": ""
+        "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
       },
       {
-        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/%24_57.jpg?alt=media&token=89428305-e0e9-48b9-bca9-4e79116d6e11",
-        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Fight_Club_poster.jpg?alt=media&token=6c0d709b-e98b-4487-bea8-f53245223161",
+        "id": "5",
+        "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/wp5549067-avatar-2-movie-toruk-makto-wallpapers.jpg?alt=media&token=f2372c7f-e524-4d0a-8739-64cbe06a7f49",
+        "poster": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/Avatar_(2009_film)_poster.jpg?alt=media&token=62094275-850a-4e68-8802-de53d7f265d4",
         "title": "Avatar",
         "year": 2009,
         "genre": ["Action", "Adventure", "Fantasy"],
         "description": "A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
         "rating": 7.8,
         "duration": "2h 42m",
-        "video": ""
+        "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
       }
     ]
   }
