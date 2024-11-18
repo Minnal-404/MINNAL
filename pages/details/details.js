@@ -63,6 +63,8 @@ if (!movieTitle) {
         const movieHTML = `<button id="playButton" class="btn btn-success">Play</button>`;
 
         movieDetailContainer.innerHTML += movieHTML;  // Inject HTML into the page
+        document.getElementById("backgroundOverlay").style.background = `url(${movie.thumbnails})`;
+
         let genres = '';
         for (let i = 0; i<movie.genre.length; i++){
             genres += `<p class="col p-2">${movie.genre[i]}</p>`;
@@ -109,7 +111,7 @@ function profileNameCreator() {
     if (/^[a-zA-Z]/.test(profileName[0])) {
         document.getElementById("profileName").textContent = profileName[0].toUpperCase();
         document.getElementById("profile").textContent = profileName[0].toUpperCase();
-        let color = getRandomRgbColor();
+        let color = localStorage.getItem("color");
         document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
         document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
 
@@ -181,6 +183,7 @@ function displayResults(results) {
     searchResultsContainer.innerHTML = ''; // Clear previous results
 
     if (results.length === 0) {
+        document.getElementById("searchResults").style.display = "flex"
         searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
         return;
     }
@@ -229,7 +232,6 @@ async function handleSearch(event) {
     } catch (error) {
         console.error("Error fetching movie thumbnails from Firestore:", error);
     }
-    console.log(data)
     const query = event.target.value.trim().toLowerCase();
 
     if (query.length === 0) {
@@ -248,3 +250,19 @@ async function handleSearch(event) {
 
 // Event listener for input changes
 searchBar.addEventListener('input', handleSearch);
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("loggedInUserId");
+    localStorage.removeItem("name");
+    signOut(auth)
+        .then(() => {
+            window.history.replaceState(null, null, "../../index.html"); // Prevent going back
+            window.location.replace("../../index.html");
+        })
+        .catch((error) => {
+            console.error("Error Signing out", error);
+        });
+
+});

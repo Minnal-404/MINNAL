@@ -9,6 +9,7 @@ header{
 input:focus{
     outline: none;
 }
+
 #search::placeholder{
     padding-left: 5%;
 }
@@ -46,9 +47,7 @@ body{
     opacity:0;
     
 }
-input:focus{
-    outline: none;
-}
+
 
 .popup {
     display: none; /* Hidden by default */
@@ -99,8 +98,8 @@ main{
     padding-left: 5%;
 
 }
-input:focus{
-    outline: none;
+#newPassword{
+    width: 100%;
 }
 #search::placeholder{
     /* padding-left: 5%; */

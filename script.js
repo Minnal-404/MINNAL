@@ -259,7 +259,13 @@ document.getElementById('closeBtn').addEventListener('click', function (event) {
 //     }
 // }
 
+function getRandomRgbColor() {
+  const r = Math.floor(Math.random() * 256); // Random red value
+  const g = Math.floor(Math.random() * 256); // Random green value
+  const b = Math.floor(Math.random() * 256); // Random blue value
+  localStorage.setItem("color", `rgb(${r}, ${g}, ${b})`);
 
+};
 
 function checkUserExists() {
   // This could be a check for a cookie, local storage, or API request
@@ -319,6 +325,7 @@ loginBtn.addEventListener("click", (event) => {
     .then(() => {
       greenMessage("Successfully Logged In", "signInMessage"); // Fixed typo: "Logined" to "Logged In"
       localStorage.setItem("loggedInUserId", email);
+      getRandomRgbColor();
       // window.history.replaceState(null, null, "pages/home/home.html"); // Prevent going back
 
       // window.location.replace("../home/home.html");
@@ -388,6 +395,27 @@ document.getElementById("loginNavigator").addEventListener("click", () => {
   document.getElementById('loginMain').style.display = 'flex';
 });
 
+function togglePassword(password, icon) {
+  const passwordField = document.getElementById(password);
+  const passwordToggle = document.getElementById(icon);
+
+  // Toggle between the eye and eye-slash icons and input type
+  if (passwordField.type === 'password') {
+    passwordField.type = 'text';
+    passwordToggle.classList.remove('fa-eye');
+    passwordToggle.classList.add('fa-eye-slash'); // Change to "hide" icon
+  } else {
+    passwordField.type = 'password';
+    passwordToggle.classList.remove('fa-eye-slash');
+    passwordToggle.classList.add('fa-eye'); // Change to "show" icon
+  }
+}
+document.getElementById("eye").addEventListener("click", () => {
+  togglePassword("password", "eye");
+});
+document.getElementById("newEye").addEventListener("click", () => {
+  togglePassword("newPassword", "newEye");
+});
 
 //===================================Create code======================================================
 

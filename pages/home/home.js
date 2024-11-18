@@ -69,7 +69,6 @@ function getRandomRgbColor() {
 };
 
 // Apply the random color to an element
-document.body.style.backgroundColor = getRandomRgbColor(); // Example: setting random background color
 
 
 onAuthStateChanged(auth, (user) => {
@@ -125,7 +124,7 @@ function profileNameCreator() {
     if (/^[a-zA-Z]/.test(profileName[0])) {
         document.getElementById("profileName").textContent = profileName[0].toUpperCase();
         document.getElementById("profile").textContent = profileName[0].toUpperCase();
-        let color = getRandomRgbColor();
+        let color = localStorage.getItem("color");
         document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
         document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
 
@@ -190,8 +189,7 @@ async function loadImagesFromFirestore() {
 
 
 function preloadImages(imageUrls, data){
-    console.log(data);
-    console.log(imageUrls);
+
     let div = document.getElementById("carousel-inner");
 
     while (true){
@@ -380,6 +378,7 @@ function displayResults(results) {
     searchResultsContainer.innerHTML = ''; // Clear previous results
 
     if (results.length === 0) {
+        document.getElementById("searchResults").style.display = "flex"
         searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
         return;
     }
@@ -428,7 +427,6 @@ async function handleSearch(event) {
     } catch (error) {
         console.error("Error fetching movie thumbnails from Firestore:", error);
     }
-    console.log(data)
     const query = event.target.value.trim().toLowerCase();
 
     if (query.length === 0) {
@@ -440,7 +438,6 @@ async function handleSearch(event) {
     
     // Filter the dataset by title (this could be a call to an API in a real app)
     const filteredResults = data.filter(item => item.title.toLowerCase().includes(query));
-
     // Display the results
     displayResults(filteredResults);
 }
