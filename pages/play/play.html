@@ -30,11 +30,10 @@
 
     <div class="col">
       <div id="userDiv" class="d-flex justify-content-end ">
-        <div id="user"
-          class=" rounded-circle border border-5 border-white text-center d-flex justify-content-center align-items-center">
-          <!-- <i class="fa-solid fa-user fa-xl p-4 text-white"></i> -->
+        <div id="user" class="d-flex justify-content-center align-items-center bg-black rounded-circle">
+          <i id="userIcon" class="fa-solid fa-user fa-xl p-4 text-white"></i>
           <h1 id="profileName" class="text-white p-0 m-0 fw-bold"></h1>
-        </div>
+      </div>
       </div>
     </div>
   </header>
@@ -77,7 +76,84 @@
         </div>
       </div>
     </div>
+
+   
+
   </main>
+  <div id="loginMain" class="popup text-white">
+
+    <div id="loginDiv" class="popup-content pb-5">
+
+        <div class="d-flex justify-content-end ">
+            <button class="close-btn " id="closeBtn">
+                <i class="fa-solid fa-x "></i>
+            </button>
+        </div>
+        <!-- <span class="close-btn" id="closeBtn">&times;</span> -->
+        <h1 class="fw-bolder text-center">Login</h1>
+        <form class="d-flex flex-column gap-2 fw-bolder px-5">
+            <div id="signInMessage" class="messageDiv text-center"></div>
+
+            <label>Email :</label>
+            <input id="email" class="" type="email" required>
+
+            <div id="signInMessage" class="messageDiv text-center"></div>
+
+            <label>Password :</label>
+            <div class=" bg-white d-flex align-items-center">
+                <input id="password" class="border border-white" type="password" minlength="6" required>
+                <i id="eye" class="fa-regular fa-eye fa-lg text-black d-flex justify-content-around p-2 password-toggle"></i>
+            </div>
+
+            <div id="signInMessage" class="messageDiv text-center"></div>
+
+            <div class="d-flex m-3 justify-content-center">
+                <button id="loginBtn" class="btn btn-success">Login</button>
+            </div>
+        </form>
+        <p class="text-center">Don't have an Account?</p>
+        <p id="createNavigator" class="text-center text-success">Create Account</p>
+        <!-- <p class="text-center">or</p>
+        <div class="text-center">
+            <button id="GoogleLoginBtn" class="btn text-white btn-success p-2">Sign in with Google</button>
+        </div> -->
+    </div>
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<div id="createMain" class="popup text-white">
+    <div class="  bg-black popup-content">
+        <div class="d-flex justify-content-end p-">
+            <button class="close-btn " id="createCloseBtn">
+                <i class="fa-solid fa-x "></i>
+            </button>
+        </div>
+        <div class=" px-5 pb-5">
+            <h1 class="fw-bolder">Create an account</h1>
+            <form class="d-flex flex-column gap-2 fw-bolder">
+                <div id="signUpMessage" class="messageDiv"></div>
+                <label>Name :</label>
+                <input id="name" class="" type="text" required>
+
+                <label>Email :</label>
+                <input id="newEmail" class="" type="email" required>
+                <label>Password :</label>
+                <div  class=" bg-white d-flex align-items-center ">
+                    <input id="newPassword" class="border border-white rounded-3 " type="password" minlength="6" required>
+                    <i id="newEye" class="fa-regular fa-eye fa-lg text-black d-flex justify-content-around p-2 passwordtoggle"></i>
+                </div>
+                <!-- <input id="newPassword" class="" type="password" minlength="6" required> -->
+                <div class="d-flex m-3 justify-content-center">
+                    <button id="createBtn" class="btn btn-success">Create Account</button>
+                </div>
+            </form>
+            <p class="text-center">Already have an Account?</p>
+            <p id="loginNavigator" class="d-flex justify-content-center text-success ">Login</p>
+            <!-- <button id="loginBtn" class="bg-primary">Sign up with Google</button> -->
+        </div>
+    </div>
+</div>
 
   <div id="searchResults" class="search-results"></div>
 
@@ -88,7 +164,7 @@
 
   <section id="profileSection" class=" text-white ">
     <div class="d-flex justify-content-end ">
-      <button class="close-btn bg-black border border-white rounded-circle border-5 " id="closeBtn">
+      <button class="close-btn bg-black border border-white rounded-circle border-5 " id="close-Btn">
         <i class="fa-solid fa-x fa-2xl  text-white"></i>
       </button>
     </div>
