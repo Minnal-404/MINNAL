@@ -489,10 +489,7 @@ loginBtn.addEventListener("click", (event) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value; // Fixed typo here: "vlaue" to "value"
 
-  if (email == "") {
-    showMessage("Email cannot be empty", "signInMessage")
-
-  } else {
+  
 
     const auth = getAuth();
 
@@ -526,15 +523,17 @@ loginBtn.addEventListener("click", (event) => {
         //     showMessage("Password cannot be empty", "signInMessage");
 
         // }
-
-        if (errorCode === "auth/invalid-email") {
-          showMessage("Please enter a valid Email", "signInMessage");
+        if (email == "") {
+          showMessage("Email cannot be empty", "signInEmailMessage")
+      
+        } else if (errorCode === "auth/invalid-email") {
+          showMessage("Please enter a valid Email", "signInEmailMessage");
         }
-        else if (errorCode === "auth/missing-password") {
-          showMessage("Password cannot be empty", "signInMessage");
+         if (errorCode === "auth/missing-password") {
+          showMessage("Password cannot be empty", "signInPasswordMessage");
         }
         else if (password.length < 8) {
-          showMessage("Password must be greater than 8 characters", "signInMessage");
+          showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
         }
         else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
           showMessage("Invalid Email or Password", "signInMessage");
@@ -547,7 +546,7 @@ loginBtn.addEventListener("click", (event) => {
         console.log(error);
       });
     }
-});
+);
 
 document.getElementById("createNavigator").addEventListener("click", () => {
   document.getElementById('loginMain').style.display = 'none';
@@ -619,25 +618,39 @@ createBtn.addEventListener("click", (event) => {
   const email = document.getElementById("newEmail").value;
   const password = document.getElementById("newPassword").value;
 
+  let namePattern = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
+  let nonSpacePattern = /[A-Za-z]/;
+    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+
   if (name == "") {
-    showMessage("Name cannot be empty", "signUpMessage")
+    showMessage("Name cannot be empty", "signUpNameMessage")
 
   } else if (name.length < 3) {
-    showMessage("Name must contain atleast 3 characters", "signUpMessage")
+    showMessage("Name must contain atleast 3 characters", "signUpNameMessage")
 
-  }
-  else if (email == "") {
-    showMessage("Email cannot be empty", "signUpMessage")
+  }else if (name.length > 20) {
+    showMessage("Name must not contain more than 20 characters.", "signUpNameMessage")
 
-  }
+  }else if (!namePattern.test(name)) {
+    showMessage("Name should only contain alphabets", "signUpNameMessage")
+} else if (!nonSpacePattern.test(name)) {
+  showMessage("Name cannot be only spaces", "signUpNameMessage")
+}
+   if (email == "") {
+    showMessage("Email cannot be empty", "signUpEmailMessage")
+
+  }else if (!emailPattern.test(email)) {
+    showMessage("Please enter a valid Email", "signUpEmailMessage")
+}
   else if (!email.includes("@") || !email.includes(".com")) {
-    showMessage("Please enter a valid Email", "signUpMessage")
+    showMessage("Please enter a valid Email", "signUpEmailMessage")
   }
-  else if (password == "") {
-    showMessage("Password cannot be empty", "signUpMessage")
+   if (password == "") {
+    showMessage("Password cannot be empty", "signUpPasswordMessage")
 
   } else if (password.length < 8) {
-    showMessage("Password must contains atleast 8 characters", "signUpMessage")
+    showMessage("Password must contains atleast 8 characters", "signUpPasswordMessage")
 
   }
 
@@ -651,7 +664,7 @@ createBtn.addEventListener("click", (event) => {
 
       // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
       // icon: 'warning';
-      showMessage("Password must contains an upper case, an lower csase, a special character and a number", "signUpMessage");
+      showMessage(`Password must contains an upper case,<br> an lower csase, a special character and a number`, "signUpPasswordMessage");
 
 
       return;  // Stop execution if the password is not strong enough
@@ -690,11 +703,11 @@ createBtn.addEventListener("click", (event) => {
         const errorCode = error.code;
         console.log(error)
         if (errorCode === "auth/email-already-in-use") {
-          showMessage("Email Address Already Exists !!!", "signUpMessage");
+          showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
           //   window.location.href = "../login/login.html";
         }
         else {
-          showMessage("Invalid Email", "signUpMessage");
+          showMessage("Invalid Email", "signUpEmailMessage");
         }
       });
   }

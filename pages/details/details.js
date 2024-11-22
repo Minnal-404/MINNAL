@@ -5,7 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 // import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, setDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBGsxpj36xgkU9wCSILp7LZlyA6DRlbU5Q",
@@ -368,10 +368,7 @@ loginBtn.addEventListener("click", (event) => {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value; // Fixed typo here: "vlaue" to "value"
 
-    if (email == "") {
-        showMessage("Email cannot be empty", "signInMessage")
-
-    } else {
+    
 
         const auth = getAuth();
 
@@ -406,27 +403,30 @@ loginBtn.addEventListener("click", (event) => {
 
                 // }
 
-                if (errorCode === "auth/invalid-email") {
-                    showMessage("Please enter a valid Email", "signInMessage");
-                }
-                else if (errorCode === "auth/missing-password") {
-                    showMessage("Password cannot be empty", "signInMessage");
-                }
-                else if (password.length < 8) {
-                    showMessage("Password must be greater than 8 characters", "signInMessage");
-                }
-                else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
+                if (email == "") {
+                    showMessage("Email cannot be empty", "signInEmailMessage")
+                
+                  } else if (errorCode === "auth/invalid-email") {
+                    showMessage("Please enter a valid Email", "signInEmailMessage");
+                  }
+                   if (errorCode === "auth/missing-password") {
+                    showMessage("Password cannot be empty", "signInPasswordMessage");
+                  }
+                  else if (password.length < 8) {
+                    showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
+                  }
+                  else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
                     showMessage("Invalid Email or Password", "signInMessage");
-                } else if (errorCode === "auth/user-not-found") {
+                  } else if (errorCode === "auth/user-not-found") {
                     showMessage("Account doesn't exists", "signInMessage");
-                }
+                  }
                 //  else {
                 //     showMessage("Incorrect", "signInMessage");
                 // }
                 console.log(error);
             });
     }
-});
+);
 
 document.getElementById("createNavigator").addEventListener("click", () => {
     document.getElementById('loginMain').style.display = 'none';
@@ -498,84 +498,98 @@ createBtn.addEventListener("click", (event) => {
     const email = document.getElementById("newEmail").value;
     const password = document.getElementById("newPassword").value;
 
-    if (name == "") {
-        showMessage("Name cannot be empty", "signUpMessage")
+    let namePattern = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
+  let nonSpacePattern = /[A-Za-z]/;
+    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-    } else if (name.length < 3) {
-        showMessage("Name must contain atleast 3 characters", "signUpMessage")
 
+  if (name == "") {
+    showMessage("Name cannot be empty", "signUpNameMessage")
+
+  } else if (name.length < 3) {
+    showMessage("Name must contain atleast 3 characters", "signUpNameMessage")
+
+  }else if (name.length > 20) {
+    showMessage("Name must not contain more than 20 characters.", "signUpNameMessage")
+
+  }else if (!namePattern.test(name)) {
+    showMessage("Name should only contain alphabets", "signUpNameMessage")
+} else if (!nonSpacePattern.test(name)) {
+  showMessage("Name cannot be only spaces", "signUpNameMessage")
+}
+   if (email == "") {
+    showMessage("Email cannot be empty", "signUpEmailMessage")
+
+  }else if (!emailPattern.test(email)) {
+    showMessage("Please enter a valid Email", "signUpEmailMessage")
+}
+  else if (!email.includes("@") || !email.includes(".com")) {
+    showMessage("Please enter a valid Email", "signUpEmailMessage")
+  }
+   if (password == "") {
+    showMessage("Password cannot be empty", "signUpPasswordMessage")
+
+  } else if (password.length < 8) {
+    showMessage("Password must contains atleast 8 characters", "signUpPasswordMessage")
+
+  }
+
+  else if (password.length >= 8) {
+    function isStrongPassword(password) {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      return regex.test(password);
     }
-    else if (email == "") {
-        showMessage("Email cannot be empty", "signUpMessage")
+    // Check if the password meets the strong criteria
+    if (!isStrongPassword(password)) {
 
+      // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
+      // icon: 'warning';
+      showMessage(`Password must contains an upper case,<br> an lower csase, a special character and a number`, "signUpPasswordMessage");
+
+
+      return;  // Stop execution if the password is not strong enough
     }
-    else if (!email.includes("@") || !email.includes(".com")) {
-        showMessage("Please enter a valid Email", "signUpMessage")
-    }
-    else if (password == "") {
-        showMessage("Password cannot be empty", "signUpMessage")
+    const auth = getAuth();
+    const db = getFirestore();
 
-    } else if (password.length < 8) {
-        showMessage("Password must contains atleast 8 characters", "signUpMessage")
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        const userData = {
+          name: name,
+          password: password,
+          email: email
+        };
 
-    }
+        greenMessage("Account Created Successfully", "signUpMessage");
+        localStorage.setItem("loggedInUserId", email);
 
-    else if (password.length >= 8) {
-        function isStrongPassword(password) {
-            const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-            return regex.test(password);
+        const docRef = doc(db, "users", email);
+        setDoc(docRef, userData)
+
+          .then(() => {
+            // Directly redirect without replaceState if not necessary
+            // window.location.replace("pages/home/home.html");
+            document.getElementById('createMain').style.display = 'none';
+            document.getElementById('loginMain').style.display = 'none';
+            getRandomRgbColor();
+            window.location.reload();
+
+          })
+          .catch((error) => {
+            console.error("Error writing document", error);
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        console.log(error)
+        if (errorCode === "auth/email-already-in-use") {
+          showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
+          //   window.location.href = "../login/login.html";
         }
-        // Check if the password meets the strong criteria
-        if (!isStrongPassword(password)) {
-
-            // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
-            // icon: 'warning';
-            showMessage("Password must contains an upper case, an lower csase, a special character and a number", "signUpMessage");
-
-
-            return;  // Stop execution if the password is not strong enough
+        else {
+          showMessage("Invalid Email", "signUpEmailMessage");
         }
-        const auth = getAuth();
-        const db = getFirestore();
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                const userData = {
-                    name: name,
-                    password: password,
-                    email: email
-                };
-
-                greenMessage("Account Created Successfully", "signUpMessage");
-                localStorage.setItem("loggedInUserId", email);
-
-                const docRef = doc(db, "users", email);
-                setDoc(docRef, userData)
-
-                    .then(() => {
-                        // Directly redirect without replaceState if not necessary
-                        // window.location.replace("pages/home/home.html");
-                        document.getElementById('createMain').style.display = 'none';
-                        document.getElementById('loginMain').style.display = 'none';
-                        getRandomRgbColor();
-                        window.location.reload();
-
-                    })
-                    .catch((error) => {
-                        console.error("Error writing document", error);
-                    });
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                console.log(error)
-                if (errorCode === "auth/email-already-in-use") {
-                    showMessage("Email Address Already Exists !!!", "signUpMessage");
-                    //   window.location.href = "../login/login.html";
-                }
-                else {
-                    showMessage("Invalid Email", "signUpMessage");
-                }
-            });
-    }
+      });
+  }
 });
 

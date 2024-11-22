@@ -87,7 +87,7 @@
                 <label>Email :</label>
                 <input id="email" class="" type="email" required>
 
-                <div id="signInMessage" class="messageDiv text-center"></div>
+                <div id="signInEmailMessage" class="messageDiv text-center"></div>
 
                 <label>Password :</label>
                 <div class=" bg-white d-flex align-items-center">
@@ -95,7 +95,7 @@
                     <i id="eye" class="fa-regular fa-eye fa-lg text-black d-flex justify-content-around p-2 password-toggle"></i>
                 </div>
 
-                <div id="signInMessage" class="messageDiv text-center"></div>
+                <div id="signInPasswordMessage" class="messageDiv text-center"></div>
 
                 <div class="d-flex m-3 justify-content-center">
                     <button id="loginBtn" class="btn btn-success">Login</button>
@@ -123,16 +123,25 @@
                 <h1 class="fw-bolder">Create an account</h1>
                 <form class="d-flex flex-column gap-2 fw-bolder">
                     <div id="signUpMessage" class="messageDiv"></div>
+
                     <label>Name :</label>
                     <input id="name" class="" type="text" required>
 
+                    <div id="signUpNameMessage" class="messageDiv"></div>
+
                     <label>Email :</label>
                     <input id="newEmail" class="" type="email" required>
+
+                    <div id="signUpEmailMessage" class="messageDiv"></div>
+
                     <label>Password :</label>
                     <div  class=" bg-white d-flex align-items-center ">
                         <input id="newPassword" class="border border-white rounded-3 " type="password" minlength="6" required>
                         <i id="newEye" class="fa-regular fa-eye fa-lg text-black d-flex justify-content-around p-2 passwordtoggle"></i>
                     </div>
+
+                    <div id="signUpPasswordMessage" class="messageDiv"></div>
+
                     <!-- <input id="newPassword" class="" type="password" minlength="6" required> -->
                     <div class="d-flex m-3 justify-content-center">
                         <button id="createBtn" class="btn btn-success">Create Account</button>
