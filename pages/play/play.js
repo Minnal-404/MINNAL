@@ -698,16 +698,17 @@ createBtn.addEventListener("click", (event) => {
   } else if (name.length < 3) {
     showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
     ok = false;
+  }
+  else if (!nonSpacePattern.test(name)) {
+    showMessage("Name cannot be only spaces", "signUpNameMessage");
+    ok = false;
   } else if (name.length > 20) {
     showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
     ok = false;
   } else if (!namePattern.test(name)) {
     showMessage("Name should only contain alphabets", "signUpNameMessage");
     ok = false;
-  } else if (!nonSpacePattern.test(name)) {
-    showMessage("Name cannot be only spaces", "signUpNameMessage");
-    ok = false;
-  }
+  } 
 
   if (email == "") {
     showMessage("Email cannot be empty", "signUpEmailMessage");
