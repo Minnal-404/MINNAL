@@ -49,7 +49,24 @@ input:focus{
     
 }
 
+.popups{
+  background: green;
+  /* width: 5rem; */
+  /* height: 5rem; */
+position: absolute;
+/* bottom: 50%; */
+top: -1rem;
+left: -1rem;
+right: -1rem;
+  display: none;
+  text-wrap: wrap;
+border-radius: 0.5rem;
+}
+
+
+
 .movie {
+  position: relative;
     border: 1px solid ;
     margin: 1rem;
     padding: 1rem;
@@ -94,13 +111,13 @@ a{
 }
 
 
-.content div:hover, #searchResults div:hover {
+/* .content div:hover, #searchResults div:hover {
     transform: scale(1.05); /* Slightly enlarge the image */
-    box-shadow: 0 4px 20px white; /* Add shadow on hover */
-    transition: transform 0.5s;
+    /* box-shadow: 0 4px 20px white; /* Add shadow on hover */
+    /* transition: transform 0.5s;
     
 
-}
+} */ 
 .icon:hover{
     background: black;
     transform: scale(1.05); /* Slightly enlarge the image */
@@ -234,11 +251,24 @@ a{
     display: none;
 }
 
-#loginBtn, #createBtn{
+#loginBtn, #createBtn, #watch{
     background-image: linear-gradient(to bottom right , green, black);
   
   }
 
+  #watch{
+    width: 100%;
+    height: 3rem;
+  }
+
+
+
+
+
+
+
+
+  
   .popup {
     display: none; /* Hidden by default */
     position: fixed;

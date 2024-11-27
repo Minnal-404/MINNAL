@@ -219,7 +219,7 @@ function preloadImages(imageUrls, data) {
     break;
   }
   for (let i = 1; i < imageUrls.length; i++) {
-    div.innerHTML += `<a href="pages/details/details.html?title=${encodeURIComponent(data[0].title)}"><div  class="carousel-item  one">
+    div.innerHTML += `<a href="pages/details/details.html?title=${encodeURIComponent(data[i].title)}"><div  class="carousel-item  one">
     <div class="carousel-caption">
           <h1>${data[i].title}</h1>
           <h4 class="description">${data[i].description}</h4>
@@ -305,7 +305,19 @@ async function fetchMovies(container, head, text) {
       movieLink.href = `pages/details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
 
       // Insert the movie poster and title inside the link
-      movieLink.innerHTML = `<img src="${movie.poster}" alt="${movie.title}"><h2>${movie.title}</h2><p>${movie.year}</p>`;
+      movieLink.innerHTML = `<img src="${movie.poster}" alt="${movie.title}"><h2>${movie.title}</h2><p>${movie.year}</p>
+      <div class="popups flex-column" >
+      <div class="p-0">
+          <img src="${movie.thumbnails}" alt="${movie.title}">
+          </div>
+          <div class="p-3 d-flex flex-column gap-3">
+          <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
+          <button id="watch" class="btn btn-success">Watch Now</button>
+          </a>
+          <p class="m-0">${movie.year} | | ${movie.duration} ${movie.rating}</p>
+    <p class="m-0">${movie.description}</p>  
+    </div>
+  </div>`;
 
       // Append the movie link div to the container
       movieDiv.appendChild(movieLink);
@@ -489,63 +501,63 @@ loginBtn.addEventListener("click", (event) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value; // Fixed typo here: "vlaue" to "value"
 
-  
 
-    const auth = getAuth();
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        greenMessage("Successfully Logged In", "signInMessage"); // Fixed typo: "Logined" to "Logged In"
-        localStorage.setItem("loggedInUserId", email);
-        // getRandomRgbColor();
-        // window.history.replaceState(null, null, "pages/home/home.html"); // Prevent going back
+  const auth = getAuth();
 
-        // window.location.replace("../home/home.html");
-        // Change the location to the next page
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      greenMessage("Successfully Logged In", "signInMessage"); // Fixed typo: "Logined" to "Logged In"
+      localStorage.setItem("loggedInUserId", email);
+      // getRandomRgbColor();
+      // window.history.replaceState(null, null, "pages/home/home.html"); // Prevent going back
 
-        // window.location.replace("pages/home/home.html");
-        getRandomRgbColor();
-        window.location.reload();
+      // window.location.replace("../home/home.html");
+      // Change the location to the next page
 
-        document.getElementById('name').value = '';
-        document.getElementById('newEmail').value = '';
-        document.getElementById('newPassword').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('password').value = '';
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        // if (email==""){
-        //     showMessage("Email cannot be empty", "signInMessage");
+      // window.location.replace("pages/home/home.html");
+      getRandomRgbColor();
+      window.location.reload();
 
-        // }
-        // // else if (password==""){
-        //     showMessage("Password cannot be empty", "signInMessage");
+      document.getElementById('name').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      // if (email==""){
+      //     showMessage("Email cannot be empty", "signInMessage");
 
-        // }
-        if (email == "") {
-          showMessage("Email cannot be empty", "signInEmailMessage")
-      
-        } else if (errorCode === "auth/invalid-email") {
-          showMessage("Please enter a valid Email", "signInEmailMessage");
-        }
-         if (errorCode === "auth/missing-password") {
-          showMessage("Password cannot be empty", "signInPasswordMessage");
-        }
-        else if (password.length < 8) {
-          showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
-        }
-        else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
-          showMessage("Invalid Email or Password", "signInMessage");
-        } else if (errorCode === "auth/user-not-found") {
-          showMessage("Account doesn't exists", "signInMessage");
-        }
-        //  else {
-        //     showMessage("Incorrect", "signInMessage");
-        // }
-        console.log(error);
-      });
-    }
+      // }
+      // // else if (password==""){
+      //     showMessage("Password cannot be empty", "signInMessage");
+
+      // }
+      if (email == "") {
+        showMessage("Email cannot be empty", "signInEmailMessage")
+
+      } else if (errorCode === "auth/invalid-email") {
+        showMessage("Please enter a valid Email", "signInEmailMessage");
+      }
+      if (errorCode === "auth/missing-password") {
+        showMessage("Password cannot be empty", "signInPasswordMessage");
+      }
+      else if (password.length < 8) {
+        showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
+      }
+      else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
+        showMessage("Invalid Email or Password", "signInMessage");
+      } else if (errorCode === "auth/user-not-found") {
+        showMessage("Account doesn't exists", "signInMessage");
+      }
+      //  else {
+      //     showMessage("Incorrect", "signInMessage");
+      // }
+      console.log(error);
+    });
+}
 );
 
 document.getElementById("createNavigator").addEventListener("click", () => {
@@ -608,8 +620,6 @@ document.getElementById('closeBtn').addEventListener('click', function (event) {
 //===================================Create code======================================================
 
 
-const createBtn = document.getElementById("createBtn");
-
 createBtn.addEventListener("click", (event) => {
   event.preventDefault();
   document.getElementById("loading").style.display = "flex";
@@ -620,55 +630,53 @@ createBtn.addEventListener("click", (event) => {
 
   let namePattern = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
   let nonSpacePattern = /[A-Za-z]/;
-    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
+  let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  let ok = true;
 
   if (name == "") {
-    showMessage("Name cannot be empty", "signUpNameMessage")
-
+    showMessage("Name cannot be empty", "signUpNameMessage");
+    ok = false;
   } else if (name.length < 3) {
-    showMessage("Name must contain atleast 3 characters", "signUpNameMessage")
-
-  }else if (name.length > 20) {
-    showMessage("Name must not contain more than 20 characters.", "signUpNameMessage")
-
-  }else if (!namePattern.test(name)) {
-    showMessage("Name should only contain alphabets", "signUpNameMessage")
-} else if (!nonSpacePattern.test(name)) {
-  showMessage("Name cannot be only spaces", "signUpNameMessage")
-}
-   if (email == "") {
-    showMessage("Email cannot be empty", "signUpEmailMessage")
-
-  }else if (!emailPattern.test(email)) {
-    showMessage("Please enter a valid Email", "signUpEmailMessage")
-}
-  else if (!email.includes("@") || !email.includes(".com")) {
-    showMessage("Please enter a valid Email", "signUpEmailMessage")
+    showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
+    ok = false;
+  } else if (name.length > 20) {
+    showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
+    ok = false;
+  } else if (!namePattern.test(name)) {
+    showMessage("Name should only contain alphabets", "signUpNameMessage");
+    ok = false;
+  } else if (!nonSpacePattern.test(name)) {
+    showMessage("Name cannot be only spaces", "signUpNameMessage");
+    ok = false;
   }
-   if (password == "") {
-    showMessage("Password cannot be empty", "signUpPasswordMessage")
 
+  if (email == "") {
+    showMessage("Email cannot be empty", "signUpEmailMessage");
+    ok = false;
+  } else if (!emailPattern.test(email)) {
+    showMessage("Please enter a valid Email", "signUpEmailMessage");
+    ok = false;
+  }
+
+  if (password == "") {
+    showMessage("Password cannot be empty", "signUpPasswordMessage");
+    ok = false;
   } else if (password.length < 8) {
-    showMessage("Password must contains atleast 8 characters", "signUpPasswordMessage")
-
+    showMessage("Password must contain at least 8 characters", "signUpPasswordMessage");
+    ok = false;
   }
 
-  else if (password.length >= 8) {
-    function isStrongPassword(password) {
-      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      return regex.test(password);
-    }
-    // Check if the password meets the strong criteria
-    if (!isStrongPassword(password)) {
+  function isStrongPassword(password) {
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  }
 
-      // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
-      // icon: 'warning';
-      showMessage(`Password must contains an upper case,<br> an lower csase, a special character and a number`, "signUpPasswordMessage");
+  if (password.length >= 8 && !isStrongPassword(password)) {
+    showMessage("Password must contain an uppercase letter, a lowercase letter, a number, and a special character.", "signUpPasswordMessage");
+    ok = false;
+  }
 
-
-      return;  // Stop execution if the password is not strong enough
-    }
+  if (ok) {
     const auth = getAuth();
     const db = getFirestore();
 
@@ -685,15 +693,11 @@ createBtn.addEventListener("click", (event) => {
 
         const docRef = doc(db, "users", email);
         setDoc(docRef, userData)
-
           .then(() => {
-            // Directly redirect without replaceState if not necessary
-            // window.location.replace("pages/home/home.html");
             document.getElementById('createMain').style.display = 'none';
             document.getElementById('loginMain').style.display = 'none';
             getRandomRgbColor();
             window.location.reload();
-
           })
           .catch((error) => {
             console.error("Error writing document", error);
@@ -701,15 +705,111 @@ createBtn.addEventListener("click", (event) => {
       })
       .catch((error) => {
         const errorCode = error.code;
-        console.log(error)
+        console.log(error);
         if (errorCode === "auth/email-already-in-use") {
           showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
-          //   window.location.href = "../login/login.html";
-        }
-        else {
+        } else {
           showMessage("Invalid Email", "signUpEmailMessage");
         }
       });
   }
 });
+
+
+// document.querySelectorAll(".movie").addEventListener("mouseover", () => {
+//   document.querySelector(".popups").style.dis
+// })
+
+// document.querySelectorAll('.movie').forEach(poster => {
+//   poster.addEventListener('mouseover', function() {
+//      this.querySelector('.popups').style.display = 'block';
+//   });
+//   poster.addEventListener('mouseout', function() {
+//      this.querySelector('.popups').style.display = 'none';
+//   });
+// });
+
+// document.querySelectorAll('.movie').forEach(poster => {
+//   poster.addEventListener('mouseover', function() {
+//      const info = this.querySelector('.popups');
+//      setTimeout(() => {
+//         info.style.opacity = 1;
+//      }, 1000); // Wait 1 second before showing the details
+//   });
+//   poster.addEventListener('mouseout', function() {
+//      this.querySelector('.popups').style.opacity = 0;
+//   });
+// });
+
+const postersContainer = document.getElementById('recommendedDiv');
+
+
+const observer = new MutationObserver(() => {
+  const posters = document.querySelectorAll('.movie');
+  posters.forEach(poster => {
+    let timeout;
+
+    // Mouse enter event
+    poster.addEventListener('mouseenter', () => {
+      console.log("Hover started on", poster.id);
+
+      const popup = poster.querySelector('.popups');
+      console.log("Popup found:", popup);
+
+      // Hide all popups immediately when hovering starts
+      document.querySelectorAll('.popups').forEach(popup => popup.style.display = 'none');
+
+      // Set a timeout to show the popup after 2 seconds
+      timeout = setTimeout(() => {
+        popup.style.display = 'flex';
+      }, 500);
+    });
+
+    // Mouse leave event
+    poster.addEventListener('mouseleave', () => {
+      console.log("Hover ended on", poster.id);
+      clearTimeout(timeout);
+      poster.querySelector('.popups').style.display = 'none';
+    });
+  });
+});
+
+// Start observing the posters container for child changes (new posters added)
+observer.observe(postersContainer, { childList: true });
+
+const postersContainer1 = document.getElementById('recentlyDiv');
+
+
+const observer1 = new MutationObserver(() => {
+  const posters = document.querySelectorAll('.movie');
+  posters.forEach(poster => {
+    let timeout;
+
+    // Mouse enter event
+    poster.addEventListener('mouseenter', () => {
+      console.log("Hover started on", poster.id);
+
+      const popup = poster.querySelector('.popups');
+      console.log("Popup found:", popup);
+
+      // Hide all popups immediately when hovering starts
+      document.querySelectorAll('.popups').forEach(popup => popup.style.display = 'none');
+
+      // Set a timeout to show the popup after 2 seconds
+      timeout = setTimeout(() => {
+        popup.style.display = 'flex';
+      }, 500);
+    });
+
+    // Mouse leave event
+    poster.addEventListener('mouseleave', () => {
+      console.log("Hover ended on", poster.id);
+      clearTimeout(timeout);
+      poster.querySelector('.popups').style.display = 'none';
+    });
+  });
+});
+
+// Start observing the posters container for child changes (new posters added)
+observer1.observe(postersContainer1, { childList: true });
 

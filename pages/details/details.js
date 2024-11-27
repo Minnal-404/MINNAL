@@ -488,8 +488,6 @@ document.getElementById('closeBtn').addEventListener('click', function (event) {
 //===================================Create code======================================================
 
 
-const createBtn = document.getElementById("createBtn");
-
 createBtn.addEventListener("click", (event) => {
     event.preventDefault();
     document.getElementById("loading").style.display = "flex";
@@ -497,99 +495,92 @@ createBtn.addEventListener("click", (event) => {
     const name = document.getElementById("name").value;
     const email = document.getElementById("newEmail").value;
     const password = document.getElementById("newPassword").value;
-
+  
     let namePattern = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
-  let nonSpacePattern = /[A-Za-z]/;
+    let nonSpacePattern = /[A-Za-z]/;
     let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
-
-  if (name == "") {
-    showMessage("Name cannot be empty", "signUpNameMessage")
-
-  } else if (name.length < 3) {
-    showMessage("Name must contain atleast 3 characters", "signUpNameMessage")
-
-  }else if (name.length > 20) {
-    showMessage("Name must not contain more than 20 characters.", "signUpNameMessage")
-
-  }else if (!namePattern.test(name)) {
-    showMessage("Name should only contain alphabets", "signUpNameMessage")
-} else if (!nonSpacePattern.test(name)) {
-  showMessage("Name cannot be only spaces", "signUpNameMessage")
-}
-   if (email == "") {
-    showMessage("Email cannot be empty", "signUpEmailMessage")
-
-  }else if (!emailPattern.test(email)) {
-    showMessage("Please enter a valid Email", "signUpEmailMessage")
-}
-  else if (!email.includes("@") || !email.includes(".com")) {
-    showMessage("Please enter a valid Email", "signUpEmailMessage")
-  }
-   if (password == "") {
-    showMessage("Password cannot be empty", "signUpPasswordMessage")
-
-  } else if (password.length < 8) {
-    showMessage("Password must contains atleast 8 characters", "signUpPasswordMessage")
-
-  }
-
-  else if (password.length >= 8) {
+    let ok = true;
+  
+    if (name == "") {
+      showMessage("Name cannot be empty", "signUpNameMessage");
+      ok = false;
+    } else if (name.length < 3) {
+      showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
+      ok = false;
+    } else if (name.length > 20) {
+      showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
+      ok = false;
+    } else if (!namePattern.test(name)) {
+      showMessage("Name should only contain alphabets", "signUpNameMessage");
+      ok = false;
+    } else if (!nonSpacePattern.test(name)) {
+      showMessage("Name cannot be only spaces", "signUpNameMessage");
+      ok = false;
+    }
+  
+    if (email == "") {
+      showMessage("Email cannot be empty", "signUpEmailMessage");
+      ok = false;
+    } else if (!emailPattern.test(email)) {
+      showMessage("Please enter a valid Email", "signUpEmailMessage");
+      ok = false;
+    }
+  
+    if (password == "") {
+      showMessage("Password cannot be empty", "signUpPasswordMessage");
+      ok = false;
+    } else if (password.length < 8) {
+      showMessage("Password must contain at least 8 characters", "signUpPasswordMessage");
+      ok = false;
+    }
+  
     function isStrongPassword(password) {
       const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       return regex.test(password);
     }
-    // Check if the password meets the strong criteria
-    if (!isStrongPassword(password)) {
-
-      // title: 'Password is too weak! It should contain at least 8 characters, with a mix of letters, numbers, and special characters.',
-      // icon: 'warning';
-      showMessage(`Password must contains an upper case,<br> an lower csase, a special character and a number`, "signUpPasswordMessage");
-
-
-      return;  // Stop execution if the password is not strong enough
+  
+    if (password.length >= 8 && !isStrongPassword(password)) {
+      showMessage("Password must contain an uppercase letter, a lowercase letter, a number, and a special character.", "signUpPasswordMessage");
+      ok = false;
     }
-    const auth = getAuth();
-    const db = getFirestore();
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        const userData = {
-          name: name,
-          password: password,
-          email: email
-        };
-
-        greenMessage("Account Created Successfully", "signUpMessage");
-        localStorage.setItem("loggedInUserId", email);
-
-        const docRef = doc(db, "users", email);
-        setDoc(docRef, userData)
-
-          .then(() => {
-            // Directly redirect without replaceState if not necessary
-            // window.location.replace("pages/home/home.html");
-            document.getElementById('createMain').style.display = 'none';
-            document.getElementById('loginMain').style.display = 'none';
-            getRandomRgbColor();
-            window.location.reload();
-
-          })
-          .catch((error) => {
-            console.error("Error writing document", error);
-          });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        console.log(error)
-        if (errorCode === "auth/email-already-in-use") {
-          showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
-          //   window.location.href = "../login/login.html";
-        }
-        else {
-          showMessage("Invalid Email", "signUpEmailMessage");
-        }
-      });
-  }
-});
+  
+    if (ok) {
+      const auth = getAuth();
+      const db = getFirestore();
+  
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          const userData = {
+            name: name,
+            password: password,
+            email: email
+          };
+  
+          greenMessage("Account Created Successfully", "signUpMessage");
+          localStorage.setItem("loggedInUserId", email);
+  
+          const docRef = doc(db, "users", email);
+          setDoc(docRef, userData)
+            .then(() => {
+              document.getElementById('createMain').style.display = 'none';
+              document.getElementById('loginMain').style.display = 'none';
+              getRandomRgbColor();
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.error("Error writing document", error);
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(error);
+          if (errorCode === "auth/email-already-in-use") {
+            showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
+          } else {
+            showMessage("Invalid Email", "signUpEmailMessage");
+          }
+        });
+    }
+  });
+  
 
