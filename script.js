@@ -310,7 +310,7 @@ async function fetchMovies(container, head, text) {
       <div class="p-0">
           <img src="${movie.thumbnails}" alt="${movie.title}">
           </div>
-          <div class="p-3 d-flex flex-column gap-3">
+          <div class="p-3 pt-0 d-flex flex-column gap-3">
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">Watch Now</button>
           </a>
@@ -639,16 +639,17 @@ createBtn.addEventListener("click", (event) => {
   } else if (name.length < 3) {
     showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
     ok = false;
+  }
+  else if (!nonSpacePattern.test(name)) {
+    showMessage("Name cannot be only spaces", "signUpNameMessage");
+    ok = false;
   } else if (name.length > 20) {
     showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
     ok = false;
   } else if (!namePattern.test(name)) {
     showMessage("Name should only contain alphabets", "signUpNameMessage");
     ok = false;
-  } else if (!nonSpacePattern.test(name)) {
-    showMessage("Name cannot be only spaces", "signUpNameMessage");
-    ok = false;
-  }
+  } 
 
   if (email == "") {
     showMessage("Email cannot be empty", "signUpEmailMessage");
