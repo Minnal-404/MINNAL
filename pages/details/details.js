@@ -5,7 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 // import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, setDoc, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, setDoc, getDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBGsxpj36xgkU9wCSILp7LZlyA6DRlbU5Q",
@@ -20,11 +20,12 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 const db = getFirestore(); // Firestore instead of Realtime Database
+const loggedInUserId = localStorage.getItem("loggedInUserId");
 
-let playCheck = false;
-if (playCheck){
-    window.location.href = `../play/play.html?title=${encodeURIComponent(movie.title)}`;
-}
+// let playCheck = false;
+// if (playCheck) {
+//     window.location.href = `../play/play.html?title=${encodeURIComponent(movie.title)}`;
+// }
 
 // Get the movie title from the URL (as the document ID)
 const urlParams = new URLSearchParams(window.location.search);
@@ -38,7 +39,6 @@ if (!movieTitle) {
 } else {
     // Get the container where movie details will be displayed
     const movieDetailContainer = document.getElementById('movie-detail-container');
-    const posterDiv = document.getElementById("posterDiv");
     // Fetch movie details from Firestore by the movie title (as the document ID)
     async function fetchMovieDetail(title) {
         try {
@@ -61,32 +61,335 @@ if (!movieTitle) {
     // Function to display movie details in the HTML
     function displayMovieDetails(movie) {
         document.getElementById("title").textContent = `${movie.title} (${movie.year})`;
-        const movieHTML = `<button id="playButton" class="btn btn-success">Play</button>`;
+        const movieHTML = `          <div class="d-flex gap-4">
+        <button id="playButton" class="btn btn-success">Rent Now</button>
+                  <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+                  </div>
+                  <p id="wishlistError" class="m-0 wishlist-error"></p>
+                  <p id="wishlistSuccess" class="m-0 text-success"></p>`;
 
         movieDetailContainer.innerHTML += movieHTML;  // Inject HTML into the page
-        document.getElementById("backgroundOverlay").style.background = `url(${movie.thumbnails})`;
+        // document.getElementById("backgroundOverlay").style.background = `url(${movie.thumbnails})`;
+        let bg = document.getElementById("backgroundOverlay");
 
+        // Create a new image element
+        let img = document.createElement("img");
+
+        // Set the source of the image
+        img.src = `${movie.thumbnails}`;  // Replace with the actual image path
+
+        // Optionally set attributes like alt text or class
+        img.alt = "Background Image";  // Replace with a descriptive alt text
+        // Optional: add a class for styling
+
+        // Append the image element to the "backgroundOverlay" element
+        bg.appendChild(img);
         let genres = '';
         for (let i = 0; i < movie.genre.length; i++) {
-            genres += `<p class="col p-2">${movie.genre[i]}</p>`;
+            genres += `<p class="mx-4 ms-0 m-0">${movie.genre[i]}</p><p class="mx-4 ms-0 m-0 p-0">•</p>`;
         }
+        console.log(genres)
+        genres = genres.slice(0, -24);
         document.getElementById("genre").innerHTML =
-            `<div class="col-4 text-end pe-5 p-0"><h2 >Genre:</h2> 
-        </div><div class="col""><div class="row gap-5">${genres}</div>
-        </div>`;
+            `<p class="mb-5">${genres}</p>`;
 
-        document.getElementById("description").innerHTML = `<div class="col-4 pe-5 p-0 text-end"><h2>Description:</h2> </div><p class="col  p-2 lh-lg"">${movie.description}</p>`;
-        document.getElementById("rating").innerHTML = `<div class="col-4 pe-5 text-end"><h2>Rating:</h2></div><p class="col-2  p-2"> ${movie.rating}</p>`;
-        document.getElementById("duration").innerHTML = `<div class="col-4 pe-5 text-end"><h2>Duration:</h2></div><p class="col-2 p-2">${movie.duration}</p>`;
-        document.getElementById("year").innerHTML = `<div class="col-4 pe-5 text-end"><h2>Year:</h2> </div><p class="col-2 p-2">${movie.year}</p>`;
+        document.getElementById("description").innerHTML = `<p class="p-0 m-0 lh-lg"">${movie.description}</p>`;
+        document.getElementById("rating").innerHTML = `<p class="ms-0 me-5 m-0 text-success"> ${movie.duration}</p><p class="ms-0 me-5 m-0 text-success">${movie.year}</p><p class="ms-0 me-5 m-0 bg-success px-2 rounded-1">${movie.rating}/5</p>`;
+        let languages = "";
+        for (let i of movie.languages) {
+            languages += `<p>${i},</p>`
+        }
+        languages = languages.replace(/,(?=[^,]*$)/, '.'); let casts = "";
+        for (let i of movie.details.cast) {
+            casts += `<p>${i},</p>`
+        }
+        casts = casts.replace(/,(?=[^,]*$)/, '.');
+        let producers = "";
+        for (let i of movie.details.producer) {
+            producers += `<p>${i},</p>`
+        }
+        producers = producers.replace(/,(?=[^,]*$)/, '.');
+        let music = "";
+        for (let i of movie.details.music) {
+            music += `<p>${i},</p>`
+        }
+        music = music.replace(/,(?=[^,]*$)/, '.');
+        let directors = "";
+        for (let i of movie.details.director) {
+            directors += `<p>${i},</p>`
+        }
+        directors = directors.replace(/,(?=[^,]*$)/, '.');
+        document.getElementById("moreDetails").innerHTML = `<h1>More Info  <i class="fa-solid fa-sm fa-arrow-down fa-bounce"></i> </h1>
+        <h2 class="text-start">Languages</h2>
+        <div class="d-flex gap-4">${languages}</div>
+        <h2 class="text-start">Directors</h2>
+        <div class="d-flex gap-4">${directors}</div>
+        <h2 class="text-start">Producers</h2>
+        <div class="d-flex gap-4">${producers}</div>
+        <h2 class="text-start">Cast</h2>
+        <div class="d-flex gap-4">${casts}</div>
+        <h2 class="text-start">Music</h2>
+        <div class="d-flex gap-4">${music}</div>
+        
+`
+        // document.getElementById("duration").innerHTML = `<p class="col-2 p-2">${movie.duration}</p>`;
+        // document.getElementById("year").innerHTML = `<p class="col-2 p-2">${movie.year}</p>`;
 
-        const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
-        posterDiv.innerHTML = poster;
-        const playButton = document.getElementById("playButton");
-        playButton.addEventListener("click", () => {
-            // Navigate to the play page and pass the title or ID of the movie
-            window.location.href = `../play/play.html?title=${encodeURIComponent(movie.title)}`;
+        // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
+        // posterDiv.innerHTML = poster;
+        function checkUserExists() {
+            // This could be a check for a cookie, local storage, or API request
+            return localStorage.getItem('loggedInUserId') !== null; // Example using local storage
+        }
+
+        // Redirect to home page if user exists
+        const buttons = document.querySelectorAll('.add-to-wishlist');
+        buttons.forEach(button => {
+            // Get the movie title from the data-title attribute
+            const movieTitle = button.getAttribute('data-title');
+            const buttonIcon = button.querySelector('i'); // Get the icon inside the button
+
+            // Directly target the error message element based on the button's parent or an appropriate ID
+            const errorMessageElement = document.getElementById("wishlistError");
+
+            // Check the movie state (whether it's in the wishlist or not) when the page loads
+            checkMovieInWishlist(loggedInUserId, movieTitle, buttonIcon);
+
+            // Add click event listener to toggle the button icon
+            button.addEventListener('click', function () {
+                document.getElementById("loading").style.display = "flex"
+
+                // Add or remove the movie from the wishlist
+                toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMessageElement);
+            });
         });
+
+        // Function to check if the movie is already in the wishlist
+        function checkMovieInWishlist(loggedInUserId, movieTitle, buttonIcon) {
+            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+            // Get the current wishlist array from Firestore
+            getDoc(userDocRef).then(docSnapshot => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const currentWishlist = userData.wishlist || [];
+
+                    // If the movie is in the wishlist, show the minus icon (fa-minus)
+                    if (currentWishlist.includes(movieTitle)) {
+                        buttonIcon.classList.remove('fa-plus');
+                        buttonIcon.classList.add('fa-minus');
+                    } else {
+                        buttonIcon.classList.remove('fa-minus');
+                        buttonIcon.classList.add('fa-plus');
+                    }
+                }
+            }).catch((error) => {
+                console.error("Error fetching user document: ", error);
+            });
+        }
+
+        // Function to toggle the movie in the wishlist
+        function toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMessageElement) {
+            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+            // Get the current wishlist array from Firestore
+            getDoc(userDocRef).then(docSnapshot => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const currentWishlist = userData.wishlist || [];
+
+                    // Log the current wishlist
+                    console.log("Current Wishlist: ", currentWishlist);
+
+                    // Check if the movie title is already in the wishlist
+                    if (currentWishlist.includes(movieTitle)) {
+                        // If the movie title is already in the wishlist, remove it
+                        updateDoc(userDocRef, {
+                            wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+                        })
+                            .then(() => {
+                                console.log(`${movieTitle} removed from wishlist!`);
+                                if (errorMessageElement) showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+                                // Change the button icon to "Add" (fa-plus)
+                                buttonIcon.classList.remove('fa-minus');
+                                buttonIcon.classList.add('fa-plus');
+                            })
+                            .catch((error) => {
+                                console.error("Error removing from wishlist: ", error);
+                                if (errorMessageElement) showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+                            });
+                    } else {
+                        // If the movie is not in the wishlist, add it using arrayUnion
+                        updateDoc(userDocRef, {
+                            wishlist: arrayUnion(movieTitle) // Add the movie title to the wishlist array
+                        })
+                            .then(() => {
+                                console.log(`${movieTitle} added to wishlist!`);
+                                if (errorMessageElement) showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+                                // Change the button icon to "Remove" (fa-minus)
+                                buttonIcon.classList.remove('fa-plus');
+                                buttonIcon.classList.add('fa-minus');
+                            })
+                            .catch((error) => {
+                                console.error("Error adding to wishlist: ", error);
+                                if (errorMessageElement) showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+                            });
+                    }
+                } else {
+                    // If the document doesn't exist, create a new one with the wishlist field
+                    console.error("User document does not exist. Creating a new document...");
+                    if (errorMessageElement) showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+                    setDoc(userDocRef, { wishlist: [movieTitle] }) // Create new user document with the movie title in the wishlist
+                        .then(() => {
+                            console.log("New user document created with wishlist!");
+                            if (errorMessageElement) showMessage("New user document created with wishlist!", errorMessageElement, "green");
+                            // Change the button icon to "Remove" (fa-minus)
+                            buttonIcon.classList.remove('fa-plus');
+                            buttonIcon.classList.add('fa-minus');
+                        })
+                        .catch((error) => {
+                            console.error("Error creating new user document: ", error);
+                            if (errorMessageElement) showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+                        });
+                }
+            }).catch((error) => {
+                console.error("Error fetching user document: ", error);
+                if (errorMessageElement) showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+            });
+        }
+
+        // Helper function to display messages in the wishlistError p tag (specific for each poster)
+        function showMessage(message, messageElement, color) {
+            document.getElementById("loading").style.display = "none"
+
+            if (messageElement) {
+                messageElement.textContent = message;  // Set the message text
+                messageElement.style.color = color;    // Set color (red for errors, green for success)
+
+                // Hide the message after 5 seconds
+                setTimeout(function () {
+                    messageElement.textContent = "";
+                }, 5000);
+            }
+        }
+
+
+
+
+        const playButton = document.getElementById("playButton");
+
+        playButton.addEventListener("click", () => {
+            if (checkUserExists()) {
+                if (){
+
+                }else{
+                renderVideoPlayer(movie);
+                changeVideoSource(movie);
+                const closeBtn = document.getElementById("clsBtn");
+
+                closeBtn.style.display = "block";
+
+                // Trigger fullscreen once the video is ready
+                function renderVideoPlayer(movie) {
+                    // Create the video element dynamically
+                    const videoHTML = `
+          <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="360" data-setup="{}" poster="${movie.thumbnails}">
+            <source src="${movie.video}" type="video/mp4">
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
+            </p>
+          </video>        <button id="clsBtn" style="display: ;">                    <i class="fa-solid fa-x "></i>
+    </button>
+    
+        `;
+
+                    // Inject the video HTML into a container in the DOM
+                    document.getElementById('video-container').innerHTML += videoHTML;
+
+                    // Initialize the video player with custom functionality
+                    initializeVideoPlayer(movie);
+                }
+
+                function initializeVideoPlayer(movie) {
+                    // Initialize the Video.js player
+                    const player = videojs('my-video');
+
+                    player.ready(function () {
+                        console.log('Video.js player is ready!');
+
+                        // Update the live display or any other player UI elements (optional)
+                        const liveDisplayElement = document.querySelector('.vjs-live-display');
+                        if (liveDisplayElement) {
+                            liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
+                        }
+
+                        // Trigger fullscreen when the player is ready
+                        const video = document.getElementById('my-video');
+                        enterFullScreen(video);
+
+                    });
+                }
+
+                function enterFullScreen(videoElement) {
+                    // Trigger fullscreen on the video element
+                    if (videoElement.requestFullscreen) {
+                        videoElement.requestFullscreen();
+                    } else if (videoElement.mozRequestFullScreen) { // Firefox
+                        videoElement.mozRequestFullScreen();
+                    } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                        videoElement.webkitRequestFullscreen();
+                    } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                        videoElement.msRequestFullscreen();
+                    }
+                    const closeBtn = document.getElementById("clsBtn");
+
+                    closeBtn.addEventListener("click", () => {
+                        // Exit fullscreen if the video is in fullscreen
+                        if (document.fullscreenElement ||
+                            document.webkitFullscreenElement ||
+                            document.mozFullScreenElement ||
+                            document.msFullscreenElement) {
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.msExitFullscreen) {
+                                document.msExitFullscreen();
+                            }
+                        }
+
+                        // Stop the video and hide the player
+
+
+                        // Hide the video player and close button
+                        document.getElementById("video-container").innerHTML = '';
+                        closeBtn.style.display = "none"; // Hide the close button
+                        window.location.reload();
+                    });
+                }
+            }
+            } else {
+                const popup = document.getElementById('loginMain');
+                // Check if the popup is already visible
+                if (popup.style.display !== 'flex') {
+                    const overlay = document.getElementById("overlay");
+
+                    overlay.style.display = "block";
+
+
+                    popup.style.display = 'flex';
+                    document.getElementById("loading").style.display = "none";
+
+                }
+            }
+
+
+        });
+
+
         document.getElementById("loading").style.display = "none";
 
     }
@@ -96,6 +399,37 @@ if (!movieTitle) {
 }
 
 
+
+
+function changeVideoSource(movie) {
+    // const player = videojs('my-video');
+    var player = videojs('my-video');
+
+    // Set the new video source using the Video.js API
+    console.log(movie.video)
+    player.src({
+        type: "application/x-mpegURL",  // HLS format
+        src: movie.video
+        // New video URL (m3u8)
+    });
+    player.poster(movie.thumbnails);
+
+    // Optionally, you can also directly modify the background-image of the poster div
+    // The new image path
+
+    // Change the poster attribute (this will set the poster for the video)
+    player.poster(movie.thumbnails);
+    var posterElement = document.querySelector('.vjs-poster');
+    if (posterElement) {
+        posterElement.style.backgroundImage = 'url(' + movie.thumbnails + ')';
+        posterElement.style.backgroundSize = 'cover'; // Ensure the image covers the area
+    }
+
+    // Optionally, load the new source and start playing
+    // player.load();  // This is handled by Video.js internally
+    // player.play();  // Play the new video immediately
+    document.getElementById("loading").style.display = "none";
+}
 // let profileName = localStorage.getItem("name");
 // console.log(profileName)
 // if (/^[a-zA-Z]/.test(profileName[0])) {
@@ -141,15 +475,182 @@ function displayResults(results) {
         movieDiv.className = 'movie';
 
         // Create a link for each movie poster (ensure the query parameter is 'title')
-        const movieLink = document.createElement('a');
-        movieLink.href = `../details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
+        // const movieLink = document.createElement('a');
+        // movieLink.href = `pages/details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
 
         // Insert the movie poster and title inside the link
-        movieLink.innerHTML = `<img src="${movie.poster}" alt="${movie.title}"><h2>${movie.title}</h2><p>${movie.year}</p>`;
+        movieDiv.innerHTML = `<img src="${movie.poster}" alt="${movie.title}"><h2>${movie.title}</h2><p>${movie.year}</p>
+      <div class="popups flex-column" >
+        <div class="p-0">
+            <img src="${movie.thumbnails}" alt="${movie.title}"></div>
+            <div class="p-3 d-flex flex-column gap-3">
+            <h2>${movie.title}</h2>
+            <div class="d-flex gap-4 justify-content-between">
+            <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
+            <button id="watch" class="btn btn-success">Watch Now</button>
+            </a>
+            <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+            </div>
+            <p id="wishlistError" class="m-0 text- wishlist-error"></p>
+            <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
+            <div class="d-flex justify-content-evenly">
+            <p class="m-0">${movie.year}</p> <p class="m-0">•</p> <p class="m-0">${movie.duration}</p> <p class="m-0">•</p> <p class="m-0 bg-success px-2 rounded-1"><strong>${movie.rating}/5</strong></p>
+            </div>
+      <p class="m-0">${movie.description}</p>  
+      </div>
+    </div>`;
 
         // Append the movie link div to the container
-        movieDiv.appendChild(movieLink);
+        // movieDiv.appendChild(movieLink);
         movieContainer.appendChild(movieDiv);
+
+        const buttons = document.querySelectorAll('.add-to-wishlist');
+
+        buttons.forEach(button => {
+            const movieTitle = button.getAttribute('data-title');
+            const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
+
+            // Find the closest .movie element
+            const movieDiv = button.closest('.movie');
+            if (movieDiv) {
+                const errorMessageElement = movieDiv.querySelector('.wishlist-error');  // Get the error message container inside .movie
+                if (errorMessageElement) {
+                    // Now you can safely use errorMessageElement without encountering null
+                    checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+
+                    // Adding click event listener to toggle the movie in the wishlist
+                    button.addEventListener('click', function () {
+                        document.getElementById("loading").style.display = "flex";
+                        toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+                    });
+                } else {
+                    console.error("Error message element not found within movie div.");
+                }
+            } else {
+                console.error("No parent .movie found for button.");
+            }
+        });
+
+
+        // Function to check the wishlist status for each movie
+        function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+            // Get the current wishlist array from Firestore
+            getDoc(userDocRef).then(docSnapshot => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const currentWishlist = userData.wishlist || [];
+
+                    // If the movie is in the wishlist, set the button to 'minus' (remove)
+                    if (currentWishlist.includes(movieTitle)) {
+                        buttonIcon.classList.remove('fa-plus');
+                        buttonIcon.classList.add('fa-minus');
+                    } else {
+                        // If the movie is not in the wishlist, set the button to 'plus' (add)
+                        buttonIcon.classList.remove('fa-minus');
+                        buttonIcon.classList.add('fa-plus');
+                    }
+                } else {
+                    // If the user document doesn't exist, initialize with 'plus' icon
+                    buttonIcon.classList.remove('fa-minus');
+                    buttonIcon.classList.add('fa-plus');
+                }
+            }).catch((error) => {
+                console.error("Error fetching user document: ", error);
+            });
+        }
+
+        // Function to add or remove the movie title to/from the Firestore wishlist array
+        function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+            // Clear previous error message
+            errorMessageElement.textContent = "";
+
+            // Get the current wishlist array from Firestore
+            getDoc(userDocRef).then(docSnapshot => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const currentWishlist = userData.wishlist || [];
+
+                    console.log("Current Wishlist: ", currentWishlist);
+
+                    // Check if the movie title is already in the wishlist
+                    if (currentWishlist.includes(movieTitle)) {
+                        // Movie is already in the wishlist, remove it
+                        updateDoc(userDocRef, {
+                            wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+                        })
+                            .then(() => {
+                                console.log(`${movieTitle} removed from wishlist in Firestore!`);
+                                showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+                                // Change the button icon to plus after removal
+                                buttonIcon.classList.remove('fa-minus');
+                                buttonIcon.classList.add('fa-plus');
+                            })
+                            .catch((error) => {
+                                console.error("Error removing from wishlist: ", error);
+                                showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+                            });
+                    } else {
+                        // If movie is not in the wishlist, add it using arrayUnion
+                        updateDoc(userDocRef, {
+                            wishlist: arrayUnion(movieTitle)
+                        })
+                            .then(() => {
+                                console.log(`${movieTitle} added to wishlist in Firestore!`);
+                                showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+
+                                // Change the button icon to minus after adding
+                                buttonIcon.classList.remove('fa-plus');
+                                buttonIcon.classList.add('fa-minus');
+                            })
+                            .catch((error) => {
+                                console.error("Error adding to wishlist: ", error);
+                                showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+                            });
+                    }
+                } else {
+                    // If the user document doesn't exist, create a new one with the wishlist field
+                    console.error("User document does not exist. Creating a new document...");
+                    showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+                    // Create a new document with the wishlist containing the movie title
+                    setDoc(userDocRef, { wishlist: [movieTitle] })
+                        .then(() => {
+                            console.log("New user document created with wishlist!");
+                            showMessage("New user document created with wishlist!", errorMessageElement, "green");
+
+                            // Change the button icon to minus after adding
+                            buttonIcon.classList.remove('fa-plus');
+                            buttonIcon.classList.add('fa-minus');
+                        })
+                        .catch((error) => {
+                            console.error("Error creating new user document: ", error);
+                            showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+                        });
+                }
+            }).catch((error) => {
+                console.error("Error fetching user document: ", error);
+                showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+            });
+        }
+
+        // Helper function to display messages in the error container (specific for each poster)
+        function showMessage(message, messageElement, color) {
+            document.getElementById("loading").style.display = "none";
+            messageElement.textContent = message;  // Set the message text
+            messageElement.style.color = color;    // Set color (red for errors, green for success)
+
+            // Hide the message after 5 seconds
+            setTimeout(() => {
+                messageElement.textContent = "";
+            }, 5000);
+        }
+
+
         document.getElementById("searchResults").style.display = "flex"
     });
 }
@@ -230,7 +731,6 @@ function checkUserExists() {
 if (checkUserExists()) {
     check = true;
     onAuthStateChanged(auth, (user) => {
-        const loggedInUserId = localStorage.getItem("loggedInUserId");
         if (loggedInUserId) {
             const docRef = doc(db, "users", loggedInUserId);
             getDoc(docRef)
@@ -260,11 +760,12 @@ if (checkUserExists()) {
 
 document.getElementById("user").addEventListener("click", () => {
     if (check) {
-        let loading = document.getElementById("loading");
-        loading.style.display = "block";
-        loading.textContent = "";
-        document.body.classList.add('no-scroll');  // Disable scrolling
-        document.getElementById("profileSection").style.display = "block";
+        window.location.href = "../profile/profile.html";
+        // let loading = document.getElementById("loading");
+        // loading.style.display = "block";
+        // loading.textContent = "";
+        // document.body.classList.add('no-scroll');  // Disable scrolling
+        // document.getElementById("profileSection").style.display = "block";
     } else {
         const popup = document.getElementById('loginMain');
         // Check if the popup is already visible
@@ -279,19 +780,19 @@ document.getElementById("user").addEventListener("click", () => {
 
 });
 
-        
-        
-    //  else {
-    //     const popup = document.getElementById('loginMain');
-    //     // Check if the popup is already visible
-    //     if (popup.style.display !== 'flex') {
-    //         playCheck = true;
-    //         const overlay = document.getElementById("overlay");
-    //         overlay.style.display = "block";
 
-    //         popup.style.display = 'flex';
-    //     }
-    // }
+
+//  else {
+//     const popup = document.getElementById('loginMain');
+//     // Check if the popup is already visible
+//     if (popup.style.display !== 'flex') {
+//         playCheck = true;
+//         const overlay = document.getElementById("overlay");
+//         overlay.style.display = "block";
+
+//         popup.style.display = 'flex';
+//     }
+// }
 
 
 
@@ -337,6 +838,7 @@ function profileNameCreator() {
 }
 
 function showMessage(message, divId) {
+    console.log("hi")
     var messageDiv = document.getElementById(divId);
     const loading = document.getElementById("loading");
     loading.style.display = "none";
@@ -368,64 +870,64 @@ loginBtn.addEventListener("click", (event) => {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value; // Fixed typo here: "vlaue" to "value"
 
-    
 
-        const auth = getAuth();
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                greenMessage("Successfully Logged In", "signInMessage"); // Fixed typo: "Logined" to "Logged In"
-                localStorage.setItem("loggedInUserId", email);
-                // getRandomRgbColor();
-                // window.history.replaceState(null, null, "pages/home/home.html"); // Prevent going back
+    const auth = getAuth();
 
-                // window.location.replace("../home/home.html");
-                // Change the location to the next page
+    signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            greenMessage("Successfully Logged In", "signInMessage"); // Fixed typo: "Logined" to "Logged In"
+            localStorage.setItem("loggedInUserId", email);
+            // getRandomRgbColor();
+            // window.history.replaceState(null, null, "pages/home/home.html"); // Prevent going back
 
-                // window.location.replace("pages/home/home.html");
-                getRandomRgbColor();
-                window.location.reload();
+            // window.location.replace("../home/home.html");
+            // Change the location to the next page
 
-                document.getElementById('name').value = '';
-                document.getElementById('newEmail').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('password').value = '';
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                // if (email==""){
-                //     showMessage("Email cannot be empty", "signInMessage");
+            // window.location.replace("pages/home/home.html");
+            getRandomRgbColor();
+            window.location.reload();
 
-                // }
-                // // else if (password==""){
-                //     showMessage("Password cannot be empty", "signInMessage");
+            document.getElementById('name').value = '';
+            document.getElementById('newEmail').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            // if (email==""){
+            //     showMessage("Email cannot be empty", "signInMessage");
 
-                // }
+            // }
+            // // else if (password==""){
+            //     showMessage("Password cannot be empty", "signInMessage");
 
-                if (email == "") {
-                    showMessage("Email cannot be empty", "signInEmailMessage")
-                
-                  } else if (errorCode === "auth/invalid-email") {
-                    showMessage("Please enter a valid Email", "signInEmailMessage");
-                  }
-                   if (errorCode === "auth/missing-password") {
-                    showMessage("Password cannot be empty", "signInPasswordMessage");
-                  }
-                  else if (password.length < 8) {
-                    showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
-                  }
-                  else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
-                    showMessage("Invalid Email or Password", "signInMessage");
-                  } else if (errorCode === "auth/user-not-found") {
-                    showMessage("Account doesn't exists", "signInMessage");
-                  }
-                //  else {
-                //     showMessage("Incorrect", "signInMessage");
-                // }
-                console.log(error);
-            });
-    }
+            // }
+
+            if (email == "") {
+                showMessage("Email cannot be empty", "signInEmailMessage")
+
+            } else if (errorCode === "auth/invalid-email") {
+                showMessage("Please enter a valid Email", "signInEmailMessage");
+            }
+            if (errorCode === "auth/missing-password") {
+                showMessage("Password cannot be empty", "signInPasswordMessage");
+            }
+            else if (password.length < 8) {
+                showMessage("Password must be greater than 8 characters", "signInPasswordMessage");
+            }
+            else if (errorCode === "auth/invalid-credential") { // Added handling for user-not-found error
+                showMessage("Invalid Email or Password", "signInMessage");
+            } else if (errorCode === "auth/user-not-found") {
+                showMessage("Account doesn't exists", "signInMessage");
+            }
+            //  else {
+            //     showMessage("Incorrect", "signInMessage");
+            // }
+            console.log(error);
+        });
+}
 );
 
 document.getElementById("createNavigator").addEventListener("click", () => {
@@ -495,93 +997,129 @@ createBtn.addEventListener("click", (event) => {
     const name = document.getElementById("name").value;
     const email = document.getElementById("newEmail").value;
     const password = document.getElementById("newPassword").value;
-  
+
     let namePattern = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
     let nonSpacePattern = /[A-Za-z]/;
     let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     let ok = true;
-  
+
     if (name == "") {
-      showMessage("Name cannot be empty", "signUpNameMessage");
-      ok = false;
+        showMessage("Name cannot be empty", "signUpNameMessage");
+        ok = false;
     } else if (name.length < 3) {
-      showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
-      ok = false;
+        showMessage("Name must contain atleast 3 characters", "signUpNameMessage");
+        ok = false;
     }
     else if (!nonSpacePattern.test(name)) {
-      showMessage("Name cannot be only spaces", "signUpNameMessage");
-      ok = false;
+        showMessage("Name cannot be only spaces", "signUpNameMessage");
+        ok = false;
     } else if (name.length > 20) {
-      showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
-      ok = false;
+        showMessage("Name must not contain more than 20 characters.", "signUpNameMessage");
+        ok = false;
     } else if (!namePattern.test(name)) {
-      showMessage("Name should only contain alphabets", "signUpNameMessage");
-      ok = false;
-    } 
-  
+        showMessage("Name should only contain alphabets", "signUpNameMessage");
+        ok = false;
+    }
+
     if (email == "") {
-      showMessage("Email cannot be empty", "signUpEmailMessage");
-      ok = false;
+        showMessage("Email cannot be empty", "signUpEmailMessage");
+        ok = false;
     } else if (!emailPattern.test(email)) {
-      showMessage("Please enter a valid Email", "signUpEmailMessage");
-      ok = false;
+        showMessage("Please enter a valid Email", "signUpEmailMessage");
+        ok = false;
     }
-  
+
     if (password == "") {
-      showMessage("Password cannot be empty", "signUpPasswordMessage");
-      ok = false;
+        showMessage("Password cannot be empty", "signUpPasswordMessage");
+        ok = false;
     } else if (password.length < 8) {
-      showMessage("Password must contain at least 8 characters", "signUpPasswordMessage");
-      ok = false;
+        showMessage("Password must contain at least 8 characters", "signUpPasswordMessage");
+        ok = false;
     }
-  
+
     function isStrongPassword(password) {
-      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      return regex.test(password);
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
     }
-  
+
     if (password.length >= 8 && !isStrongPassword(password)) {
-      showMessage("Password must contain an uppercase letter, a lowercase letter, a number, and a special character.", "signUpPasswordMessage");
-      ok = false;
+        showMessage("Password must contain an uppercase letter, a lowercase letter, a number, and a special character.", "signUpPasswordMessage");
+        ok = false;
     }
-  
+
     if (ok) {
-      const auth = getAuth();
-      const db = getFirestore();
-  
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          const userData = {
-            name: name,
-            password: password,
-            email: email
-          };
-  
-          greenMessage("Account Created Successfully", "signUpMessage");
-          localStorage.setItem("loggedInUserId", email);
-  
-          const docRef = doc(db, "users", email);
-          setDoc(docRef, userData)
+        const auth = getAuth();
+        const db = getFirestore();
+
+        createUserWithEmailAndPassword(auth, email, password)
             .then(() => {
-              document.getElementById('createMain').style.display = 'none';
-              document.getElementById('loginMain').style.display = 'none';
-              getRandomRgbColor();
-              window.location.reload();
+                const userData = {
+                    name: name,
+                    password: password,
+                    email: email
+                };
+
+                greenMessage("Account Created Successfully", "signUpMessage");
+                localStorage.setItem("loggedInUserId", email);
+
+                const docRef = doc(db, "users", email);
+                setDoc(docRef, userData)
+                    .then(() => {
+                        document.getElementById('createMain').style.display = 'none';
+                        document.getElementById('loginMain').style.display = 'none';
+                        getRandomRgbColor();
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error writing document", error);
+                    });
             })
             .catch((error) => {
-              console.error("Error writing document", error);
+                const errorCode = error.code;
+                console.log(error);
+                if (errorCode === "auth/email-already-in-use") {
+                    showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
+                } else {
+                    showMessage("Invalid Email", "signUpEmailMessage");
+                }
             });
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          console.log(error);
-          if (errorCode === "auth/email-already-in-use") {
-            showMessage("Email Address Already Exists !!!", "signUpEmailMessage");
-          } else {
-            showMessage("Invalid Email", "signUpEmailMessage");
-          }
-        });
     }
-  });
-  
+});
+
+
+const postersContainer = document.getElementById('searchResults');
+const observer = new MutationObserver(() => {
+    const posters = document.querySelectorAll('.movie');
+    posters.forEach(poster => {
+        let timeout;
+
+        // Mouse enter event
+        poster.addEventListener('mouseenter', () => {
+            console.log("Hover started on", poster.id);
+
+            const popup = poster.querySelector('.popups');
+            console.log("Popup found:", popup);
+
+            // Hide all popups immediately when hovering starts
+            document.querySelectorAll('.popups').forEach(popup => popup.style.display = 'none');
+
+            // Set a timeout to show the popup after 2 seconds
+            timeout = setTimeout(() => {
+                popup.style.display = 'flex';
+            }, 500);
+        });
+
+        // Mouse leave event
+        poster.addEventListener('mouseleave', () => {
+            console.log("Hover ended on", poster.id);
+            clearTimeout(timeout);
+            poster.querySelector('.popups').style.display = 'none';
+        });
+    });
+});
+
+// Start observing the posters container for child changes (new posters added)
+observer.observe(postersContainer, { childList: true });
+
+
 

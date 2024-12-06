@@ -2,47 +2,78 @@
     box-sizing: border-box;
 }
 html, body{
-    height: 100vh;
+    /* height: 100vh; */
 
 }
 
+#video-container{
+  position: relative;
+  width: 640px;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+}
 
-
-.row{
-    /* height: 90vh; */
+#clsBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10000;
+}
+.container, .row{
+    height: 100%;
 }
 .container p{
     /* border: 0.5rem solid green; */
-    border-radius: 1rem;
+    /* border-radius: 1rem;
     background: black;
-    text-align: center;
+    text-align: center; */
+    font-size: large;
+    font-weight: bolder;
+    letter-spacing: 0.1rem;
 }
-.container p:hover, img:hover{
+ .movie:hover{
     transform: scale(1.05); /* Slightly enlarge the image */
     box-shadow: 0 0px 20px white; /* Add shadow on hover */
     transition: transform 0.5s;
 }
 main{
-    padding: 3% 5% 0 5%;
-    height: 91.6vh;
-    background: rgba(0, 0, 0, 0.5); /* Optional: semi-transparent background for text */
+    padding: 35vh 5% 5% 5% ;
+
+    /* height: 100%; */
+    /* position: absolute; */
+    bottom: 0;
+    top: 0;
+    /* background: rgba(0, 0, 0, 0.5); */
+    /* background-image: linear-gradient(to bottom left , white, black); */
+    /* background-image: linear-gradient(to bottom left, transparent 50%, black 60%); */
+    /* background-image: linear-gradient(to bottom left, transparent 40%, black 70%, black 100%); */
+
 
 }
+footer{
+  height: 1rem;
+  background: green;
+}
 #genres{
-    display: grid;
-    grid-template-columns: auto;
-    gap: 1rem;
-    padding: 0;
+
     
 }
 #movie-detail-container{
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
+    height: 100%;
     /* gap: 5%; */
 }
 #posterDiv{
-    height: 80vh;
+    /* height: 80vh; */
 }
 /* #movie-detail-container div{
     display: flex;
@@ -82,7 +113,7 @@ input:focus{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: none; /* Hidden by default */
-    z-index: 3; /* Ensure it's on top of other content */
+    z-index: 5; /* Ensure it's on top of other content */
   }
 
  #playButton, #logoutBtn {
@@ -90,9 +121,15 @@ input:focus{
     width: 10rem;
     
 }
-#playButton:hover, #logoutBtn:hover{
+#playButton{
+  width: 25rem;
+  height: 3.5rem;
+  font-size: x-large ;
+  font-weight: bolder;
+}
+#playButton:hover, #logoutBtn:hover, #add:hover, #watch:hover{
     transform: scale(1.05); /* Slightly enlarge the image */
-    /* box-shadow: 0 -4px 0px white; Add shadow on hover */
+    box-shadow: 0 0px 20px white;
     transition: transform 0.5s;
 }
 
@@ -133,13 +170,13 @@ section{
     height: 10rem;
     
 }
-#searchResults div:hover {
-    transform: scale(1.05); /* Slightly enlarge the image */
-    box-shadow: 0 4px 20px white; /* Add shadow on hover */
+/* #searchResults div:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 4px 20px white; 
     transition: transform 0.5s;
     
 
-}
+} */
 #searchResults{
     overflow-x: scroll;
     white-space: nowrap;
@@ -147,10 +184,10 @@ section{
     -ms-overflow-style: none;
 }
 #searchResults{
-    margin: 0 0 0 5%;
+    padding: 5% 0 0 5%;
     position: absolute;
     z-index: 4;
-    top: 5rem;
+    top: 8%;
     /* bottom: 0;/ */
     background: black;
     left: 0;
@@ -162,19 +199,7 @@ section{
     /* overflow-x: ; */
     display: none;
 }
-.movie {
-    border: 1px solid ;
-    margin: 1rem;
-    padding: 1rem;
-    height: 35rem;
-    min-width: 20rem;
-    max-width: 20rem;
-    text-align: center;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 20px green; /* Add shadow on hover */
 
-}
 a{
     color: black;
     text-decoration: none;
@@ -189,16 +214,42 @@ img{
 }
 .background-overlay {
     position: absolute;
+    padding: 5% 0 0 0;
     top: 0;
+    right: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0.5; /* Adjust the opacity of the background */
-    z-index: -1; /* Places the overlay behind the content */
-  }
+    bottom: 0;
+    /* width: 100%; */
+    /* height: 100%; */
+  /* Adjust the opacity of the background */
+    z-index: -2; /* Places the overlay behind the content */
 
+  }
+  #gradient{
+    background-image: linear-gradient(to bottom left, transparent 40%, black 70%, black 100%);
+    position: absolute;
+    padding: 5% 0 0 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    /* width: 100%; */
+    /* height: 100%; */
+  /* Adjust the opacity of the background */
+    z-index: -2;
+  }
+  .background-overlay img{
+    height: 100%;
+    position: absolute;
+    padding: 4% 0 0 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    box-shadow: none;
+    background: linear-gradient(to bottom left, transparent 40%, black 70%, black 100%);
+
+  }
   *{
     box-sizing: border-box;
 }
@@ -209,6 +260,10 @@ img{
 header{
     /* height: rem; */
     padding: 0.5% 5%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 1;
     /* padding-right: 5%; */
 }
 /* main, footer{
@@ -250,7 +305,31 @@ input:focus{
     
 }
 
+.popups{
+    background: black;
+    color: white;
+    /* width: 5rem; */
+    /* height: 5rem; */
+  position: absolute;
+  /* bottom: 50%; */
+  top: -1rem;
+  left: -1rem;
+  right: -1rem;
+    display: none;
+    text-wrap: wrap;
+  border-radius: 0.5rem;
+  }
+  
+  .popups img, #searchResults img{
+    box-shadow: none;
+    
+  }
+  #watch{
+    width: 15rem;
+    height: 3rem;
+  }
 .movie {
+    position: relative;
     border: 1px solid ;
     margin: 1rem;
     padding: 1rem;
@@ -269,13 +348,13 @@ h2{
 
 }
 
-img{
+/* img{
     width: 100%;
     height: 80%;
     border-radius: 0.5rem;
     box-shadow: 0 4px 20px grey; /* Add shadow on hover */
 
-}
+
 
 a{
     color: black;
@@ -295,13 +374,7 @@ a{
 }
 
 
-.content div:hover, #searchResults div:hover {
-    transform: scale(1.05); /* Slightly enlarge the image */
-    box-shadow: 0 4px 20px white; /* Add shadow on hover */
-    transition: transform 0.5s;
-    
 
-}
 .icon:hover{
     background: black;
     transform: scale(1.05); /* Slightly enlarge the image */
@@ -335,21 +408,7 @@ a{
     /* justify-content: center; */
 /* }  */
 
-#loading {
-    position: fixed;
-    color: white;
-    text-align: center;
-    /* font-size: 5rem; */
-    align-items: center;
-    justify-content: center;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    display: none; /* Hidden by default */
-    z-index: 3; /* Ensure it's on top of other content */
-  }
+
 
   .carousel-inners{
     height: 25rem;  /* Set a fixed height for images */
@@ -418,26 +477,14 @@ a{
  }
 
 
-#searchResults{
-    margin: 0 0 0 5%;
-    position: absolute;
-    z-index: 4;
-    top: 5rem;
-    /* bottom: 0;/ */
-    background: black;
-    left: 0;
-    right: 0;
-    height: 100%;
-    /* width: 100%; */
-    display: flex;
-    flex-wrap: wrap;
-    /* overflow-x: ; */
-    display: none;
-}
 
-#loginBtn, #createBtn{
+
+#loginBtn, #createBtn, #watch, #add{
     background-image: linear-gradient(to bottom right , green, black);
   
+  }
+  #add{
+    width: 3.5rem;
   }
 
   .popup {
@@ -473,7 +520,7 @@ a{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: none; /* Hidden by default */
-    z-index: 1; /* Ensure it's on top of other content */
+    z-index: 5; /* Ensure it's on top of other content */
   }
   #newPassword, #password{
     width: 100%;

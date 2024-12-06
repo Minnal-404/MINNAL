@@ -1,0 +1,167 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    height: 100vh;
+}
+#aside{
+    width: 30vw;
+    /* padding-left: 5%;
+    padding-top: 3%; */
+}
+#content{
+    width: 70vw;
+}
+#profileSec, #rented, #wishlist{
+         padding-left: 4.5rem; 
+}
+header{
+    /* height: rem; */
+    padding: 0.5% 5%;
+    /* padding-right: 5%; */
+}
+main{
+    height: 100%;
+    /* padding: 0 0 2% 0; */
+}
+#search{
+    width: 100%;
+    padding-left: 5%;
+
+}
+input:focus{
+    outline: none;
+}
+#logo{
+    height: 3.5rem;
+    /* width: 0.1rem; */
+    box-shadow: none;
+
+}
+#search::placeholder{
+    /* padding-left: 5%; */
+}
+#searchDiv{
+    height: 2.5rem;
+    padding-left: 3%;
+
+}
+#user{
+    width: 3.5rem;
+    cursor: pointer;
+}
+#userDiv{
+}
+#profileName{
+  
+    font-family:Arial, Helvetica, sans-serif;
+}
+#prof{
+    width: 10rem;
+    height: 10rem;
+    
+}
+#profile{
+    font-size: 6rem;
+}
+  #profileContent{
+    height: 65%;
+  }
+
+  body.no-scroll {
+    overflow: hidden;  /* Disable scroll on body */
+  }
+  #pro{
+    height: 100vh;
+    width: 100%;
+  }
+  #remaining{
+    height: 100%;
+  }
+  #loading {
+    position: fixed;
+    color: white;
+    text-align: center;
+    /* font-size: 5rem; */
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    z-index: 3; /* Ensure it's on top of other content */
+  }
+ #logoutBtn {
+    background-image: linear-gradient(to bottom right , green, black);
+    width: 10rem;
+    
+}
+#watch, #add{
+    background-image: linear-gradient(to bottom right , green, black);
+
+}
+#watch{
+    width: 15rem;
+}
+ #logoutBtn:hover, #watch:hover, #add:hover{
+    transform: scale(1.05); /* Slightly enlarge the image */
+    box-shadow: 0 0px 20px white;
+    transition: transform 0.5s;
+}
+.movie {
+    position: relative;
+      border: 1px solid ;
+      margin: 1rem;
+      padding: 1rem;
+      height: 35rem;
+      min-width: 20rem;
+      max-width: 20rem;
+      text-align: center;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 20px green; /* Add shadow on hover */
+  
+  }
+  .movie:hover {
+    transform: scale(1.05); 
+     box-shadow: 0 4px 20px white; 
+     transition: transform 0.5s;
+    
+
+} 
+  .popups{
+    background: black;
+    color: white;
+    /* width: 5rem; */
+    /* height: 5rem; */
+  position: absolute;
+  /* bottom: 50%; */
+  top: -1rem;
+  left: -1rem;
+  right: -1rem;
+    display: none;
+    text-wrap: wrap;
+  border-radius: 0.5rem;
+  }
+  
+  .popups img{
+    box-shadow: none;
+  }
+  img{
+    width: 100%;
+    height: 80%;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px grey; /* Add shadow on hover */
+
+}
+a{
+  text-decoration: none;
+  color: black;  
+}
+#wishlistSection{
+  white-space: nowrap;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+}

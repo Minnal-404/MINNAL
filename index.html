@@ -31,21 +31,22 @@
 <body class="bg-black">
 
     <header class="d-flex align-items-center justify-content-between bg-success">
-        <div class="col">
-            <div class="d-flex align-items-center gap-5 justify-content-evenly">
+        <div id="col1" class="col-3">
+            <div id="gap1" class="d-flex align-items-center justify-content-between">
                 <p>Logo</p>
-                <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center ps-2">
-                    <i class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around"></i>
+                <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center">
+                    <i id="searchIcon" class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around p-2"></i>
                     <input id="search" type="search" class="border border-white rounded-3" placeholder="Search">
+                    <!-- <i id="xbtn" class="fa-solid fa-x "></i> -->
                 </div>
             </div>
         </div>
 
-        <div class="col-6 d-flex justify-content-center">
+        <div id="greet" class="col d-flex ">
             <h1 class="text-white" id="userName"></h1>
         </div>
 
-        <div class="col">
+        <div id="col2" class="col-2">
             <div id="userDiv" class="d-flex justify-content-end ">
                 <div id="user" class="d-flex justify-content-center align-items-center bg-black rounded-circle">
                     <i id="userIcon" class="fa-solid fa-user fa-xl p-4 text-white"></i>

@@ -1,5 +1,6 @@
 *{
     box-sizing: border-box;
+    font-size: 16px;
 }
 #logoutBtn{
     background-image: linear-gradient(to bottom right , green, black);
@@ -33,6 +34,8 @@ input:focus{
 }
 #searchDiv{
     height: 2.5rem;
+    padding-left: 3%;
+
 }
 #user{
     width: 3.5rem;
@@ -41,6 +44,7 @@ input:focus{
 #userDiv{
 }
 #profileName{
+  
     font-family:Arial, Helvetica, sans-serif;
 }
 #prof{
@@ -50,7 +54,8 @@ input:focus{
 }
 
 .popups{
-  background: green;
+  background: black;
+  color: white;
   /* width: 5rem; */
   /* height: 5rem; */
 position: absolute;
@@ -63,7 +68,9 @@ right: -1rem;
 border-radius: 0.5rem;
 }
 
-
+.popups img{
+  box-shadow: none;
+}
 
 .movie {
   position: relative;
@@ -111,13 +118,13 @@ a{
 }
 
 
-/* .content div:hover, #searchResults div:hover {
-    transform: scale(1.05); /* Slightly enlarge the image */
-    /* box-shadow: 0 4px 20px white; /* Add shadow on hover */
-    /* transition: transform 0.5s;
+.movie:hover {
+    transform: scale(1.05); 
+     box-shadow: 0 4px 20px white; 
+     transition: transform 0.5s;
     
 
-} */ 
+} 
 .icon:hover{
     background: black;
     transform: scale(1.05); /* Slightly enlarge the image */
@@ -164,7 +171,7 @@ a{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     display: none; /* Hidden by default */
-    z-index: 3; /* Ensure it's on top of other content */
+    z-index: 5; /* Ensure it's on top of other content */
   }
 
   .carousel-inners{
@@ -251,14 +258,23 @@ a{
     display: none;
 }
 
-#loginBtn, #createBtn, #watch{
+#loginBtn, #createBtn, #watch, #add{
     background-image: linear-gradient(to bottom right , green, black);
-  
+    
   }
-
+  #loginBtn:hover, #createBtn:hover, #watch:hover, #add:hover{
+  transform: scale(1.05); 
+     box-shadow: 0 0px 20px white;
+     transition: transform 0.5s;
+}
   #watch{
-    width: 100%;
+    width: 15rem;
     height: 3rem;
+    flex-grow: 1;
+  }
+  #add{
+    width: 3rem;
+    
   }
 
 
@@ -316,4 +332,45 @@ a{
   #createNavigator:hover, #loginNavigator:hover{
     text-decoration: underline;
     cursor: pointer;
+  }
+  #xbtn{
+    display: none;
+  }
+  #greet{
+    justify-content: center;
+  }
+
+  @media (max-width: 1024px) {
+    *{
+      font-size: 14px;
+    }
+    #search{
+      display: none;
+      padding: 0;
+
+    }
+    #searchDiv {
+      padding: 0;
+    }
+    .carousel-caption{
+      display: none;
+    }
+    .one{
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 767px){
+    *{
+      font-size: 12px;
+    }
+    #carousel-inner, #carousel-inner img{
+      height: 15rem;
+    }
+    .movie{
+      height: 50vh;
+    }
+    #searchDiv {
+      padding: 0 5%;
+    }
   }
