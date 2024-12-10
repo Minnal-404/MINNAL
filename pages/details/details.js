@@ -63,14 +63,16 @@ if (!movieTitle) {
         document.getElementById("title").textContent = `${movie.title} (${movie.year})`;
         const movieHTML = `          <div class="d-flex gap-4">
     <button id="playButton" class="btn btn-success" data-title="${movie.title}">Watch Now</button>
-                  <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+    <button id="trailerPlay" class="play-button btn btn-success text-white">Watch Trailer</button>
+                  <button id="add" class="add-to-wishlist btn btn-success border-black" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
                   </div>
                   <p id="wishlistError" class="m-0 wishlist-error"></p>`;
 
         movieDetailContainer.innerHTML += movieHTML;  // Inject HTML into the page
         // document.getElementById("backgroundOverlay").style.background = `url(${movie.thumbnails})`;
         let bg = document.getElementById("backgroundOverlay");
-
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         // Create a new image element
         let img = document.createElement("img");
 
@@ -136,6 +138,29 @@ if (!movieTitle) {
 
         // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
         // posterDiv.innerHTML = poster;
+        
+        document.getElementById("trailerPlay").addEventListener("click", () => {
+            // The YouTube video ID of the trailer (replace with the actual trailer ID)
+            const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
+      
+            // Get the iframe and change its src to the YouTube video
+            const iframe = document.getElementById('trailer');
+            iframe.src = `${trailerId}`;
+      
+            // Show the iframe
+            if (iframe.style.display == 'block'){
+                iframe.style.display = 'none';
+
+            }else{
+                iframe.style.display = 'block';
+
+            }
+      
+            // Hide the poster and play button
+            // document.getElementById('poster').style.backgroundImage = 'none';
+            // document.querySelector('.play-button').style.display = 'none';
+          })
+
         function checkUserExists() {
             // This could be a check for a cookie, local storage, or API request
             return localStorage.getItem('loggedInUserId') !== null; // Example using local storage
@@ -607,7 +632,7 @@ function displayResults(results) {
               <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
                 <button id="watch" class="btn btn-success">Watch Now</button>
               </a>
-              <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}">
+              <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist">
                 <i class="fa-solid fa-plus fa-xl"></i>
               </button>
             </div>
@@ -626,7 +651,8 @@ function displayResults(results) {
   
       // Append movie div to container
       movieContainer.appendChild(movieDiv);
-  
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
       // Log the buttons to ensure they're there
       const buttons = movieDiv.querySelectorAll('.add-to-wishlist');
       console.log('Buttons:', buttons);  // Log the buttons array

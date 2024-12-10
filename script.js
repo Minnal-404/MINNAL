@@ -330,7 +330,7 @@ async function fetchMovies(container, head, text) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">Watch Now</button>
           </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <div class="d-flex justify-content-evenly">
@@ -343,7 +343,8 @@ async function fetchMovies(container, head, text) {
       // Append the movie link div to the container
       // movieDiv.appendChild(movieLink);
       movieContainer.appendChild(movieDiv);
-
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
 
@@ -615,7 +616,7 @@ function displayResults(results) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">Watch Now</button>
           </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
@@ -625,7 +626,8 @@ function displayResults(results) {
     <p class="m-0">${movie.description}</p>  
     </div>
   </div>`;
-
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     // Append the movie link div to the container
     // movieDiv.appendChild(movieLink);
     movieContainer.appendChild(movieDiv);

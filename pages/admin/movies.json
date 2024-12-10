@@ -27,7 +27,8 @@
         "director": ["Christopher Nolan"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
+      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "trailer": "https://www.youtube-nocookie.com/embed/8hP9D6kZseM?si=HEWHV5ri6vlOjYA5"
     },
     {
       "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/hq720.jpg?alt=media&token=8dccc84d-eebe-4c02-93ca-5e7b5a835a04",
@@ -57,7 +58,8 @@
         "director": ["Christopher Nolan"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
+      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "trailer": "https://www.youtube-nocookie.com/embed/LDG9bisJEaI?si=k7PiTgsxSHmO5_nC"
     },
     {
       "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/interstellar.jpg?alt=media&token=e986749e-13b6-472f-834b-abb771536a70",
@@ -86,7 +88,8 @@
         "director": ["Christopher Nolan"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
+      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "trailer": "https://www.youtube-nocookie.com/embed/zSWdZVtXT7E?si=O1YOZMDO6Bu26qFb"
     },
     {
       "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/matrixjpeg.jpeg?alt=media&token=e6f76820-e124-41e1-98f3-66f8bb94b9e27",
@@ -114,7 +117,8 @@
         "director": ["The Wachowskis"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
+      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "trailer": "https://www.youtube-nocookie.com/embed/m8e-FF8MsqU?si=VPKTNrIQPpx7QdVb"
     },
     {
       "thumbnails": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/wp5549067-avatar-2-movie-toruk-makto-wallpapers.jpg?alt=media&token=f2372c7f-e524-4d0a-8739-64cbe06a7f49",
@@ -144,7 +148,8 @@
         "director": ["James Cameron"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu", "Kannada"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8"
+      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "trailer": "https://www.youtube-nocookie.com/embed/5PSNL1qE6VY?si=374X7OSedidoorDA"
     }
   ]
 }
