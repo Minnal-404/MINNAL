@@ -63,9 +63,25 @@ position: absolute;
 top: -1rem;
 left: -1rem;
 right: -1rem;
-  display: none;
+  /* display: none; */
   text-wrap: wrap;
+  opacity: 0;
 border-radius: 0.5rem;
+}
+
+
+.fade {
+            
+  animation: fadeInOut 0.3s ease-in ;
+}
+@keyframes fadeInOut {
+  0% {
+      opacity: 0;
+  }
+  
+  100% {
+      opacity: 1;
+  }
 }
 
 .popups img{
@@ -340,6 +356,18 @@ a{
     justify-content: center;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
   @media (max-width: 1024px) {
     *{
       font-size: 14px;
@@ -374,3 +402,8 @@ a{
       padding: 0 5%;
     }
   }
+
+
+
+
+

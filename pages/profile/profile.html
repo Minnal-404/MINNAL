@@ -35,14 +35,14 @@
         <div id="col1" class="col-3">
             <div id="gap1" class="d-flex align-items-center justify-content-between">
                 <a href="../../index.html" class="text-black text-decoration-none">
-                    <p style="cursor: pointer;">Logo</p>
+                    <p style="cursor: pointer;" class="m-0">Logo</p>
                 </a>
-                <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center">
+                <!-- <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center">
                     <i id="searchIcon"
                         class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around p-2"></i>
                     <input id="search" type="search" class="border border-white rounded-3" placeholder="Search">
-                    <!-- <i id="xbtn" class="fa-solid fa-x "></i> -->
-                </div>
+                    <i id="xbtn" class="fa-solid fa-x "></i> -->
+                <!-- </div> -->
             </div>
         </div>
 
@@ -128,14 +128,14 @@
                 </div>
             </div>
 
-            <div id="rentedSection" class="section-content" style="display: none;">
-                <h2 class="section-header">Rented Movies</h2>
-                <p>List of your rented movies will be displayed here.</p>
+            <div id="rentalsSection" class="section-content text-black p-5 overflow-x-scroll " style="display: none;">
+                <p id="rentalsError" class="m-0 text-danger"></p>
+                <h1 class="text-white ">You have no active rentals!</h1>
             </div>
 
-            <div id="wishlistSection" class="section-content p-5 overflow-x-scroll " style="display: none;">
+            <div id="wishlistSection" class="section-content p-5 overflow-x-scroll  text-black" style="display: none;">
                 <p id="wishlistError" class="m-0 wishlist-error"></p>
-
+                <h1 class="text-white ">Your wishlist is empty</h1>
             </div>
         </section>
     </main>

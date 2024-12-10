@@ -141,11 +141,26 @@ input:focus{
   top: -1rem;
   left: -1rem;
   right: -1rem;
-    display: none;
+    /* display: none; */
+    opacity: 0;
     text-wrap: wrap;
   border-radius: 0.5rem;
   }
   
+  .fade {
+            
+    animation: fadeInOut 0.3s ease-in ;
+  }
+  @keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    
+    100% {
+        opacity: 1;
+    }
+  }
+
   .popups img{
     box-shadow: none;
   }
@@ -160,8 +175,9 @@ a{
   text-decoration: none;
   color: black;  
 }
-#wishlistSection{
+#wishlistSection, #rentalsSection{
   white-space: nowrap;
     scrollbar-width: none; /* For Firefox */
     -ms-overflow-style: none;
+    height: 100%;
 }

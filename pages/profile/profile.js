@@ -51,7 +51,7 @@ if (checkUserExists()) {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error getting document");
+                    console.log("Error getting document", error);
                 })
         } else {
             console.log("User Id not found in local storage")
@@ -62,7 +62,7 @@ if (checkUserExists()) {
 }
 
 function profileNameCreator() {
-    document.getElementById("search").value = "";
+    // document.getElementById("search").value = "";
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
@@ -109,7 +109,7 @@ logoutBtn.addEventListener("click", () => {
 
 });
 
-const rentedSection = document.getElementById("rentedSection");
+const rentalsSection = document.getElementById("rentalsSection");
 const wishlistSection = document.getElementById("wishlistSection");
 const profileSection = document.getElementById("profileSection");
 const profileSec = document.getElementById("profileSec");
@@ -117,7 +117,7 @@ const rented = document.getElementById("rented");
 const wishlist = document.getElementById("wishlist");
 
 profileSec.addEventListener("click", () => {
-    rentedSection.style.display = "none";
+    rentalsSection.style.display = "none";
     wishlistSection.style.display = "none";
 
     profileSec.classList.add("text-white");
@@ -158,10 +158,10 @@ rented.addEventListener("click", () => {
     wishlist.classList.remove("text-white");
     wishlist.classList.add("border-top-0");
 
-    rentedSection.style.display = "block";
+    rentalsSection.style.display = "flex";
 });
 wishlist.addEventListener("click", () => {
-    rentedSection.style.display = "none";
+    rentalsSection.style.display = "none";
     profileSection.style.display = "none";
 
     profileSec.classList.remove("text-white");
@@ -199,7 +199,7 @@ function fetchWishlist(loggedInUserId) {
                     displayWishlist(wishlist);
                 } else {
                     console.log("Wishlist is empty.");
-                    document.getElementById("wishlistError").textContent = "Your wishlist is empty!";
+                    // document.getElementById("wishlistError").textContent = "Your wishlist is empty!";
                 }
             } else {
                 // If the document doesn't exist, handle the case
@@ -242,7 +242,7 @@ function displayWishlist(wishlist) {
                   <div class="p-3 d-flex flex-column gap-3">
                   <h2>${movieDetails.title}</h2>
                   <div class="d-flex gap-4 justify-content-between">
-                  <a href="pages/details/details.html?title=${encodeURIComponent(movieDetails.title)}">
+                  <a href="../details/details.html?title=${encodeURIComponent(movieDetails.title)}">
                   <button id="watch" class="btn btn-success">Watch Now</button>
                   </a>
                   <button id="add" class="add-to-wishlist btn btn-success" data-title="${movieDetails.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
@@ -268,6 +268,8 @@ buttons.forEach(button => {
 
     // Add click event listener to toggle the button icon and remove the movie
     button.addEventListener('click', function () {
+        document.getElementById("loading").style.display = "flex";
+
         toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMessageElement);
     });
 
@@ -352,6 +354,7 @@ function toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMes
                         // Change the button icon to minus after adding
                         buttonIcon.classList.remove('fa-plus');
                         buttonIcon.classList.add('fa-minus');
+                        
                     })
                     .catch((error) => {
                         console.error("Error adding to wishlist: ", error);
@@ -382,6 +385,7 @@ function toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMes
         console.error("Error fetching user document: ", error);
         showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
     });
+
 }
 
 // Function to check if the wishlist is empty and update the UI
@@ -401,12 +405,14 @@ function checkIfWishlistIsEmpty(loggedInUserId) {
 
             if (currentWishlist.length === 0) {
                 // If the wishlist is empty, create a new p tag to show the empty message
-                const emptyMessage = document.createElement("p");
+                const emptyMessage = document.createElement("h1");
                 emptyMessage.textContent = "Your wishlist is empty!";
-                emptyMessage.classList.add("wishlist-error");
+                emptyMessage.classList.add("text-white");
 
                 // Append the message to the wishlist section (or wherever you prefer in the DOM)
                 wishlistSection.appendChild(emptyMessage);
+                document.getElementById("loading").style.display = "none";
+
             } else {
                 // If the wishlist is not empty, clear any previous empty message
                 const existingErrorMessage = wishlistSection.querySelector(".wishlist-error");
@@ -479,11 +485,13 @@ const observer = new MutationObserver(() => {
       console.log("Popup found:", popup);
 
       // Hide all popups immediately when hovering starts
-      document.querySelectorAll('.popups').forEach(popup => popup.style.display = 'none');
+      document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
 
       // Set a timeout to show the popup after 2 seconds
       timeout = setTimeout(() => {
         popup.style.display = 'flex';
+        popup.classList.add("fade");
+        popup.style.opacity = 1;
       }, 500);
     });
 
@@ -498,3 +506,205 @@ const observer = new MutationObserver(() => {
 
 // Start observing the posters container for child changes (new posters added)
 observer.observe(postersContainer, { childList: true });
+
+
+
+// Function to fetch and display rentals for a logged-in user
+function fetchRentals(loggedInUserId) {
+    const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document
+
+    // Get the user's document
+    getDoc(userDocRef)
+        .then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                // Document exists, get the rentals array
+                let rentals = docSnapshot.data().rentals;
+
+                if (rentals && rentals.length > 0) {
+                    // Remove expired rentals
+                    rentals = removeExpiredRentals(rentals);
+
+                    if (rentals.length > 0) {
+                        // Do something with the rentals, e.g., display it on the page
+                        console.log("Active Rentals:", rentals);
+                        displayRentals(rentals);
+                    } else {
+                        console.log("All rentals have expired.");
+                        // document.getElementById("rentalsError").textContent = "You have no active rentals!";
+                    }
+
+                    // Update the user's document with the active rentals
+                    updateRentalsInFirestore(loggedInUserId, rentals);
+                } else {
+                    console.log("Rentals section is empty.");
+                    // document.getElementById("rentalsError").textContent = "You have no active rentals!";
+                }
+            } else {
+                // If the document doesn't exist, handle the case
+                console.error("User document does not exist!");
+                document.getElementById("rentalsError").textContent = "User document does not exist!";
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching rentals: ", error);
+            document.getElementById("rentalsError").textContent = "Error fetching rentals!";
+        });
+}
+
+// Function to remove expired rentals from the rentals array
+function removeExpiredRentals(rentals) {
+    const currentDate = new Date();
+
+    // Filter out the expired rentals
+    return rentals.filter(rental => {
+        const expiryDate = new Date(rental.rentalExpiration); // Expiry date is stored in rentalExpiration
+        return expiryDate > currentDate; // Keep only rentals that haven't expired
+    });
+}
+
+// Function to update the rentals in Firestore
+function updateRentalsInFirestore(userId, rentals) {
+    const userDocRef = doc(db, "users", userId);
+
+    // Update the rentals field in the Firestore document
+    updateDoc(userDocRef, { rentals })
+        .then(() => {
+            console.log("Updated rentals in Firestore");
+        })
+        .catch((error) => {
+            console.error("Error updating rentals in Firestore: ", error);
+        });
+}
+
+// Function to display the rentals
+function displayRentals(rentals) {
+    const rentalsSection = document.getElementById("rentalsSection");
+    rentalsSection.innerHTML = "";  // Clear previous content
+
+    // Loop through the rentals and fetch details for each movie
+    rentals.forEach(async (rental) => {
+        console.log(rental.title, "Fetching details...");
+
+        // Fetch movie details based on title (asynchronously)
+        const movieDetails = await getMovieDetailsByTitle(rental.title);
+
+        if (movieDetails) {
+            const rentalDiv = document.createElement('div');
+            rentalDiv.className = 'movie';
+
+            // Get the rental duration in days (24 hours = 1 day)
+            let durationInDays = rental.duration;
+            if (durationInDays === 24) {
+                durationInDays = 1; // Treat 24 hours as 1 day
+            }
+
+            // Calculate the expiry date based on the rental duration in days
+            const expiryDate = new Date(rental.rentalExpiration);
+
+            // Get the countdown string (remaining rental period)
+            const countdownString = getCountdown(expiryDate);
+
+            rentalDiv.innerHTML = `
+                <img src="${movieDetails.poster}" alt="${movieDetails.title}"><h2>${movieDetails.title}</h2><p>${movieDetails.year}</p><p><strong>Rental Period:</strong> ${countdownString}</p>
+                <p><strong>Rental Price:</strong> $${rental.price}</p>
+            <div class="popups flex-column" >
+              <div class="p-0">
+                  <img src="${movieDetails.thumbnails}" alt="${movieDetails.title}"></div>
+                  <div class="p-3 d-flex flex-column gap-3">
+                  <h2>${movieDetails.title}</h2>
+                  <div class="d-flex justify-content-center">
+                  <a href="../details/details.html?title=${encodeURIComponent(movieDetails.title)}">
+                  <button id="watch" class="btn btn-success">Watch Now</button>
+                  </a>
+                  </div>
+                  <p id="wishlistError" class="m-0 text- wishlist-error"></p>
+                  <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
+                  <div class="d-flex justify-content-evenly">
+                  <p class="m-0">${movieDetails.year}</p> <p class="m-0">•</p> <p class="m-0">${movieDetails.duration}</p> <p class="m-0">•</p> <p class="m-0 bg-success px-2 rounded-1"><strong>${movieDetails.rating}/5</strong></p>
+                  </div>
+            <p class="m-0">${movieDetails.description}</p>  
+            </div>
+          </div>
+            `;
+
+            // Append the movie rental info to the container
+            rentalsSection.appendChild(rentalDiv);
+        } else {
+            console.log("Movie not found: " + rental.title);
+        }
+    });
+}
+
+// Function to calculate the expiry date based on rental duration in days
+// Function to calculate the expiry date based on rental duration in days
+
+
+
+
+function getCountdown(expiryDate) {
+    const currentDate = new Date();
+    const remainingTime = expiryDate - currentDate; // Remaining time in milliseconds
+
+    if (remainingTime <= 0) {
+        return "Rental period expired!";  // If the time has passed, display the expiration message
+    }
+
+    // Calculate remaining days and hours
+    const remainingDays = Math.floor(remainingTime / (1000 * 60 * 60 * 24)); // Full days
+    const remainingHours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Remaining hours
+    const remainingMinutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60)); // Remaining minutes
+
+    if (remainingDays > 0) {
+        return `${remainingDays} days ${remainingHours} hours`; // Return in days and hours if days > 0
+    } else if (remainingHours > 0) {
+        return `${remainingHours} hours ${remainingMinutes} minutes`; // Return hours and minutes if days are 0
+    } else {
+        return `${remainingMinutes} minutes`; // Return minutes if both days and hours are 0
+    }
+}
+
+// Example usage
+
+
+
+
+// Call the function to fetch rentals for the logged-in user
+fetchRentals(loggedInUserId);
+
+const postersContainer1 = document.getElementById('rentalsSection');
+
+
+const observer1 = new MutationObserver(() => {
+  const posters = document.querySelectorAll('.movie');
+  posters.forEach(poster => {
+    let timeout;
+
+    // Mouse enter event
+    poster.addEventListener('mouseenter', () => {
+      console.log("Hover started on", poster.id);
+
+      const popup = poster.querySelector('.popups');
+      console.log("Popup found:", popup);
+
+      // Hide all popups immediately when hovering starts
+      document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
+
+      // Set a timeout to show the popup after 2 seconds
+      timeout = setTimeout(() => {
+        popup.style.display = 'flex';
+        popup.classList.add("fade");
+        popup.style.opacity = 1;
+      }, 500);
+    });
+
+    // Mouse leave event
+    poster.addEventListener('mouseleave', () => {
+      console.log("Hover ended on", poster.id);
+      clearTimeout(timeout);
+      poster.querySelector('.popups').style.display = 'none';
+    });
+  });
+});
+
+// Start observing the posters container for child changes (new posters added)
+observer1.observe(postersContainer1, { childList: true });

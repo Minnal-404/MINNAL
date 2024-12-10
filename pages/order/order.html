@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Rental - Order Page</title>
+    <link rel="stylesheet" href="order.css">
+    <!-- You can add Font Awesome for icons -->
+    <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body class="bg-black text-white">
+    <header class="d-flex align-items-center justify-content-between bg-success">
+        <div id="col1" class="col-3">
+            <div id="gap1" class="d-flex align-items-center justify-content-between">
+                <a href="../../index.html" class="text-black text-decoration-none">
+                    <p style="cursor: pointer;" class="m-0">Logo</p>
+                </a>
+                <!-- <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center">
+                    <i id="searchIcon"
+                        class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around p-2"></i>
+                    <input id="search" type="search" class="border border-white rounded-3" placeholder="Search">
+                    <i id="xbtn" class="fa-solid fa-x "></i> -->
+                <!-- </div> -->
+            </div>
+        </div>
+
+        <div id="greet" class="col d-flex ">
+            <h1 class="text-white" id="userName"></h1>
+        </div>
+
+        <div id="col2" class="col-2">
+            <div id="userDiv" class="d-flex justify-content-end ">
+                <div id="user" class="d-flex justify-content-center align-items-center bg-black rounded-circle">
+                    <i id="userIcon" class="fa-solid fa-user fa-xl p-4 text-white"></i>
+                    <h1 id="profileName" class="text-white p-0 m-0 fw-bold"></h1>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+    <div id="loading">
+        <h1 id="loadMessage"></h1>
+        <i class="fa-solid fa-spinner fa-spin fa-2xl" style="color: #ffffff;"></i>
+      </div>
+    <main class="container">
+        <div class="row">
+            
+
+            <div id="rental-form" class="col d-flex flex-column p-0 gap-3">
+                <h1 class="text-end">Rent Movie</h1>
+
+                <label for="rentalDuration">Select rental duration:</label>
+                <select id="rentalDuration">
+                    <option value="">Choose a duration</option>
+                    <option value="24">24 Hours</option>
+                    <option value="7">7 Days</option>
+                    <option value="30">30 Days</option>
+                </select>
+                <div id="rentalDurationError" class="messageDiv"></div>
+                <p id="rentalPrice">Price: $0.00</p>
+
+                <h4>Credit Card Information</h4>
+
+                <label for="cardNumber">Card Number:</label>
+                <input type="text" id="cardNumber" placeholder="Enter card number" maxlength="16">
+                <div id="cardNumberError" class="messageDiv"></div>
+
+                <label for="expirationDate">Expiration Date: <span class="text-white bg-secondary">Eg. (January  2024)</span></label>
+                <input type="month" id="expirationDate">
+                <div id="expirationDateError" class="messageDiv"></div>
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" placeholder="Enter CVV" maxlength="3" minlength="3">
+                <div id="cvvError" class="messageDiv"></div>
+
+                <button id="confirmRental" class="btn btn-success">Confirm Rental</button>
+                <p id="orderMessage" class="text-success"></p>
+            </div>
+            <div id="movie-details" class="col p-0 ">
+                <!-- Movie details will be injected here -->
+            </div>
+        </div>
+    </main>
+    <script type="module" defer src="order.js"></script>
+</body>
+
+</html>
