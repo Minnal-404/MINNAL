@@ -150,10 +150,12 @@ if (!movieTitle) {
             // Show the iframe
             if (iframe.style.display == 'block'){
                 iframe.style.display = 'none';
+                document.getElementById("trailerPlay").textContent = "Watch Trailer";
+
 
             }else{
                 iframe.style.display = 'block';
-
+                document.getElementById("trailerPlay").textContent = "Close Trailer";
             }
       
             // Hide the poster and play button
