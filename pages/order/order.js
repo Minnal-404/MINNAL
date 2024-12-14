@@ -59,6 +59,7 @@ async function getMovieDetailsByTitle(title) {
 // Check if movie title exists in URL and fetch movie details
 if (movieTitle) {
     // Fetch the movie details using the title
+    document.getElementById("subscription").style.display = "none";
     getMovieDetailsByTitle(movieTitle).then(movieDetails => {
         if (movieDetails) {
             // Populate the page with the movie details
@@ -79,6 +80,9 @@ if (movieTitle) {
         document.getElementById("loading").style.display = "none";
     });
 } else {
+    document.getElementById("rental").style.display = "none";
+    document.getElementById("loading").style.display = "none";
+
     console.error("Movie title not found in URL.");
 }
 
@@ -262,9 +266,9 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
 
             // Update the user's rentals array in Firestore
             await updateDoc(userRef, { rentals });
-            window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent("The Matrix")}`);
-            window.location.replace( `../details/details.html?title=${encodeURIComponent("The Matrix")}`);
-            window.location.href = `../details/details.html?title=${encodeURIComponent("The Matrix")}`;
+            window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+            window.location.replace( `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+            window.location.href = `../details/details.html?title=${encodeURIComponent(movieTitle)}`;
             console.log('Rental added to user order list');
         } else {
             throw new Error("User document not found.");
@@ -275,11 +279,12 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
 }
 
 // Function to remove expired rentals
-function calculateExpirationDate(rentalDurationInDays) {
+function calculateExpirationDate() {
     const rentalDate = new Date(); // Get the current date
-    rentalDate.setUTCDate(rentalDate.getUTCDate() + rentalDurationInDays); // Add the rental duration in days
+    rentalDate.setMonth(rentalDate.getMonth() + 1); // Add 1 month to the current date
     return rentalDate.toISOString(); // Return the expiration date in ISO format
 }
+
 
 function profileNameCreator() {
     // document.getElementById("search").value = "";
@@ -309,3 +314,144 @@ function profileNameCreator() {
     // document.getElementById("loading").style.display = "none";
 
 }
+
+document.getElementById('confirmSub').addEventListener('click', function () {
+    // const rentalDuration = document.getElementById('rentalDuration').value;
+    // const rentalPriceElement = document.getElementById('rentalPrice').textContent;
+    // const rentalPrice = parseFloat(rentalPriceElement.replace('Price: $', '').trim());
+
+    // const orderMessageElement = document.getElementById('orderMessage');
+
+    // Credit Card Validation
+    const cardNumber = document.getElementById('cardNumber1').value.trim();
+    const expirationDate = document.getElementById('expirationDate1').value;
+    const cvv = document.getElementById('cvv1').value.trim();
+    let sub = true;
+    if (!cardNumber) {
+        // orderMessageElement.textContent = 'Please fill in all the credit card details.';
+        showMessage('Please fill in all the credit card details.', "cardNumberError1");
+        sub = false;
+        // return;
+    }
+
+    else if (!validateCardNumber(cardNumber)) {
+        // orderMessageElement.textContent = 'Invalid credit card number. Please check and try again.';
+        showMessage('Invalid credit card number. Please check and try again.', "cardNumberError1");
+        // return;
+        sub = false;
+
+    }
+
+    if ( !cvv) {
+        // orderMessageElement.textContent = 'Please fill in all the credit card details.';
+        showMessage('Please fill in all the credit card details.', "cvvError1");
+        // return;
+        sub = false;
+
+    }
+    else if(!validateCVV(cvv)) {
+        // orderMessageElement.textContent = 'Invalid CVV. Please check and try again.';
+        showMessage('Invalid CVV. Please check and try again.', "cvvError1");
+        sub = false;
+
+        // return;
+    }
+
+    if (!expirationDate) {
+        // orderMessageElement.textContent = 'Please fill in all the credit card details.';
+        showMessage('Please fill in all the credit card details.', "expirationDateError1");
+        // return;
+        sub = false;
+
+    }
+    else if (!validateExpirationDate(expirationDate)) {
+        // orderMessageElement.textContent = 'Invalid expiration date. Please check and try again.';
+        showMessage('Invalid expiration date. Please check and try again.', "expirationDateError1");
+        sub = false;
+
+        // return;
+    }
+
+    // if (!rentalPrice > 0) {
+    //     // Assuming loggedInUserId is the user ID of the currently logged-in user
+
+    //     // Proceed with the rental process (e.g., add to Firestore or call your backend API)
+    //     showMessage('Please select a rental duration before confirming.', "rentalDurationError");
+    //     sub = false;
+    //     // Add rental to Firestore (assuming a Firestore function to update the user's rentals)
+    // } 
+
+    if (sub){
+        //     orderMessageElement.textContent = `Successfully rented ${movieTitle} for ${rentalDuration} day(s)!`;
+        // addRentalToUserOrder(loggedInUserId, movieTitle, rentalDuration, rentalPrice);
+        document.getElementById("loading").style.display = "flex";
+        updateSubscriptionStatus(loggedInUserId, true);
+    }
+});
+
+async function updateSubscriptionStatus(userId, status) {
+    try{
+    const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
+
+    // Update the subscription field
+    // userRef.update({
+    //     subscription: status // true or false
+    // })
+    const subscriptionExpiration = calculateExpirationDate();
+    let subscription = {
+        status: status,
+        expiration: subscriptionExpiration
+    };
+    await updateDoc(userRef, { subscription });
+    console.log("Subscription status updated successfully!");
+    window.history.replaceState(null, null, `../../index.html`);
+    window.location.replace( `../../index.html`);
+    window.location.href = `../../index.html`;
+    }
+    catch (error) {
+            console.error(error);
+    }
+    
+}
+
+// try {
+//     const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
+//     const userDoc = await getDoc(userRef);
+
+//     if (userDoc.exists()) {
+//         const userData = userDoc.data();
+//         const rentals = userData.rentals || [];
+
+//         // If duration is 24 hours, convert it to 1 day
+//         let rentalDurationInDays = parseInt(duration);
+//         if (duration === '24') {
+//             rentalDurationInDays = 1;  // Treat 24 hours as 1 day
+//         }
+    
+//         // Get the current date as rentalDate
+//         const rentalDate = new Date();
+    
+//         // Calculate the rental expiration date
+//         const rentalExpiration = calculateExpirationDate(rentalDurationInDays);
+    
+//         // Add the rental info to the user's rentals array
+//         rentals.push({
+//             title: movieTitle,
+//             duration: rentalDurationInDays,
+//             price: rentalPrice,
+//             rentalDate: rentalDate.toISOString(),
+//             rentalExpiration: rentalExpiration  // Store expiration time in ISO format
+//         });
+
+//         // Update the user's rentals array in Firestore
+//         await updateDoc(userRef, { rentals });
+//         window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+//         window.location.replace( `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+//         window.location.href = `../details/details.html?title=${encodeURIComponent(movieTitle)}`;
+//         console.log('Rental added to user order list');
+//     } else {
+//         throw new Error("User document not found.");
+//     }
+// } catch (error) {
+//     console.error("Error adding rental to user order:", error);
+// }

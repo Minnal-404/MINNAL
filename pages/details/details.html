@@ -26,27 +26,31 @@
   </div>
 
   <header class="d-flex align-items-center justify-content-between bg-success">
-    <div class="col">
-      <div class="d-flex align-items-center gap-5 justify-content-evenly">
-        <a href="../../index.html">
-          <!-- <p style="cursor: pointer;" class="m-0">Logo</p> -->
-          <img src="../../assets/kanax.png" style="width: 5rem; box-shadow: none; cursor: pointer">
-        </a>
-        <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center ps-2">
-          <i class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around"></i>
+    <div id="col1" class="col-3">
+      <div id="gap1" class="d-flex align-items-center justify-content-between">
+        <!-- <p style="cursor: pointer;" class="m-0">Logo</p> -->
+        <img src="../../assets/kanax.png" style="width: 5rem; box-shadow: none;">
+        <div id="searchDiv" class="rounded-3 bg-white d-flex align-items-center">
+          <i id="searchIcon"
+            class="fa-solid fa-magnifying-glass fa-lg text-black d-flex justify-content-around p-2"></i>
           <input id="search" type="search" class="border border-white rounded-3" placeholder="Search">
+          <!-- <i id="xbtn" class="fa-solid fa-x "></i> -->
         </div>
       </div>
     </div>
 
-    <div class="col-6 d-flex justify-content-center">
+    <div id="greet" class="col-5 d-flex ">
       <h1 class="text-white" id="userName"></h1>
     </div>
 
-    <div class="col">
-      <div id="userDiv" class="d-flex justify-content-end ">
-        <div id="user" class="d-flex justify-content-center align-items-center bg-black rounded-circle">
-          <i id="userIcon" class="fa-solid fa-user fa-xl p-4 text-white"></i>
+    <div id="col2" class="col-3 ">
+
+      <div id="userDiv" class="d-flex gap-4 justify-content-end">
+        
+        <div id="user" class="d-flex gap-4 align-items-center ">
+          <!-- <i id="userIcon" class="fa-solid fa-user fa-xl p-4 text-white"></i> -->
+           <button class="btn btn-success" id="logBtn">Login</button>
+           <button class="btn btn-success" id="signUpBtn">Sign Up</button>
           <h1 id="profileName" class="text-white p-0 m-0 fw-bold"></h1>
         </div>
       </div>

@@ -73,7 +73,7 @@ function profileNameCreator() {
     console.log(profileName)
     let color = localStorage.getItem("color");
     console.log(color)
-    document.getElementById("userIcon").style.display = "none";
+    // document.getElementById("userIcon").style.display = "none";
     if (/^[a-zA-Z]/.test(profileName[0])) {
         document.getElementById("profileName").textContent = profileName[0].toUpperCase();
         document.getElementById("profile").textContent = profileName[0].toUpperCase();

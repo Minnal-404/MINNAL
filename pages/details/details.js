@@ -21,6 +21,92 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(); // Firestore instead of Realtime Database
 const loggedInUserId = localStorage.getItem("loggedInUserId");
+let subCheck = false;
+let userCheck = false;
+
+if (loggedInUserId) {
+    const docRef = doc(db, "users", loggedInUserId);
+    userCheck = true;
+    getDoc(docRef)
+        .then((docSnap) => {
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                try {
+                    if (userData.subscription.status) {
+                        let present = new Date();
+                        let expiration = new Date(userData.subscription.expiration);
+                        if (present > expiration) {
+                            let subscription = {};
+                            updateDoc(docRef, { subscription });
+                        }
+                        console.log(expiration)
+                    }
+                    if (userData.subscription.status) {
+                        // document.getElementById("subscribeBtn").setAttribute('disabled', 'true');
+                        // document.getElementById("subscribeBtn").classList.remove("ball");
+                        // document.getElementById("subscribeBtn").textContent = "Subscribed";
+                        subCheck = true;
+                    }
+                } catch (arror) {
+
+                } finally {
+                    document.getElementById("logBtn").style.display = "none";
+                    document.getElementById("signUpBtn").style.display = "none";
+                }
+
+
+
+            } else {
+                console.log("No document found matching id")
+            }
+        })
+        .catch((error) => {
+            console.log("Error getting document", error);
+        })
+}
+
+document.getElementById("user").addEventListener("click", () => {
+    if (check) {
+        window.location.href = "../profile/profile.html";
+    }
+});
+
+document.getElementById("logBtn").addEventListener("click", () => {
+    // if (check) {
+    //   window.location.href = "pages/profile/profile.html";
+
+    //   // let loading = document.getElementById("loading");
+    //   // loading.style.display = "block";
+    //   // loading.textContent = "";
+    //   // document.body.classList.add('no-scroll');  // Disable scrolling
+    //   // document.getElementById("profileSection").style.display = "block";
+    // } else {
+    const popup = document.getElementById('loginMain');
+    // Check if the popup is already visible
+    if (popup.style.display !== 'flex') {
+        const overlay = document.getElementById("overlay");
+
+        overlay.style.display = "block";
+
+        popup.style.display = 'flex';
+    }
+    // }
+
+});
+
+document.getElementById("signUpBtn").addEventListener("click", () => {
+
+    const popup = document.getElementById('createMain');
+    // Check if the popup is already visible
+    if (popup.style.display !== 'flex') {
+        const overlay = document.getElementById("overlay");
+
+        overlay.style.display = "block";
+
+        popup.style.display = 'flex';
+    }
+});
+
 
 // let playCheck = false;
 // if (playCheck) {
@@ -95,7 +181,7 @@ if (!movieTitle) {
             `<p class="mb-5">${genres}</p>`;
 
         document.getElementById("description").innerHTML = `<p class="p-0 m-0 lh-lg"">${movie.description}</p>`;
-        document.getElementById("rating").innerHTML = `<p class="ms-0 me-5 m-0 text-success"> ${movie.duration}</p><p class="ms-0 me-5 m-0 text-success">${movie.year}</p><p class="ms-0 me-5 m-0 bg-success px-2 rounded-1">${movie.rating}/5</p>`;
+        document.getElementById("rating").innerHTML = `<p class="ms-0 me-5 m-0 text-success"> ${movie.duration}</p><p class="ms-0 me-5 m-0 text-success">${movie.year}</p><p class="ms-0 me-5 m-0 bg-success px-2 rounded-1">${movie.rating}/5</p><p id="rentedTag" class="px-2 rounded-1 bg-warning m-0 " style="display: none;">Rented</p>`;
         let languages = "";
         for (let i of movie.languages) {
             languages += `<p>${i},</p>`
@@ -138,30 +224,45 @@ if (!movieTitle) {
 
         // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
         // posterDiv.innerHTML = poster;
-        
+
         document.getElementById("trailerPlay").addEventListener("click", () => {
             // The YouTube video ID of the trailer (replace with the actual trailer ID)
             const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
-      
+
             // Get the iframe and change its src to the YouTube video
             const iframe = document.getElementById('trailer');
             iframe.src = `${trailerId}`;
-      
+
             // Show the iframe
-            if (iframe.style.display == 'block'){
+            if (iframe.style.display == 'block') {
                 iframe.style.display = 'none';
                 document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                // document.getElementById("playButton").setAttribute('disabled', 'false');
+                // document.getElementById("playButton").disabled = false;
 
-
-            }else{
+            } else {
                 iframe.style.display = 'block';
-                document.getElementById("trailerPlay").textContent = "Close Trailer";
+                // Initialize the video player
+
+                // Check if the video is currently playing, and pause it if it is
+                try {
+                    videojs('my-video').pause();
+                }
+                catch (error) {
+                } finally {
+
+
+                    // document.getElementById("playButton").setAttribute('disabled', 'true');
+                    document.getElementById("trailerPlay").textContent = "Close Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                }
             }
-      
+
             // Hide the poster and play button
             // document.getElementById('poster').style.backgroundImage = 'none';
             // document.querySelector('.play-button').style.display = 'none';
-          })
+        })
 
         function checkUserExists() {
             // This could be a check for a cookie, local storage, or API request
@@ -191,6 +292,8 @@ if (!movieTitle) {
                     showMessage("Please log in to manage your wishlist.", errorMessageElement, "red");
 
                 });
+                document.getElementById("loading").style.display = "none";
+
                 return; // Exit early if no logged-in user
             }
 
@@ -224,6 +327,8 @@ if (!movieTitle) {
             getDoc(userDocRef).then(docSnapshot => {
                 if (docSnapshot.exists()) {
                     const userData = docSnapshot.data();
+
+
                     const currentWishlist = userData.wishlist || [];
 
                     // If the movie is in the wishlist, show the minus icon (fa-minus)
@@ -264,6 +369,7 @@ if (!movieTitle) {
             getDoc(userDocRef).then(docSnapshot => {
                 if (docSnapshot.exists()) {
                     const userData = docSnapshot.data();
+
                     const currentWishlist = userData.wishlist || [];
 
                     console.log("Current Wishlist: ", currentWishlist);
@@ -341,95 +447,100 @@ if (!movieTitle) {
 
 
 
-// Function to check if a movie is rented
-async function isMovieRented(loggedInUserId, movieTitle) {
-    const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document
-    removeExpiredRentals(loggedInUserId);
+        // Function to check if a movie is rented
+        async function isMovieRented(loggedInUserId, movieTitle) {
+            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document
+            removeExpiredRentals(loggedInUserId);
 
-    try {
-        const docSnapshot = await getDoc(userDocRef);
-        if (docSnapshot.exists()) {
-            const rentals = docSnapshot.data().rentals;
-            
-            // Check if the movie is in the rentals array
-            return rentals.some(rental => rental.title === movieTitle);
-        } else {
-            console.error("User document does not exist!");
-            return false;  // If the user document doesn't exist, return false
+            try {
+                const docSnapshot = await getDoc(userDocRef);
+                if (docSnapshot.exists()) {
+                    const rentals = docSnapshot.data().rentals;
+
+                    // Check if the movie is in the rentals array
+                    return rentals.some(rental => rental.title === movieTitle);
+                } else {
+                    console.error("User document does not exist!");
+                    return false;  // If the user document doesn't exist, return false
+                }
+            } catch (error) {
+                console.error("Error fetching rentals: ", error);
+                return false;  // Return false if there is an error fetching the rentals
+            }
         }
-    } catch (error) {
-        console.error("Error fetching rentals: ", error);
-        return false;  // Return false if there is an error fetching the rentals
-    }
-}
 
 
 
 
 
-async function removeExpiredRentals(userId) {
-    try {
-        const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
-        const userDoc = await getDoc(userRef);
+        async function removeExpiredRentals(userId) {
+            try {
+                const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
+                const userDoc = await getDoc(userRef);
 
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            let rentals = userData.rentals || [];
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    let rentals = userData.rentals || [];
 
-            // Get the current date
-            const currentDate = new Date();
+                    // Get the current date
+                    const currentDate = new Date();
 
-            // Filter out expired rentals
-            rentals = rentals.filter(rental => {
-                const rentalExpiration = new Date(rental.rentalExpiration);
-                return rentalExpiration > currentDate;  // Keep rentals that haven't expired
-            });
+                    // Filter out expired rentals
+                    rentals = rentals.filter(rental => {
+                        const rentalExpiration = new Date(rental.rentalExpiration);
+                        return rentalExpiration > currentDate;  // Keep rentals that haven't expired
+                    });
 
-            // Update the rentals list in Firestore
-            await updateDoc(userRef, { rentals });
+                    // Update the rentals list in Firestore
+                    await updateDoc(userRef, { rentals });
 
-            console.log('Expired rentals removed');
-        } else {
-            throw new Error("User document not found.");
+                    console.log('Expired rentals removed');
+                } else {
+                    throw new Error("User document not found.");
+                }
+            } catch (error) {
+                console.error("Error removing expired rentals:", error);
+            }
         }
-    } catch (error) {
-        console.error("Error removing expired rentals:", error);
-    }
-}
 
-// Example: Call this function to remove expired rentals when the page loads
+        // Example: Call this function to remove expired rentals when the page loads
 
+        let rented = false;
 
+        if (subCheck) {
+            console.log("hi")
+            document.getElementById("loading").style.display = "none";
 
-
-
-
-let rented = false;
-
-        isMovieRented(loggedInUserId, movieTitle)
-    .then(isRented => {
-        if (isRented) {
-            console.log("The movie is rented.");
-            rented = true;
         } else {
-            console.log("The movie is not rented.");
-            document.getElementById("playButton").textContent = "Rent Now";
+            if (loggedInUserId) {
+                isMovieRented(loggedInUserId, movieTitle)
+                    .then(isRented => {
+                        if (isRented) {
+                            console.log("The movie is rented.");
+                            document.getElementById("rentedTag").style.display = "block";
+                            rented = true;
+                        } else {
+                            console.log("The movie is not rented.");
+                            document.getElementById("playButton").textContent = "Rent Now";
+
+                        }
+                        document.getElementById("loading").style.display = "none";
+
+                    });
+            }
 
         }
-    });
-
-
-
         const playButton = document.getElementById("playButton");
 
         playButton.addEventListener("click", () => {
             if (checkUserExists()) {
-                if (!rented) {
-                    const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+                if (rented || subCheck) {
+                    document.getElementById("playButton").setAttribute('disabled', 'true');
+                    document.getElementById('trailer').style.display = 'none';
+                    document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                    document.getElementById('trailer').src = "";
 
-                    window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
-
-                } else {
                     renderVideoPlayer(movie);
                     changeVideoSource(movie);
                     const closeBtn = document.getElementById("clsBtn");
@@ -511,11 +622,17 @@ let rented = false;
 
 
                             // Hide the video player and close button
-                            document.getElementById("video-container").innerHTML = '';
+                            document.getElementById("my-video").innerHTML = '';
                             closeBtn.style.display = "none"; // Hide the close button
                             window.location.reload();
                         });
                     }
+                }
+                else {
+                    const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+
+                    window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
+
                 }
             } else {
                 const popup = document.getElementById('loginMain');
@@ -531,12 +648,12 @@ let rented = false;
 
                 }
             }
+            document.getElementById("loading").style.display = "none";
 
 
         });
 
 
-        document.getElementById("loading").style.display = "none";
 
     }
 
@@ -608,20 +725,20 @@ const searchResultsContainer = document.getElementById('searchResults');
 
 function displayResults(results) {
     searchResultsContainer.innerHTML = ''; // Clear previous results
-  
+
     if (results.length === 0) {
-      document.getElementById("searchResults").style.display = "flex";
-      searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
-      return;
+        document.getElementById("searchResults").style.display = "flex";
+        searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
+        return;
     }
-  
+
     const movieContainer = document.getElementById("searchResults");
-  
+
     results.forEach(movie => {
-      const movieDiv = document.createElement('div');
-      movieDiv.className = 'movie';
-  
-      movieDiv.innerHTML = `<img src="${movie.poster}" alt="${movie.title}">
+        const movieDiv = document.createElement('div');
+        movieDiv.className = 'movie';
+
+        movieDiv.innerHTML = `<img src="${movie.poster}" alt="${movie.title}">
         <h2>${movie.title}</h2>
         <p>${movie.year}</p>
         <div class="popups flex-column">
@@ -632,7 +749,7 @@ function displayResults(results) {
             <h2>${movie.title}</h2>
             <div class="d-flex gap-4 justify-content-between">
               <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
-                <button id="watch" class="btn btn-success">Watch Now</button>
+                <button id="watch" class="btn btn-success">More details</button>
               </a>
               <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist">
                 <i class="fa-solid fa-plus fa-xl"></i>
@@ -650,168 +767,168 @@ function displayResults(results) {
             <p class="m-0">${movie.description}</p>
           </div>
         </div>`;
-  
-      // Append movie div to container
-      movieContainer.appendChild(movieDiv);
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-      // Log the buttons to ensure they're there
-      const buttons = movieDiv.querySelectorAll('.add-to-wishlist');
-      console.log('Buttons:', buttons);  // Log the buttons array
-      buttons.forEach(button => {
-        const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
-        console.log('Button icon:', buttonIcon);  // Log the button icon to check if it exists
-  
-        // Safeguard if the icon is missing
-        if (!buttonIcon) {
-          console.error('Button does not contain <i> icon:', button);
-          return; // Skip this button if the icon is not present
-        }
-  
-        const movieTitle = button.getAttribute('data-title');
-        const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
-  
-        // Check if loggedInUserId is available
-        if (loggedInUserId) {
-          checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
-          button.addEventListener('click', function () {
-            document.getElementById("loading").style.display = "flex";
-            toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
-          });
-        } else {
-          button.addEventListener('click', function () {
-            showMessage('Please log in to add movies to the wishlist.', errorMessageElement, 'red');
-          });
-          console.error('User not logged in. Please log in to add movies to the wishlist.');
-        }
-      });
+
+        // Append movie div to container
+        movieContainer.appendChild(movieDiv);
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        // Log the buttons to ensure they're there
+        const buttons = movieDiv.querySelectorAll('.add-to-wishlist');
+        console.log('Buttons:', buttons);  // Log the buttons array
+        buttons.forEach(button => {
+            const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
+            console.log('Button icon:', buttonIcon);  // Log the button icon to check if it exists
+
+            // Safeguard if the icon is missing
+            if (!buttonIcon) {
+                console.error('Button does not contain <i> icon:', button);
+                return; // Skip this button if the icon is not present
+            }
+
+            const movieTitle = button.getAttribute('data-title');
+            const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
+
+            // Check if loggedInUserId is available
+            if (loggedInUserId) {
+                checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+                button.addEventListener('click', function () {
+                    document.getElementById("loading").style.display = "flex";
+                    toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+                });
+            } else {
+                button.addEventListener('click', function () {
+                    showMessage('Please log in to add movies to the wishlist.', errorMessageElement, 'red');
+                });
+                console.error('User not logged in. Please log in to add movies to the wishlist.');
+            }
+        });
     });
-  
-    
-  
 
 
-        // Function to check the wishlist status for each movie
-        function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
-            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
 
-            // Get the current wishlist array from Firestore
-            getDoc(userDocRef).then(docSnapshot => {
-                if (docSnapshot.exists()) {
-                    const userData = docSnapshot.data();
-                    const currentWishlist = userData.wishlist || [];
 
-                    // If the movie is in the wishlist, set the button to 'minus' (remove)
-                    if (currentWishlist.includes(movieTitle)) {
-                        buttonIcon.classList.remove('fa-plus');
-                        buttonIcon.classList.add('fa-minus');
-                    } else {
-                        // If the movie is not in the wishlist, set the button to 'plus' (add)
-                        buttonIcon.classList.remove('fa-minus');
-                        buttonIcon.classList.add('fa-plus');
-                    }
+
+    // Function to check the wishlist status for each movie
+    function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+        // Get the current wishlist array from Firestore
+        getDoc(userDocRef).then(docSnapshot => {
+            if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                const currentWishlist = userData.wishlist || [];
+
+                // If the movie is in the wishlist, set the button to 'minus' (remove)
+                if (currentWishlist.includes(movieTitle)) {
+                    buttonIcon.classList.remove('fa-plus');
+                    buttonIcon.classList.add('fa-minus');
                 } else {
-                    // If the user document doesn't exist, initialize with 'plus' icon
-                    console.error("User document does not exist. Creating a new document...");
+                    // If the movie is not in the wishlist, set the button to 'plus' (add)
                     buttonIcon.classList.remove('fa-minus');
                     buttonIcon.classList.add('fa-plus');
                 }
-            }).catch((error) => {
-                console.error("Error fetching user document: ", error);
-            });
-        }
+            } else {
+                // If the user document doesn't exist, initialize with 'plus' icon
+                console.error("User document does not exist. Creating a new document...");
+                buttonIcon.classList.remove('fa-minus');
+                buttonIcon.classList.add('fa-plus');
+            }
+        }).catch((error) => {
+            console.error("Error fetching user document: ", error);
+        });
+    }
 
-        // Function to add or remove the movie title to/from the Firestore wishlist array
-        function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
-            const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+    // Function to add or remove the movie title to/from the Firestore wishlist array
+    function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
 
-            // Clear previous error message
-            errorMessageElement.textContent = "";
+        // Clear previous error message
+        errorMessageElement.textContent = "";
 
-            // Get the current wishlist array from Firestore
-            getDoc(userDocRef).then(docSnapshot => {
-                if (docSnapshot.exists()) {
-                    const userData = docSnapshot.data();
-                    const currentWishlist = userData.wishlist || [];
+        // Get the current wishlist array from Firestore
+        getDoc(userDocRef).then(docSnapshot => {
+            if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                const currentWishlist = userData.wishlist || [];
 
-                    console.log("Current Wishlist: ", currentWishlist);
+                console.log("Current Wishlist: ", currentWishlist);
 
-                    // Check if the movie title is already in the wishlist
-                    if (currentWishlist.includes(movieTitle)) {
-                        // Movie is already in the wishlist, remove it
-                        updateDoc(userDocRef, {
-                            wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
-                        })
-                            .then(() => {
-                                console.log(`${movieTitle} removed from wishlist in Firestore!`);
-                                showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
-
-                                // Change the button icon to plus after removal
-                                buttonIcon.classList.remove('fa-minus');
-                                buttonIcon.classList.add('fa-plus');
-                            })
-                            .catch((error) => {
-                                console.error("Error removing from wishlist: ", error);
-                                showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
-                            });
-                    } else {
-                        // If movie is not in the wishlist, add it using arrayUnion
-                        updateDoc(userDocRef, {
-                            wishlist: arrayUnion(movieTitle)
-                        })
-                            .then(() => {
-                                console.log(`${movieTitle} added to wishlist in Firestore!`);
-                                showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
-
-                                // Change the button icon to minus after adding
-                                buttonIcon.classList.remove('fa-plus');
-                                buttonIcon.classList.add('fa-minus');
-                            })
-                            .catch((error) => {
-                                console.error("Error adding to wishlist: ", error);
-                                showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
-                            });
-                    }
-                } else {
-                    // If the user document doesn't exist, create a new one with the wishlist field
-                    console.error("User document does not exist. Creating a new document...");
-                    showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
-
-                    // Create a new document with the wishlist containing the movie title
-                    setDoc(userDocRef, { wishlist: [movieTitle] })
+                // Check if the movie title is already in the wishlist
+                if (currentWishlist.includes(movieTitle)) {
+                    // Movie is already in the wishlist, remove it
+                    updateDoc(userDocRef, {
+                        wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+                    })
                         .then(() => {
-                            console.log("New user document created with wishlist!");
-                            showMessage("New user document created with wishlist!", errorMessageElement, "green");
+                            console.log(`${movieTitle} removed from wishlist in Firestore!`);
+                            showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+                            // Change the button icon to plus after removal
+                            buttonIcon.classList.remove('fa-minus');
+                            buttonIcon.classList.add('fa-plus');
+                        })
+                        .catch((error) => {
+                            console.error("Error removing from wishlist: ", error);
+                            showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+                        });
+                } else {
+                    // If movie is not in the wishlist, add it using arrayUnion
+                    updateDoc(userDocRef, {
+                        wishlist: arrayUnion(movieTitle)
+                    })
+                        .then(() => {
+                            console.log(`${movieTitle} added to wishlist in Firestore!`);
+                            showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
 
                             // Change the button icon to minus after adding
                             buttonIcon.classList.remove('fa-plus');
                             buttonIcon.classList.add('fa-minus');
                         })
                         .catch((error) => {
-                            console.error("Error creating new user document: ", error);
-                            showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+                            console.error("Error adding to wishlist: ", error);
+                            showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
                         });
                 }
-            }).catch((error) => {
-                console.error("Error fetching user document: ", error);
-                showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
-            });
-        }
+            } else {
+                // If the user document doesn't exist, create a new one with the wishlist field
+                console.error("User document does not exist. Creating a new document...");
+                showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
 
-        // Helper function to display messages in the error container (specific for each poster)
-        function showMessage(message, messageElement, color) {
-            document.getElementById("loading").style.display = "none";
-            messageElement.textContent = message;  // Set the message text
-            messageElement.style.color = color;    // Set color (red for errors, green for success)
+                // Create a new document with the wishlist containing the movie title
+                setDoc(userDocRef, { wishlist: [movieTitle] })
+                    .then(() => {
+                        console.log("New user document created with wishlist!");
+                        showMessage("New user document created with wishlist!", errorMessageElement, "green");
 
-            // Hide the message after 5 seconds
-            setTimeout(() => {
-                messageElement.textContent = "";
-            }, 5000);
-        }
+                        // Change the button icon to minus after adding
+                        buttonIcon.classList.remove('fa-plus');
+                        buttonIcon.classList.add('fa-minus');
+                    })
+                    .catch((error) => {
+                        console.error("Error creating new user document: ", error);
+                        showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+                    });
+            }
+        }).catch((error) => {
+            console.error("Error fetching user document: ", error);
+            showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+        });
+    }
 
-        document.getElementById("searchResults").style.display = "flex"
-    };
+    // Helper function to display messages in the error container (specific for each poster)
+    function showMessage(message, messageElement, color) {
+        document.getElementById("loading").style.display = "none";
+        messageElement.textContent = message;  // Set the message text
+        messageElement.style.color = color;    // Set color (red for errors, green for success)
+
+        // Hide the message after 5 seconds
+        setTimeout(() => {
+            messageElement.textContent = "";
+        }, 5000);
+    }
+
+    document.getElementById("searchResults").style.display = "flex"
+};
 
 
 // Function to handle search input
@@ -906,7 +1023,7 @@ if (checkUserExists()) {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error getting document");
+                    console.log("Error getting document", error);
                 })
         } else {
             console.log("User Id not found in local storage")
@@ -916,27 +1033,27 @@ if (checkUserExists()) {
 }
 
 
-document.getElementById("user").addEventListener("click", () => {
-    if (check) {
-        window.location.href = "../profile/profile.html";
-        // let loading = document.getElementById("loading");
-        // loading.style.display = "block";
-        // loading.textContent = "";
-        // document.body.classList.add('no-scroll');  // Disable scrolling
-        // document.getElementById("profileSection").style.display = "block";
-    } else {
-        const popup = document.getElementById('loginMain');
-        // Check if the popup is already visible
-        if (popup.style.display !== 'flex') {
-            const overlay = document.getElementById("overlay");
+// document.getElementById("user").addEventListener("click", () => {
+//     if (check) {
+//         window.location.href = "../profile/profile.html";
+//         // let loading = document.getElementById("loading");
+//         // loading.style.display = "block";
+//         // loading.textContent = "";
+//         // document.body.classList.add('no-scroll');  // Disable scrolling
+//         // document.getElementById("profileSection").style.display = "block";
+//     } else {
+//         const popup = document.getElementById('loginMain');
+//         // Check if the popup is already visible
+//         if (popup.style.display !== 'flex') {
+//             const overlay = document.getElementById("overlay");
 
-            overlay.style.display = "block";
+//             overlay.style.display = "block";
 
-            popup.style.display = 'flex';
-        }
-    }
+//             popup.style.display = 'flex';
+//         }
+//     }
 
-});
+// });
 
 
 
@@ -974,13 +1091,16 @@ function profileNameCreator() {
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
     document.getElementById("user").classList.add("border-5");
+    document.getElementById("user").classList.add("rounded-circle");
+    document.getElementById("user").style.width = "3.5rem";
+    document.getElementById("user").classList.add("justify-content-center");
 
     // rounded-circle border-white border border-5
     let profileName = localStorage.getItem("name");
     console.log(profileName)
     let color = localStorage.getItem("color");
     console.log(color)
-    document.getElementById("userIcon").style.display = "none";
+    // document.getElementById("userIcon").style.display = "none";
     if (/^[a-zA-Z]/.test(profileName[0])) {
         document.getElementById("profileName").textContent = profileName[0].toUpperCase();
         document.getElementById("profile").textContent = profileName[0].toUpperCase();

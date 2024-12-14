@@ -174,3 +174,13 @@ h1 {
     opacity:0;
     
   }
+  #subDiv, #orderDiv{
+    background-image: linear-gradient(to bottom right , green, black);
+    box-shadow: 0 0px 20px 1px yellow; /* Add shadow on hover */
+
+  }
+  #subDiv:hover, #orderDiv:hover{
+    box-shadow: 0 0px 20px 5px yellow; /* Add shadow on hover */
+    transform: scale(1.05); /* Slightly enlarge the image */
+    transition: transform 0.5s;
+  }
