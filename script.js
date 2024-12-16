@@ -90,7 +90,7 @@ else {
 
 document.getElementById("user").addEventListener("click", () => {
   if (check) {
-    window.location.href = "";
+    window.location.href = "pages/profile/profile.html";
   }
 });
 

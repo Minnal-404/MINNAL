@@ -68,11 +68,14 @@ if (movieTitle) {
             // Insert the movie details into the HTML
             movieContainer.innerHTML = `
                 <h1 class="text-start">${movieDetails.title}</h1>
+                <div class="d-flex flex-column align-items-center">
                 <img src="${movieDetails.poster}" alt="${movieDetails.title}" />
+                </div>
                 <p><strong>Year:</strong> ${movieDetails.year}</p>
                 <p><strong>Duration:</strong> ${movieDetails.duration}</p>
                 <p><strong>Description:</strong> ${movieDetails.description}</p>
                 <p><strong>Rating:</strong> ${movieDetails.rating}/5</p>
+                </div>
             `;
         } else {
             console.error("Movie details not found.");
@@ -298,7 +301,7 @@ function profileNameCreator() {
     console.log(profileName)
     let color = localStorage.getItem("color");
     console.log(color)
-    document.getElementById("userIcon").style.display = "none";
+    // document.getElementById("userIcon").style.display = "none";
     if (/^[a-zA-Z]/.test(profileName[0])) {
         document.getElementById("profileName").textContent = profileName[0].toUpperCase();
         // document.getElementById("profile").textContent = profileName[0].toUpperCase();
