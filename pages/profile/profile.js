@@ -519,7 +519,10 @@ function fetchRentals(loggedInUserId) {
             if (docSnapshot.exists()) {
                 // Document exists, get the rentals array
                 let rentals = docSnapshot.data().rentals;
-
+                let rentalHistory = docSnapshot.data().rentalHistory;
+                if (rentalHistory){
+                    displayRentalHistory(rentalHistory);
+                }
                 if (rentals && rentals.length > 0) {
                     // Remove expired rentals
                     rentals = removeExpiredRentals(rentals);
@@ -528,6 +531,7 @@ function fetchRentals(loggedInUserId) {
                         // Do something with the rentals, e.g., display it on the page
                         console.log("Active Rentals:", rentals);
                         displayRentals(rentals);
+
                     } else {
                         console.log("All rentals have expired.");
                         // document.getElementById("rentalsError").textContent = "You have no active rentals!";
@@ -542,13 +546,16 @@ function fetchRentals(loggedInUserId) {
             } else {
                 // If the document doesn't exist, handle the case
                 console.error("User document does not exist!");
-                document.getElementById("rentalsError").textContent = "User document does not exist!";
+                // document.getElementById("rentalsError").textContent = "User document does not exist!";
             }
+            
+
         })
         .catch((error) => {
             console.error("Error fetching rentals: ", error);
-            document.getElementById("rentalsError").textContent = "Error fetching rentals!";
+            // document.getElementById("rentalsError").textContent = "Error fetching rentals!";
         });
+
 }
 
 // Function to remove expired rentals from the rentals array
@@ -578,7 +585,7 @@ function updateRentalsInFirestore(userId, rentals) {
 
 // Function to display the rentals
 function displayRentals(rentals) {
-    const rentalsSection = document.getElementById("rentalsSection");
+    const rentalsSection = document.getElementById("activeRentals");
     rentalsSection.innerHTML = "";  // Clear previous content
 
     // Loop through the rentals and fetch details for each movie
@@ -606,7 +613,7 @@ function displayRentals(rentals) {
 
             rentalDiv.innerHTML = `
                 <img src="${movieDetails.poster}" alt="${movieDetails.title}"><h2>${movieDetails.title}</h2><p>${movieDetails.year}</p><p><strong>Rental Period:</strong> ${countdownString}</p>
-                <p><strong>Rental Price:</strong> $${rental.price}</p>
+               
             <div class="popups flex-column" >
               <div class="p-0">
                   <img src="${movieDetails.thumbnails}" alt="${movieDetails.title}"></div>
@@ -629,9 +636,90 @@ function displayRentals(rentals) {
 
             // Append the movie rental info to the container
             rentalsSection.appendChild(rentalDiv);
+
+            
         } else {
             console.log("Movie not found: " + rental.title);
         }
+        
+    });
+    
+}
+
+function displayRentalHistory(rentals) {
+    const rentalsSection = document.getElementById("rentalHistory");
+    rentalsSection.innerHTML = "";  // Clear previous content
+
+    // Loop through the rentals and fetch details for each movie
+    rentals.forEach(async (rental) => {
+        console.log(rental.title, "Fetching details...");
+
+        // Fetch movie details based on title (asynchronously)
+        const movieDetails = await getMovieDetailsByTitle(rental.title);
+
+        if (movieDetails) {
+            const rentalDiv = document.createElement('div');
+            rentalDiv.classList.add("rentalHistoryCard")
+            // Get the rental duration in days (24 hours = 1 day)
+            // let durationInDays = rental.duration;
+            
+            // Calculate the expiry date based on the rental duration in days
+            // const expiryDate = new Date(rental.rentalExpiration);
+
+            // Get the countdown string (remaining rental period)
+            function formatDate(rentedDate) {
+                const rentalDate = new Date(rentedDate);
+            
+                // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
+                const day = rentalDate.getDate();
+                const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                               (day % 10 === 2 && day !== 12) ? 'nd' :
+                               (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+                const formattedDay = day + suffix;
+            
+                // Month as full name (e.g., "December")
+                const month = rentalDate.toLocaleString('en-US', { month: 'long' });
+            
+                // Year (e.g., "2024")
+                const year = rentalDate.getFullYear();
+            
+                // Full weekday name (e.g., "Monday")
+                const weekday = rentalDate.toLocaleString('en-US', { weekday: 'long' });
+            
+                // Time in 24-hour format (e.g., "16:31:41")
+                const hours = rentalDate.getHours().toString().padStart(2, '0');
+                const minutes = rentalDate.getMinutes().toString().padStart(2, '0');
+                const seconds = rentalDate.getSeconds().toString().padStart(2, '0');
+                const time = `${hours}:${minutes}:${seconds}`;
+            
+                // Combine all parts into the desired format
+                const formattedDate = `${formattedDay} ${month} ${year} on ${weekday} at ${time}`;
+            
+                return formattedDate;
+            }
+            
+            // Example usage
+              // Output: "26th December 2024 on Thursday at 16:31:41"
+            
+            rentalDiv.innerHTML = `
+                <img src="${movieDetails.poster}" alt="${movieDetails.title}">
+                <div>
+                <h2>${movieDetails.title}</h2>
+                <p><strong>Rented on:</strong> ${formatDate(rental.rentedDate)}</p>
+                <p><strong>Expired on:</strong> ${formatDate(rental.expiredDate)}</p>
+                <p><strong>Rental Duration:</strong> ${rental.rentedDuration}</p>
+               </div>
+            
+            `;
+
+            // Append the movie rental info to the container
+            rentalsSection.appendChild(rentalDiv);
+
+            
+        } else {
+            console.log("Movie not found: " + rental.title);
+        }
+        
     });
 }
 
@@ -671,7 +759,7 @@ function getCountdown(expiryDate) {
 // Call the function to fetch rentals for the logged-in user
 fetchRentals(loggedInUserId);
 
-const postersContainer1 = document.getElementById('rentalsSection');
+const postersContainer1 = document.getElementById('activeRentals');
 
 
 const observer1 = new MutationObserver(() => {
@@ -708,3 +796,22 @@ const observer1 = new MutationObserver(() => {
 
 // Start observing the posters container for child changes (new posters added)
 observer1.observe(postersContainer1, { childList: true });
+
+const floatingButton = document.getElementById('floating-btn');
+
+// Show or hide the button when scrolling
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 200) { // Show button after scrolling 200px
+        floatingButton.style.display = 'block';
+    } else {
+        floatingButton.style.display = 'none';
+    }
+});
+
+// Optionally, you can make the button scroll the page to the top when clicked
+floatingButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});

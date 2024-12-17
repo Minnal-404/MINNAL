@@ -31,7 +31,7 @@
         <h1 id="loadMessage"></h1>
         <i class="fa-solid fa-spinner fa-spin fa-2xl" style="color: #ffffff;"></i>
       </div>
-    <header class="d-flex align-items-center justify-content-between bg-success">
+    <header class="d-flex align-items-center justify-content-between bg-success position-fixed top-0 start-0 end-0">
         <div id="col1" class="col-3">
             <div id="gap1" class="d-flex align-items-center justify-content-between">
                 <a href="../../index.html" class="text-black text-decoration-none">
@@ -71,9 +71,10 @@
             <li id='wishlist'><a href="#" >Wishlist</a></li>
         </ul>
     </aside> -->
+    <button id="floating-btn" class="floating-btn"><i class="fa-solid fa-arrow-up fa-lg"></i></button>
 
     <main class="d-flex">
-        <section id="aside" class="bg-black text-success d-flex flex-column border-end border-5">
+        <section id="aside" class="bg-black text-success d-flex flex-column ">
             <div id='profileSec' class="border text-white border-5 border-end-0 py-3">
                 <h2>Profile</h2>
             </div>
@@ -129,9 +130,17 @@
                 </div>
             </div>
 
-            <div id="rentalsSection" class="section-content text-black p-5 overflow-x-scroll " style="display: none;">
-                <p id="rentalsError" class="m-0 text-danger"></p>
-                <h1 class="text-white ">You have no active rentals!</h1>
+            <div id="rentalsSection" class="section-content text-black p-5  flex-column gap-4" style="display: none;">
+                <h1 class="text-white">Active Rentals</h1>
+                <div id="activeRentals" class="overflow-x-scroll d-flex">
+                    <p id="rentalsError" class="m-0 text-danger"></p>
+                    <h3 class="text-white ">You have no active rentals!</h3>
+                </div>
+                <h1 class="text-white">Rental History</h1>
+                <div id="rentalHistory" class="overflow-y-scroll">
+                    <h3 class="text-white ">You have no rental history!</h3>
+                </div>
+                
             </div>
 
             <div id="wishlistSection" class="section-content p-5 overflow-x-scroll  text-black" style="display: none;">
@@ -139,6 +148,8 @@
                 <h1 class="text-white ">Your wishlist is empty</h1>
             </div>
         </section>
+        <div id="proBorder" class="border-end border-5 position-fixed bottom-0"></div>
+
     </main>
 </body>
 

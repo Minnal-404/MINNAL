@@ -254,7 +254,11 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
         
             // Get the current date as rentalDate
             const rentalDate = new Date();
-        
+            function calculateExpirationDate(rentalDurationInDays) {
+                const rentalDate = new Date(); // Get the current date
+                rentalDate.setUTCDate(rentalDate.getUTCDate() + rentalDurationInDays); // Add the rental duration in days
+                return rentalDate.toISOString(); // Return the expiration date in ISO format
+            }
             // Calculate the rental expiration date
             const rentalExpiration = calculateExpirationDate(rentalDurationInDays);
         
@@ -267,8 +271,26 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
                 rentalExpiration: rentalExpiration  // Store expiration time in ISO format
             });
 
-            // Update the user's rentals array in Firestore
+            // let rentalHistory = [{
+            //     rentedDate: rentalDate,
+            //     expiredDate: rentalExpiration,
+            //     rentedDuration: rentalDurationInDays+" "+" Days"
+            // }]
+            // // Update the user's rentals array in Firestore
             await updateDoc(userRef, { rentals });
+            // await updateDoc(userRef, { rentalHistory });
+            const newRentalEntry = {
+                rentedDate: rentalDate.toISOString(),
+                expiredDate: rentalExpiration,
+                rentedDuration: rentalDurationInDays + " Days",
+                title: movieTitle
+            };
+        
+            // Use arrayUnion to add the new rental entry to the rentalHistory array
+            await updateDoc(userRef, {
+                rentalHistory: arrayUnion(newRentalEntry)
+            });
+        
             window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
             window.location.replace( `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
             window.location.href = `../details/details.html?title=${encodeURIComponent(movieTitle)}`;
