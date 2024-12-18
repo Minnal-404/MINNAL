@@ -147,7 +147,7 @@ if (!movieTitle) {
     // Function to display movie details in the HTML
     function displayMovieDetails(movie) {
         document.getElementById("title").textContent = `${movie.title} (${movie.year})`;
-        const movieHTML = `          <div class="d-flex gap-4">
+        const movieHTML = `          <div class="d-flex flex-wrap gap-4">
     <button id="playButton" class="btn btn-success" data-title="${movie.title}">Watch Now</button>
     <button id="trailerPlay" class="play-button btn btn-success text-white">Watch Trailer</button>
                   <button id="add" class="add-to-wishlist btn btn-success border-black" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
@@ -173,50 +173,50 @@ if (!movieTitle) {
         bg.appendChild(img);
         let genres = '';
         for (let i = 0; i < movie.genre.length; i++) {
-            genres += `<p class="mx-4 ms-0 m-0">${movie.genre[i]}</p><p class="mx-4 ms-0 m-0 p-0">•</p>`;
+            genres += `<h5 class="mx-4 ms-0 m-0">${movie.genre[i]}</h5><h5 class="mx-4 ms-0 m-0 h5-0">•</h5>`;
         }
         console.log(genres)
         genres = genres.slice(0, -24);
         document.getElementById("genre").innerHTML =
-            `<p class="mb-5">${genres}</p>`;
+            `<h5 class="mb-5">${genres}</h5>`;
 
-        document.getElementById("description").innerHTML = `<p class="p-0 m-0 lh-lg"">${movie.description}</p>`;
-        document.getElementById("rating").innerHTML = `<p class="ms-0 me-5 m-0 text-success"> ${movie.duration}</p><p class="ms-0 me-5 m-0 text-success">${movie.year}</p><p class="ms-0 me-5 m-0 bg-success px-2 rounded-1">${movie.rating}/5</p><p id="rentedTag" class="px-2 rounded-1 bg-warning m-0 " style="display: none;">Rented</p>`;
+        document.getElementById("description").innerHTML = `<h5 class="h5-0 m-0 lh-lg"">${movie.description}</h5>`;
+        document.getElementById("rating").innerHTML = `<h5 class="ms-0  m-0 text-success"> ${movie.duration}</h5><h5 class="ms-0  m-0 text-success">${movie.year}</h5><h5 class="ms-0  m-0 bg-success px-2 rounded-1">${movie.rating}/5</h5><h5 id="rentedTag" class="px-2 rounded-1 bg-warning m-0 " style="display: none;">Rented</h5>`;
         let languages = "";
         for (let i of movie.languages) {
-            languages += `<p>${i},</p>`
+            languages += `<h5>${i},</h5>`
         }
         languages = languages.replace(/,(?=[^,]*$)/, '.'); let casts = "";
         for (let i of movie.details.cast) {
-            casts += `<p>${i},</p>`
+            casts += `<h5>${i},</h5>`
         }
         casts = casts.replace(/,(?=[^,]*$)/, '.');
         let producers = "";
         for (let i of movie.details.producer) {
-            producers += `<p>${i},</p>`
+            producers += `<h5>${i},</h5>`
         }
         producers = producers.replace(/,(?=[^,]*$)/, '.');
         let music = "";
         for (let i of movie.details.music) {
-            music += `<p>${i},</p>`
+            music += `<h5>${i},</h5>`
         }
         music = music.replace(/,(?=[^,]*$)/, '.');
         let directors = "";
         for (let i of movie.details.director) {
-            directors += `<p>${i},</p>`
+            directors += `<h5>${i},</h5>`
         }
         directors = directors.replace(/,(?=[^,]*$)/, '.');
         document.getElementById("moreDetails").innerHTML = `<h1>More Info  <i class="fa-solid fa-sm fa-arrow-down fa-bounce"></i> </h1>
-        <h2 class="text-start">Languages</h2>
-        <div class="d-flex gap-4">${languages}</div>
-        <h2 class="text-start">Directors</h2>
-        <div class="d-flex gap-4">${directors}</div>
-        <h2 class="text-start">Producers</h2>
-        <div class="d-flex gap-4">${producers}</div>
-        <h2 class="text-start">Cast</h2>
-        <div class="d-flex gap-4">${casts}</div>
-        <h2 class="text-start">Music</h2>
-        <div class="d-flex gap-4">${music}</div>
+        <h2 class="text-start text-success">Languages</h2>
+        <div class="d-flex flex-wrap gap-4">${languages}</div>
+        <h2 class="text-start text-success">Directors</h2>
+        <div class="d-flex flex-wrap gap-4">${directors}</div>
+        <h2 class="text-start text-success">Producers</h2>
+        <div class="d-flex flex-wrap gap-4">${producers}</div>
+        <h2 class="text-start text-success">Cast</h2>
+        <div class="d-flex flex-wrap gap-4">${casts}</div>
+        <h2 class="text-start text-success">Music</h2>
+        <div class="d-flex flex-wrap gap-4">${music}</div>
         
 `
         // document.getElementById("duration").innerHTML = `<p class="col-2 p-2">${movie.duration}</p>`;
@@ -224,7 +224,56 @@ if (!movieTitle) {
 
         // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
         // posterDiv.innerHTML = poster;
+        const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
 
+// Check if the media query matches
+if (mediaQuery1.matches) {
+  // Code for small screens (mobile/tablet)
+  console.log("Screen is less than 768px wide");
+  
+  document.getElementById("trailerPlay").addEventListener("click", () => {
+    let btn = document.getElementById("posterDiv");
+    if (btn.style.height!='25rem'){
+        btn.style.height = '25rem';
+
+    }else{
+        btn.style.height = '0';
+
+    }
+    const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
+
+            // Get the iframe and change its src to the YouTube video
+            const iframe = document.getElementById('trailer');
+            iframe.src = `${trailerId}`;
+
+            // Show the iframe
+            if (iframe.style.display == 'block') {
+                iframe.style.display = 'none';
+                document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                // document.getElementById("playButton").setAttribute('disabled', 'false');
+                // document.getElementById("playButton").disabled = false;
+
+            } else {
+                iframe.style.display = 'block';
+                // Initialize the video player
+
+                // Check if the video is currently playing, and pause it if it is
+                try {
+                    videojs('my-video').pause();
+                }
+                catch (error) {
+                } finally {
+
+
+                    // document.getElementById("playButton").setAttribute('disabled', 'true');
+                    document.getElementById("trailerPlay").textContent = "Close Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                }
+            }
+  })
+}else{
         document.getElementById("trailerPlay").addEventListener("click", () => {
             // The YouTube video ID of the trailer (replace with the actual trailer ID)
             const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
@@ -263,6 +312,7 @@ if (!movieTitle) {
             // document.getElementById('poster').style.backgroundImage = 'none';
             // document.querySelector('.play-button').style.display = 'none';
         })
+    }
 
         function checkUserExists() {
             // This could be a check for a cookie, local storage, or API request
@@ -530,9 +580,144 @@ if (!movieTitle) {
             }
 
         }
+
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+
         const playButton = document.getElementById("playButton");
 
         playButton.addEventListener("click", () => {
+            if (mediaQuery1.matches) {
+                // Code for small screens (mobile/tablet)
+                console.log("Screen is less than 768px wide");
+                
+                  let btn = document.getElementById("posterDiv");
+                  if (btn.style.height!='25rem'){
+                      btn.style.height = '25rem';
+              
+                  }else{
+                      btn.style.height = '0';
+              
+                  }
+                  if (checkUserExists()) {
+                    if (rented || subCheck) {
+                        document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById('trailer').style.display = 'none';
+                        document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                        document.getElementById('trailer').src = "";
+    
+                        renderVideoPlayer(movie);
+                        changeVideoSource(movie);
+                        const closeBtn = document.getElementById("clsBtn");
+    
+                        closeBtn.style.display = "block";
+    
+                        // Trigger fullscreen once the video is ready
+                        function renderVideoPlayer(movie) {
+                            // Create the video element dynamically
+                            const videoHTML = `
+              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="360" data-setup="{}" poster="${movie.thumbnails}">
+                <source src="${movie.video}" type="video/mp4">
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
+                </p>
+              </video>        <button id="clsBtn" style="display: ;">                    <i class="fa-solid fa-x "></i>
+        </button>
+        
+            `;
+    
+                            // Inject the video HTML into a container in the DOM
+                            document.getElementById('video-container').innerHTML += videoHTML;
+    
+                            // Initialize the video player with custom functionality
+                            initializeVideoPlayer(movie);
+                        }
+    
+                        function initializeVideoPlayer(movie) {
+                            // Initialize the Video.js player
+                            const player = videojs('my-video');
+    
+                            player.ready(function () {
+                                console.log('Video.js player is ready!');
+    
+                                // Update the live display or any other player UI elements (optional)
+                                const liveDisplayElement = document.querySelector('.vjs-live-display');
+                                if (liveDisplayElement) {
+                                    liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
+                                }
+    
+                                // Trigger fullscreen when the player is ready
+                                const video = document.getElementById('my-video');
+                                enterFullScreen(video);
+    
+                            });
+                        }
+    
+                        function enterFullScreen(videoElement) {
+                            // Trigger fullscreen on the video element
+                            if (videoElement.requestFullscreen) {
+                                videoElement.requestFullscreen();
+                            } else if (videoElement.mozRequestFullScreen) { // Firefox
+                                videoElement.mozRequestFullScreen();
+                            } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                                videoElement.webkitRequestFullscreen();
+                            } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                                videoElement.msRequestFullscreen();
+                            }
+                            const closeBtn = document.getElementById("clsBtn");
+    
+                            closeBtn.addEventListener("click", () => {
+                                // Exit fullscreen if the video is in fullscreen
+                                if (document.fullscreenElement ||
+                                    document.webkitFullscreenElement ||
+                                    document.mozFullScreenElement ||
+                                    document.msFullscreenElement) {
+                                    if (document.exitFullscreen) {
+                                        document.exitFullscreen();
+                                    } else if (document.webkitExitFullscreen) {
+                                        document.webkitExitFullscreen();
+                                    } else if (document.mozCancelFullScreen) {
+                                        document.mozCancelFullScreen();
+                                    } else if (document.msExitFullscreen) {
+                                        document.msExitFullscreen();
+                                    }
+                                }
+    
+                                // Stop the video and hide the player
+    
+    
+                                // Hide the video player and close button
+                                document.getElementById("my-video").innerHTML = '';
+                                closeBtn.style.display = "none"; // Hide the close button
+                                window.location.reload();
+                            });
+                        }
+                    }
+                    else {
+                        const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+    
+                        window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
+    
+                    }
+                } else {
+                    const popup = document.getElementById('loginMain');
+                    // Check if the popup is already visible
+                    if (popup.style.display !== 'flex') {
+                        const overlay = document.getElementById("overlay");
+    
+                        overlay.style.display = "block";
+    
+    
+                        popup.style.display = 'flex';
+                        document.getElementById("loading").style.display = "none";
+    
+                    }
+                }
+                document.getElementById("loading").style.display = "none";
+              
+              }else{
             if (checkUserExists()) {
                 if (rented || subCheck) {
                     document.getElementById("playButton").setAttribute('disabled', 'true');
@@ -650,7 +835,7 @@ if (!movieTitle) {
             }
             document.getElementById("loading").style.display = "none";
 
-
+        }
         });
 
 
@@ -773,6 +958,7 @@ function displayResults(results) {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         // Log the buttons to ensure they're there
+
         const buttons = movieDiv.querySelectorAll('.add-to-wishlist');
         console.log('Buttons:', buttons);  // Log the buttons array
         buttons.forEach(button => {
@@ -1402,4 +1588,75 @@ const observer = new MutationObserver(() => {
 observer.observe(postersContainer, { childList: true });
 
 
+
+const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+if (mediaQuery1.matches) {
+  // Code for small screens (mobile/tablet)
+  console.log("Screen is less than 768px wide");
+  const searchDiv = document.getElementById('searchDiv');
+  const searchInput = document.getElementById('search');
+ 
+// document.getElementById("trailer").classList.remove("videoStyle");
+// document.getElementById("video-container").classList.remove("videoStyle");
+function movePosterDiv() {
+    const posterDiv = document.getElementById("posterDiv");  // Select the posterDiv
+    const moreDetails = document.getElementById("moreDetails");  // Select the moreDetails div
+
+    if (posterDiv && moreDetails) {
+        moreDetails.parentNode.insertBefore(posterDiv, moreDetails);  // Insert posterDiv above moreDetails
+    }
+}
+
+// Call the function to move the divs
+movePosterDiv();
+  const searchIcon = document.getElementById("searchIcon");
+  document.getElementById("posterDiv").classList.remove("col");
+  searchIcon.addEventListener('click', function () {
+    // If the input field is hidden, show it and change the icon
+    if (searchInput.style.display === 'none' || searchInput.style.display === '') {
+      searchInput.style.display = 'inline-block';  // Show the input field
+      searchDiv.style.position = 'absolute';
+      searchDiv.style.left = "20%";
+      searchDiv.style.right = "20%";
+      searchIcon.classList.remove("fa-magnifying-glass");
+      searchIcon.classList.add("fa-arrow-left");
+
+      searchInput.focus();  // Focus on the input field
+    }
+    // If the input field is visible, hide it and change the icon back to the search icon
+    else {
+      searchInput.style.display = 'none';  // Hide the input field
+      searchIcon.classList.remove("fa-arrow-left");
+      searchIcon.classList.add("fa-magnifying-glass");
+      searchDiv.style.right = "";
+      searchDiv.style.left = "";
+
+      // Reset the search bar position
+      searchDiv.style.position = '';
+      searchInput.value = ''; // Clear the input field
+    }
+  });
+} else {
+  // Code for larger screens (desktop)
+  console.log("Screen is wider than 768px");
+}
+
+
+const mediaQuery = window.matchMedia('(max-width: 767px)');
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+if (mediaQuery.matches) {
+  // Code for small screens (mobile/tablet)
+
+  document.getElementById("rating").classList.remove("gap-5");
+  document.getElementById("rating").classList.add("justify-content-between");
+  
+} else {
+  // Code for larger screens (desktop)
+  console.log("Screen is wider than 768px");
+}
 

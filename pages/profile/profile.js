@@ -521,6 +521,7 @@ function fetchRentals(loggedInUserId) {
                 let rentals = docSnapshot.data().rentals;
                 let rentalHistory = docSnapshot.data().rentalHistory;
                 if (rentalHistory){
+                    document.getElementById("rentalHistory").style.display = 'none';
                     displayRentalHistory(rentalHistory);
                 }
                 if (rentals && rentals.length > 0) {
@@ -646,82 +647,158 @@ function displayRentals(rentals) {
     
 }
 
-function displayRentalHistory(rentals) {
-    const rentalsSection = document.getElementById("rentalHistory");
-    rentalsSection.innerHTML = "";  // Clear previous content
+// function displayRentalHistory(rentals) {
+//     const rentalsSection = document.getElementById("rentalHistory");
+//     rentalsSection.innerHTML = "";  // Clear previous content
 
-    // Loop through the rentals and fetch details for each movie
-    rentals.forEach(async (rental) => {
+//     // Loop through the rentals and fetch details for each movie
+//     // Assuming rentals is the array containing your rental data
+// rentals.reverse().forEach(async (rental) => {
+//     console.log(rental.title, "Fetching details...");
+
+//     // Fetch movie details based on title (asynchronously)
+//     const movieDetails = await getMovieDetailsByTitle(rental.title);
+
+//     if (movieDetails) {
+//         const rentalDiv = document.createElement('div');
+//         rentalDiv.classList.add("rentalHistoryCard");
+
+//         // Function to format the rented/expired date
+//         function formatDate(rentedDate) {
+//             const rentalDate = new Date(rentedDate);
+
+//             // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
+//             const day = rentalDate.getDate();
+//             const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+//                            (day % 10 === 2 && day !== 12) ? 'nd' :
+//                            (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+//             const formattedDay = day + suffix;
+
+//             // Month as full name (e.g., "December")
+//             const month = rentalDate.toLocaleString('en-US', { month: 'long' });
+
+//             // Year (e.g., "2024")
+//             const year = rentalDate.getFullYear();
+
+//             // Full weekday name (e.g., "Monday")
+//             const weekday = rentalDate.toLocaleString('en-US', { weekday: 'long' });
+
+//             // Time in 24-hour format (e.g., "16:31:41")
+//             const hours = rentalDate.getHours().toString().padStart(2, '0');
+//             const minutes = rentalDate.getMinutes().toString().padStart(2, '0');
+//             const seconds = rentalDate.getSeconds().toString().padStart(2, '0');
+//             const time = `${hours}:${minutes}:${seconds}`;
+
+//             // Combine all parts into the desired format
+//             const formattedDate = `${formattedDay} ${month} ${year} on ${weekday} at ${time}`;
+
+//             return formattedDate;
+//         }
+
+//         // Render rental details
+//         rentalDiv.innerHTML = `
+//             <img src="${movieDetails.poster}" alt="${movieDetails.title}">
+//             <div>
+//                 <h2>${movieDetails.title}</h2>
+//                 <p><strong>Rented on:</strong> ${formatDate(rental.rentedDate)}</p>
+//                 <p><strong>Expired on:</strong> ${formatDate(rental.expiredDate)}</p>
+//                 <p><strong>Rental Duration:</strong> ${rental.rentedDuration}</p>
+//             </div>
+//         `;
+
+//         // Append the movie rental info to the container
+//         rentalsSection.appendChild(rentalDiv);
+//     } else {
+//         console.log("Movie not found: " + rental.title);
+//     }
+// });
+
+// }
+
+async function displayRentalHistory(rentals) {
+    // Reverse the array so that the most recent rental appears first
+    rentals.reverse();
+
+    // Loop through each rental asynchronously
+    for (const rental of rentals) {
         console.log(rental.title, "Fetching details...");
 
-        // Fetch movie details based on title (asynchronously)
-        const movieDetails = await getMovieDetailsByTitle(rental.title);
+        try {
+            // Fetch movie details based on title (asynchronously)
+            const movieDetails = await getMovieDetailsByTitle(rental.title);
 
-        if (movieDetails) {
-            const rentalDiv = document.createElement('div');
-            rentalDiv.classList.add("rentalHistoryCard")
-            // Get the rental duration in days (24 hours = 1 day)
-            // let durationInDays = rental.duration;
-            
-            // Calculate the expiry date based on the rental duration in days
-            // const expiryDate = new Date(rental.rentalExpiration);
+            if (movieDetails) {
+                const rentalDiv = document.createElement('div');
+                rentalDiv.classList.add("rentalHistoryCard");
 
-            // Get the countdown string (remaining rental period)
-            function formatDate(rentedDate) {
-                const rentalDate = new Date(rentedDate);
-            
-                // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
-                const day = rentalDate.getDate();
-                const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
-                               (day % 10 === 2 && day !== 12) ? 'nd' :
-                               (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
-                const formattedDay = day + suffix;
-            
-                // Month as full name (e.g., "December")
-                const month = rentalDate.toLocaleString('en-US', { month: 'long' });
-            
-                // Year (e.g., "2024")
-                const year = rentalDate.getFullYear();
-            
-                // Full weekday name (e.g., "Monday")
-                const weekday = rentalDate.toLocaleString('en-US', { weekday: 'long' });
-            
-                // Time in 24-hour format (e.g., "16:31:41")
-                const hours = rentalDate.getHours().toString().padStart(2, '0');
-                const minutes = rentalDate.getMinutes().toString().padStart(2, '0');
-                const seconds = rentalDate.getSeconds().toString().padStart(2, '0');
-                const time = `${hours}:${minutes}:${seconds}`;
-            
-                // Combine all parts into the desired format
-                const formattedDate = `${formattedDay} ${month} ${year} on ${weekday} at ${time}`;
-            
-                return formattedDate;
+                // Function to format the rented/expired date
+                
+
+                // Render rental details
+                rentalDiv.innerHTML = `
+                    <img src="${movieDetails.poster}" alt="${movieDetails.title}">
+                    <div>
+                        <h2>${movieDetails.title}</h2>
+                        <p><strong>Rented on:</strong> ${formatDate(rental.rentedDate)}</p>
+                        <p><strong>${getExpiryText(rental.expiredDate)}</strong> ${formatDate(rental.expiredDate)}</p>
+                        <p><strong>Rental Duration:</strong> ${rental.rentedDuration}</p>
+                    </div>
+                `;
+
+                // Append the movie rental info to the container
+                rentalsSection.appendChild(rentalDiv);
+            } else {
+                console.log("Movie not found: " + rental.title);
             }
-            
-            // Example usage
-              // Output: "26th December 2024 on Thursday at 16:31:41"
-            
-            rentalDiv.innerHTML = `
-                <img src="${movieDetails.poster}" alt="${movieDetails.title}">
-                <div>
-                <h2>${movieDetails.title}</h2>
-                <p><strong>Rented on:</strong> ${formatDate(rental.rentedDate)}</p>
-                <p><strong>Expired on:</strong> ${formatDate(rental.expiredDate)}</p>
-                <p><strong>Rental Duration:</strong> ${rental.rentedDuration}</p>
-               </div>
-            
-            `;
-
-            // Append the movie rental info to the container
-            rentalsSection.appendChild(rentalDiv);
-
-            
-        } else {
-            console.log("Movie not found: " + rental.title);
+        } catch (error) {
+            console.error("Error fetching details for", rental.title, error);
         }
-        
-    });
+    }
+
+    function formatDate(rentedDate) {
+        const rentalDate = new Date(rentedDate);
+
+        // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
+        const day = rentalDate.getDate();
+        const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                       (day % 10 === 2 && day !== 12) ? 'nd' :
+                       (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+        const formattedDay = day + suffix;
+
+        // Month as full name (e.g., "December")
+        const month = rentalDate.toLocaleString('en-US', { month: 'long' });
+
+        // Year (e.g., "2024")
+        const year = rentalDate.getFullYear();
+
+        // Full weekday name (e.g., "Monday")
+        const weekday = rentalDate.toLocaleString('en-US', { weekday: 'long' });
+
+        // Time in 24-hour format (e.g., "16:31:41")
+        const hours = rentalDate.getHours().toString().padStart(2, '0');
+        const minutes = rentalDate.getMinutes().toString().padStart(2, '0');
+        const seconds = rentalDate.getSeconds().toString().padStart(2, '0');
+        const time = `${hours}:${minutes}:${seconds}`;
+
+        // Combine all parts into the desired format
+        const formattedDate = `${formattedDay} ${month} ${year} on ${weekday} at ${time}`;
+
+        return formattedDate;
+    }
+
+    function getExpiryText(expiredDate) {
+        const expiryDate = new Date(expiredDate);
+        const currentDate = new Date();
+    
+        // Compare the current date with the expiry date
+        if (expiryDate < currentDate) {
+            return `Expired on: `;
+        } else {
+            return `Will expire on: `;
+        }
+    }
 }
+
 
 // Function to calculate the expiry date based on rental duration in days
 // Function to calculate the expiry date based on rental duration in days

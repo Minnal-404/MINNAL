@@ -50,12 +50,15 @@
         <h1 id="loadMessage"></h1>
         <i class="fa-solid fa-spinner fa-spin fa-2xl" style="color: #ffffff;"></i>
       </div>
-    <main class="container">
-        <div id="rental" class="row">
-            
+    <main id="container" class="container p-5 gap-4 d-flex flex-column m-0">
+        <h1 id="rentMovie" class="text-center"></h1>
 
-            <div id="rental-form" class="col d-flex flex-column p-0 gap-3">
-                <h1 class="text-end">Rent Movie</h1>
+        <div id="rental" class="row">
+        
+            <div id="movie-details" class="col px-5 d-flex flex-column gap-4">
+                <!-- Movie details will be injected here -->
+            </div>
+            <div id="rental-form" class="col px-5 d-flex flex-column  gap-3">
 
                 <label for="rentalDuration">Select rental duration:</label>
                 <select id="rentalDuration">
@@ -83,9 +86,6 @@
 
                 <button id="confirmRental" class="btn btn-success">Confirm Rental</button>
                 <p id="orderMessage" class="text-success"></p>
-            </div>
-            <div id="movie-details" class="col p-0 d-flex flex-column gap-4">
-                <!-- Movie details will be injected here -->
             </div>
         </div>
         <div id="subscription" class="row">

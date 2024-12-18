@@ -508,6 +508,7 @@ body.no-scroll {
 
   #searchDiv {
     padding: 0;
+    z-index: 1;
   }
 
   .carousel-caption {
@@ -523,17 +524,34 @@ body.no-scroll {
   * {
     font-size: 12px;
   }
-
+  
   #carousel-inner,
   #carousel-inner img {
     height: 15rem;
   }
-
+header{
+  position: relative;
+}
   .movie {
     /* height: 50vh; */
   }
 
   #searchDiv {
-    padding: 0 5%;
+    padding: 0 0.5rem;
+    position: absolute;
+    left: 8rem;
+  }
+  #userName{
+    display: none;
+  }
+  #user{
+    position: absolute;
+    z-index: 1;
+    height: 3.5rem;    
+    top: 0.7rem;
+  }
+  #subscribeBtn{
+    position: absolute;
+    right: 6rem;
   }
 }

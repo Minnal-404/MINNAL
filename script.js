@@ -1299,6 +1299,8 @@ if (mediaQuery1.matches) {
       searchInput.style.display = 'none';  // Hide the input field
       searchIcon.classList.remove("fa-arrow-left");
       searchIcon.classList.add("fa-magnifying-glass");
+      searchDiv.style.right = "";
+      searchDiv.style.left = "";
 
       // Reset the search bar position
       searchDiv.style.position = '';

@@ -40,7 +40,7 @@ body {
     background: black;
     text-align: center; */
   font-size: large;
-  font-weight: bolder;
+  /* font-weight: bolder; */
   letter-spacing: 0.1rem;
 }
 
@@ -420,6 +420,7 @@ input:focus {
 h2 {
   text-align: center;
   text-wrap: wrap;
+  font-weight: bolder;
 
 }
 
@@ -662,8 +663,7 @@ body.no-scroll {
     cursor: pointer;
   } */
 
-iframe,
-#video-container {
+.videoStyle {
   /* display: none; */
   position: absolute;
   top: 50%;
@@ -675,4 +675,81 @@ iframe,
 
 #trailer {
   display: none;
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 1024px) {
+  *{
+    font-size: 14px;
+  }
+  #search {
+    display: none;
+    padding: 0;
+
+  }
+  .background-overlay img {
+    height: auto;
+  }
+  #searchDiv {
+    padding: 0;
+    z-index: 1;
+  }
+  #gradient{
+    bottom: 15%;
+  }
+  main{
+    padding: 30vh 5% 5% 5%;
+    position: relative;
+  }
+  iframe, #video-container{
+    position: absolute;
+    top: 50%;        /* Move the top edge to the middle */
+    left: 50%;       /* Move the left edge to the middle */
+    transform: translate(-50%, -50%);
+  }
+  
+  #posterDiv{
+    position: relative;
+    /* height: 25rem; */
+  }
+}
+@media (max-width: 767px) {
+  *{
+    font-size: 12px;
+  }
+  header{
+    position: relative;
+  }
+  #gradient{
+    bottom: 50%;
+  }
+    .movie {
+      /* height: 50vh; */
+    }
+  
+    #searchDiv {
+      padding: 0 0.5rem;
+      position: absolute;
+      left: 8rem;
+    }
+    #userName{
+      display: none;
+    }
+    #user{
+      position: absolute;
+      z-index: 1;
+      height: 3.5rem;    
+      top: 0.7rem;
+    }
+    main{
+      padding: 10vh 5% 5% 5%;
+
+    }
 }

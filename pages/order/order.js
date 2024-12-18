@@ -64,10 +64,9 @@ if (movieTitle) {
         if (movieDetails) {
             // Populate the page with the movie details
             const movieContainer = document.getElementById('movie-details');
-
+            document.getElementById("rentMovie").textContent = `Rent Movie - ${movieDetails.title}`
             // Insert the movie details into the HTML
             movieContainer.innerHTML = `
-                <h1 class="text-start">${movieDetails.title}</h1>
                 <div class="d-flex flex-column align-items-center">
                 <img src="${movieDetails.poster}" alt="${movieDetails.title}" />
                 </div>
@@ -480,3 +479,20 @@ async function updateSubscriptionStatus(userId, status) {
 // } catch (error) {
 //     console.error("Error adding rental to user order:", error);
 // }
+
+
+
+const mediaQuery1 = window.matchMedia('(max-width: 767px)');
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+if (mediaQuery1.matches) {
+  // Code for small screens (mobile/tablet)
+  document.getElementById("rental").classList.remove("row");
+  document.getElementById("container").classList.remove("p-5");
+  document.getElementById("container").classList.remove("p-5");
+} else {
+  // Code for larger screens (desktop)
+  console.log("Screen is wider than 768px");
+}
+
