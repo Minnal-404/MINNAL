@@ -225,94 +225,161 @@ if (!movieTitle) {
         // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
         // posterDiv.innerHTML = poster;
         const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
-// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+        // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
 
-// Check if the media query matches
-if (mediaQuery1.matches) {
-  // Code for small screens (mobile/tablet)
-  console.log("Screen is less than 768px wide");
-  
-  document.getElementById("trailerPlay").addEventListener("click", () => {
-    let btn = document.getElementById("posterDiv");
-    if (btn.style.height!='25rem'){
-        btn.style.height = '25rem';
+        // Check if the media query matches
+        if (mediaQuery.matches) {
+            // Code for small screens (mobile/tablet)
+            console.log("Screen is less than 768px wide");
 
-    }else{
-        btn.style.height = '0';
+            document.getElementById("trailerPlay").addEventListener("click", () => {
+                // document.getElementById("trailer").classList.add("pb-5")
 
-    }
-    const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
+                const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
 
-            // Get the iframe and change its src to the YouTube video
-            const iframe = document.getElementById('trailer');
-            iframe.src = `${trailerId}`;
+                // Get the iframe and change its src to the YouTube video
+                const iframe = document.getElementById('trailer');
+                iframe.src = `${trailerId}`;
 
-            // Show the iframe
-            if (iframe.style.display == 'block') {
-                iframe.style.display = 'none';
-                document.getElementById("trailerPlay").textContent = "Watch Trailer";
-                document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
-                // document.getElementById("playButton").setAttribute('disabled', 'false');
-                // document.getElementById("playButton").disabled = false;
+                // Show the iframe
+                if (iframe.style.display == 'block') {
+                    document.getElementById("posterDiv").style.height = '0rem';
+                    try {
+                        // Check if the video is paused
+                        if (videojs('my-video').paused()) {
+                            // Set the height of posterDiv if the video is paused
+                            document.getElementById("posterDiv").style.height = '15rem';
+                        }
 
-            } else {
-                iframe.style.display = 'block';
-                // Initialize the video player
+                    }
+                    catch (error) {
+                    } finally {
+                        // document.getElementById("playButton").setAttribute('disabled', 'true');
+                    }
 
-                // Check if the video is currently playing, and pause it if it is
-                try {
-                    videojs('my-video').pause();
+                    iframe.style.display = 'none';
+                    document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                    // document.getElementById("playButton").setAttribute('disabled', 'false');
+                    // document.getElementById("playButton").disabled = false;
+
+                } else {
+                    iframe.style.display = 'block';
+                    document.getElementById("posterDiv").style.height = '30rem';
+
+                    // Initialize the video player
+
+                    // Check if the video is currently playing, and pause it if it is
+                    try {
+                        videojs('my-video').pause();
+
+                    }
+                    catch (error) {
+                    } finally {
+
+
+                        // document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById("trailerPlay").textContent = "Close Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                    }
                 }
-                catch (error) {
-                } finally {
+            })
+        }else if (mediaQuery1.matches) {
+            // Code for small screens (mobile/tablet)
+            console.log("Screen is less than 768px wide");
+
+            document.getElementById("trailerPlay").addEventListener("click", () => {
+                // document.getElementById("trailer").classList.add("pb-5")
+
+                const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
+
+                // Get the iframe and change its src to the YouTube video
+                const iframe = document.getElementById('trailer');
+                iframe.src = `${trailerId}`;
+
+                // Show the iframe
+                if (iframe.style.display == 'block') {
+                    document.getElementById("posterDiv").style.height = '0rem';
+                    try {
+                        // Check if the video is paused
+                        if (videojs('my-video').paused()) {
+                            // Set the height of posterDiv if the video is paused
+                            document.getElementById("posterDiv").style.height = '30rem';
+                        }
+
+                    }
+                    catch (error) {
+                    } finally {
+                        // document.getElementById("playButton").setAttribute('disabled', 'true');
+                    }
+
+                    iframe.style.display = 'none';
+                    document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                    // document.getElementById("playButton").setAttribute('disabled', 'false');
+                    // document.getElementById("playButton").disabled = false;
+
+                } else {
+                    iframe.style.display = 'block';
+                    document.getElementById("posterDiv").style.height = '30rem';
+
+                    // Initialize the video player
+
+                    // Check if the video is currently playing, and pause it if it is
+                    try {
+                        videojs('my-video').pause();
+
+                    }
+                    catch (error) {
+                    } finally {
 
 
-                    // document.getElementById("playButton").setAttribute('disabled', 'true');
-                    document.getElementById("trailerPlay").textContent = "Close Trailer";
-                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                        // document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById("trailerPlay").textContent = "Close Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                    }
                 }
-            }
-  })
-}else{
-        document.getElementById("trailerPlay").addEventListener("click", () => {
-            // The YouTube video ID of the trailer (replace with the actual trailer ID)
-            const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
+            })
+        } else {
+            document.getElementById("trailerPlay").addEventListener("click", () => {
+                // The YouTube video ID of the trailer (replace with the actual trailer ID)
+                const trailerId = `${movie.trailer}`; // Replace with the correct YouTube video ID
 
-            // Get the iframe and change its src to the YouTube video
-            const iframe = document.getElementById('trailer');
-            iframe.src = `${trailerId}`;
+                // Get the iframe and change its src to the YouTube video
+                const iframe = document.getElementById('trailer');
+                iframe.src = `${trailerId}`;
 
-            // Show the iframe
-            if (iframe.style.display == 'block') {
-                iframe.style.display = 'none';
-                document.getElementById("trailerPlay").textContent = "Watch Trailer";
-                document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
-                // document.getElementById("playButton").setAttribute('disabled', 'false');
-                // document.getElementById("playButton").disabled = false;
+                // Show the iframe
+                if (iframe.style.display == 'block') {
+                    iframe.style.display = 'none';
+                    document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                    // document.getElementById("playButton").setAttribute('disabled', 'false');
+                    // document.getElementById("playButton").disabled = false;
 
-            } else {
-                iframe.style.display = 'block';
-                // Initialize the video player
+                } else {
+                    iframe.style.display = 'block';
+                    // Initialize the video player
 
-                // Check if the video is currently playing, and pause it if it is
-                try {
-                    videojs('my-video').pause();
+                    // Check if the video is currently playing, and pause it if it is
+                    try {
+                        videojs('my-video').pause();
+                    }
+                    catch (error) {
+                    } finally {
+
+
+                        // document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById("trailerPlay").textContent = "Close Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
+                    }
                 }
-                catch (error) {
-                } finally {
 
-
-                    // document.getElementById("playButton").setAttribute('disabled', 'true');
-                    document.getElementById("trailerPlay").textContent = "Close Trailer";
-                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, red, black)';
-                }
-            }
-
-            // Hide the poster and play button
-            // document.getElementById('poster').style.backgroundImage = 'none';
-            // document.querySelector('.play-button').style.display = 'none';
-        })
-    }
+                // Hide the poster and play button
+                // document.getElementById('poster').style.backgroundImage = 'none';
+                // document.querySelector('.play-button').style.display = 'none';
+            })
+        }
 
         function checkUserExists() {
             // This could be a check for a cookie, local storage, or API request
@@ -581,44 +648,38 @@ if (mediaQuery1.matches) {
 
         }
 
-// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+        // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
 
-// Check if the media query matches
+        // Check if the media query matches
 
         const playButton = document.getElementById("playButton");
 
         playButton.addEventListener("click", () => {
-            if (mediaQuery1.matches) {
+            if (mediaQuery.matches) {
                 // Code for small screens (mobile/tablet)
                 console.log("Screen is less than 768px wide");
-                
-                  let btn = document.getElementById("posterDiv");
-                  if (btn.style.height!='25rem'){
-                      btn.style.height = '25rem';
-              
-                  }else{
-                      btn.style.height = '0';
-              
-                  }
-                  if (checkUserExists()) {
+
+                document.getElementById("video-container").classList.add("pb-5")
+
+                if (checkUserExists()) {
                     if (rented || subCheck) {
                         document.getElementById("playButton").setAttribute('disabled', 'true');
                         document.getElementById('trailer').style.display = 'none';
                         document.getElementById("trailerPlay").textContent = "Watch Trailer";
                         document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
                         document.getElementById('trailer').src = "";
-    
+                        document.getElementById("posterDiv").style.height = '15rem';
                         renderVideoPlayer(movie);
                         changeVideoSource(movie);
                         const closeBtn = document.getElementById("clsBtn");
-    
+
                         closeBtn.style.display = "block";
-    
+
                         // Trigger fullscreen once the video is ready
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="360" data-setup="{}" poster="${movie.thumbnails}">
+              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="310" data-setup="{}" poster="${movie.thumbnails}">
                 <source src="${movie.video}" type="video/mp4">
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -627,34 +688,34 @@ if (mediaQuery1.matches) {
         </button>
         
             `;
-    
+
                             // Inject the video HTML into a container in the DOM
                             document.getElementById('video-container').innerHTML += videoHTML;
-    
+
                             // Initialize the video player with custom functionality
                             initializeVideoPlayer(movie);
                         }
-    
+
                         function initializeVideoPlayer(movie) {
                             // Initialize the Video.js player
                             const player = videojs('my-video');
-    
+
                             player.ready(function () {
                                 console.log('Video.js player is ready!');
-    
+
                                 // Update the live display or any other player UI elements (optional)
                                 const liveDisplayElement = document.querySelector('.vjs-live-display');
                                 if (liveDisplayElement) {
                                     liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
                                 }
-    
+
                                 // Trigger fullscreen when the player is ready
                                 const video = document.getElementById('my-video');
                                 enterFullScreen(video);
-    
+
                             });
                         }
-    
+
                         function enterFullScreen(videoElement) {
                             // Trigger fullscreen on the video element
                             if (videoElement.requestFullscreen) {
@@ -667,7 +728,7 @@ if (mediaQuery1.matches) {
                                 videoElement.msRequestFullscreen();
                             }
                             const closeBtn = document.getElementById("clsBtn");
-    
+
                             closeBtn.addEventListener("click", () => {
                                 // Exit fullscreen if the video is in fullscreen
                                 if (document.fullscreenElement ||
@@ -684,10 +745,10 @@ if (mediaQuery1.matches) {
                                         document.msExitFullscreen();
                                     }
                                 }
-    
+
                                 // Stop the video and hide the player
-    
-    
+
+
                                 // Hide the video player and close button
                                 document.getElementById("my-video").innerHTML = '';
                                 closeBtn.style.display = "none"; // Hide the close button
@@ -697,46 +758,173 @@ if (mediaQuery1.matches) {
                     }
                     else {
                         const movieTitle = document.getElementById("playButton").getAttribute("data-title");
-    
+
                         window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
-    
+
                     }
                 } else {
                     const popup = document.getElementById('loginMain');
+                    document.getElementById("posterDiv").style.height = '0rem';
+
                     // Check if the popup is already visible
                     if (popup.style.display !== 'flex') {
                         const overlay = document.getElementById("overlay");
-    
+
                         overlay.style.display = "block";
-    
-    
+
+
                         popup.style.display = 'flex';
                         document.getElementById("loading").style.display = "none";
-    
+
                     }
                 }
                 document.getElementById("loading").style.display = "none";
-              
-              }else{
-            if (checkUserExists()) {
-                if (rented || subCheck) {
-                    document.getElementById("playButton").setAttribute('disabled', 'true');
-                    document.getElementById('trailer').style.display = 'none';
-                    document.getElementById("trailerPlay").textContent = "Watch Trailer";
-                    document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
-                    document.getElementById('trailer').src = "";
 
-                    renderVideoPlayer(movie);
-                    changeVideoSource(movie);
-                    const closeBtn = document.getElementById("clsBtn");
+            }else if (mediaQuery1.matches) {
+                // Code for small screens (mobile/tablet)
+                console.log("Screen is less than 768px wide");
 
-                    closeBtn.style.display = "block";
+                document.getElementById("video-container").classList.add("pb-5")
 
-                    // Trigger fullscreen once the video is ready
-                    function renderVideoPlayer(movie) {
-                        // Create the video element dynamically
-                        const videoHTML = `
-          <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="360" data-setup="{}" poster="${movie.thumbnails}">
+                if (checkUserExists()) {
+                    if (rented || subCheck) {
+                        document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById('trailer').style.display = 'none';
+                        document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                        document.getElementById('trailer').src = "";
+                        document.getElementById("posterDiv").style.height = '30rem';
+                        renderVideoPlayer(movie);
+                        changeVideoSource(movie);
+                        const closeBtn = document.getElementById("clsBtn");
+
+                        closeBtn.style.display = "block";
+
+                        // Trigger fullscreen once the video is ready
+                        function renderVideoPlayer(movie) {
+                            // Create the video element dynamically
+                            const videoHTML = `
+              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="310" data-setup="{}" poster="${movie.thumbnails}">
+                <source src="${movie.video}" type="video/mp4">
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
+                </p>
+              </video>        <button id="clsBtn" style="display: ;">                    <i class="fa-solid fa-x "></i>
+        </button>
+        
+            `;
+
+                            // Inject the video HTML into a container in the DOM
+                            document.getElementById('video-container').innerHTML += videoHTML;
+
+                            // Initialize the video player with custom functionality
+                            initializeVideoPlayer(movie);
+                        }
+
+                        function initializeVideoPlayer(movie) {
+                            // Initialize the Video.js player
+                            const player = videojs('my-video');
+
+                            player.ready(function () {
+                                console.log('Video.js player is ready!');
+
+                                // Update the live display or any other player UI elements (optional)
+                                const liveDisplayElement = document.querySelector('.vjs-live-display');
+                                if (liveDisplayElement) {
+                                    liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
+                                }
+
+                                // Trigger fullscreen when the player is ready
+                                const video = document.getElementById('my-video');
+                                enterFullScreen(video);
+
+                            });
+                        }
+
+                        function enterFullScreen(videoElement) {
+                            // Trigger fullscreen on the video element
+                            if (videoElement.requestFullscreen) {
+                                videoElement.requestFullscreen();
+                            } else if (videoElement.mozRequestFullScreen) { // Firefox
+                                videoElement.mozRequestFullScreen();
+                            } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                                videoElement.webkitRequestFullscreen();
+                            } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                                videoElement.msRequestFullscreen();
+                            }
+                            const closeBtn = document.getElementById("clsBtn");
+
+                            closeBtn.addEventListener("click", () => {
+                                // Exit fullscreen if the video is in fullscreen
+                                if (document.fullscreenElement ||
+                                    document.webkitFullscreenElement ||
+                                    document.mozFullScreenElement ||
+                                    document.msFullscreenElement) {
+                                    if (document.exitFullscreen) {
+                                        document.exitFullscreen();
+                                    } else if (document.webkitExitFullscreen) {
+                                        document.webkitExitFullscreen();
+                                    } else if (document.mozCancelFullScreen) {
+                                        document.mozCancelFullScreen();
+                                    } else if (document.msExitFullscreen) {
+                                        document.msExitFullscreen();
+                                    }
+                                }
+
+                                // Stop the video and hide the player
+
+
+                                // Hide the video player and close button
+                                document.getElementById("my-video").innerHTML = '';
+                                closeBtn.style.display = "none"; // Hide the close button
+                                window.location.reload();
+                            });
+                        }
+                    }
+                    else {
+                        const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+
+                        window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
+
+                    }
+                } else {
+                    const popup = document.getElementById('loginMain');
+                    document.getElementById("posterDiv").style.height = '0rem';
+
+                    // Check if the popup is already visible
+                    if (popup.style.display !== 'flex') {
+                        const overlay = document.getElementById("overlay");
+
+                        overlay.style.display = "block";
+
+
+                        popup.style.display = 'flex';
+                        document.getElementById("loading").style.display = "none";
+
+                    }
+                }
+                document.getElementById("loading").style.display = "none";
+
+            } else {
+                if (checkUserExists()) {
+                    if (rented || subCheck) {
+                        document.getElementById("playButton").setAttribute('disabled', 'true');
+                        document.getElementById('trailer').style.display = 'none';
+                        document.getElementById("trailerPlay").textContent = "Watch Trailer";
+                        document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+                        document.getElementById('trailer').src = "";
+
+                        renderVideoPlayer(movie);
+                        changeVideoSource(movie);
+                        const closeBtn = document.getElementById("clsBtn");
+
+                        closeBtn.style.display = "block";
+
+                        // Trigger fullscreen once the video is ready
+                        function renderVideoPlayer(movie) {
+                            // Create the video element dynamically
+                            const videoHTML = `
+          <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto"  data-setup="{}" poster="${movie.thumbnails}">
             <source src="${movie.video}" type="video/mp4">
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -746,96 +934,96 @@ if (mediaQuery1.matches) {
     
         `;
 
-                        // Inject the video HTML into a container in the DOM
-                        document.getElementById('video-container').innerHTML += videoHTML;
+                            // Inject the video HTML into a container in the DOM
+                            document.getElementById('video-container').innerHTML += videoHTML;
 
-                        // Initialize the video player with custom functionality
-                        initializeVideoPlayer(movie);
-                    }
-
-                    function initializeVideoPlayer(movie) {
-                        // Initialize the Video.js player
-                        const player = videojs('my-video');
-
-                        player.ready(function () {
-                            console.log('Video.js player is ready!');
-
-                            // Update the live display or any other player UI elements (optional)
-                            const liveDisplayElement = document.querySelector('.vjs-live-display');
-                            if (liveDisplayElement) {
-                                liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
-                            }
-
-                            // Trigger fullscreen when the player is ready
-                            const video = document.getElementById('my-video');
-                            enterFullScreen(video);
-
-                        });
-                    }
-
-                    function enterFullScreen(videoElement) {
-                        // Trigger fullscreen on the video element
-                        if (videoElement.requestFullscreen) {
-                            videoElement.requestFullscreen();
-                        } else if (videoElement.mozRequestFullScreen) { // Firefox
-                            videoElement.mozRequestFullScreen();
-                        } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                            videoElement.webkitRequestFullscreen();
-                        } else if (videoElement.msRequestFullscreen) { // IE/Edge
-                            videoElement.msRequestFullscreen();
+                            // Initialize the video player with custom functionality
+                            initializeVideoPlayer(movie);
                         }
-                        const closeBtn = document.getElementById("clsBtn");
 
-                        closeBtn.addEventListener("click", () => {
-                            // Exit fullscreen if the video is in fullscreen
-                            if (document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement ||
-                                document.msFullscreenElement) {
-                                if (document.exitFullscreen) {
-                                    document.exitFullscreen();
-                                } else if (document.webkitExitFullscreen) {
-                                    document.webkitExitFullscreen();
-                                } else if (document.mozCancelFullScreen) {
-                                    document.mozCancelFullScreen();
-                                } else if (document.msExitFullscreen) {
-                                    document.msExitFullscreen();
+                        function initializeVideoPlayer(movie) {
+                            // Initialize the Video.js player
+                            const player = videojs('my-video');
+
+                            player.ready(function () {
+                                console.log('Video.js player is ready!');
+
+                                // Update the live display or any other player UI elements (optional)
+                                const liveDisplayElement = document.querySelector('.vjs-live-display');
+                                if (liveDisplayElement) {
+                                    liveDisplayElement.innerHTML = `<span class="vjs-control-text">Stream Type&nbsp;</span>${movie.title}`;
                                 }
+
+                                // Trigger fullscreen when the player is ready
+                                const video = document.getElementById('my-video');
+                                enterFullScreen(video);
+
+                            });
+                        }
+
+                        function enterFullScreen(videoElement) {
+                            // Trigger fullscreen on the video element
+                            if (videoElement.requestFullscreen) {
+                                videoElement.requestFullscreen();
+                            } else if (videoElement.mozRequestFullScreen) { // Firefox
+                                videoElement.mozRequestFullScreen();
+                            } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                                videoElement.webkitRequestFullscreen();
+                            } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                                videoElement.msRequestFullscreen();
                             }
+                            const closeBtn = document.getElementById("clsBtn");
 
-                            // Stop the video and hide the player
+                            closeBtn.addEventListener("click", () => {
+                                // Exit fullscreen if the video is in fullscreen
+                                if (document.fullscreenElement ||
+                                    document.webkitFullscreenElement ||
+                                    document.mozFullScreenElement ||
+                                    document.msFullscreenElement) {
+                                    if (document.exitFullscreen) {
+                                        document.exitFullscreen();
+                                    } else if (document.webkitExitFullscreen) {
+                                        document.webkitExitFullscreen();
+                                    } else if (document.mozCancelFullScreen) {
+                                        document.mozCancelFullScreen();
+                                    } else if (document.msExitFullscreen) {
+                                        document.msExitFullscreen();
+                                    }
+                                }
+
+                                // Stop the video and hide the player
 
 
-                            // Hide the video player and close button
-                            document.getElementById("my-video").innerHTML = '';
-                            closeBtn.style.display = "none"; // Hide the close button
-                            window.location.reload();
-                        });
+                                // Hide the video player and close button
+                                document.getElementById("my-video").innerHTML = '';
+                                closeBtn.style.display = "none"; // Hide the close button
+                                window.location.reload();
+                            });
+                        }
+                    }
+                    else {
+                        const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+
+                        window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
+
+                    }
+                } else {
+                    const popup = document.getElementById('loginMain');
+                    // Check if the popup is already visible
+                    if (popup.style.display !== 'flex') {
+                        const overlay = document.getElementById("overlay");
+
+                        overlay.style.display = "block";
+
+
+                        popup.style.display = 'flex';
+                        document.getElementById("loading").style.display = "none";
+
                     }
                 }
-                else {
-                    const movieTitle = document.getElementById("playButton").getAttribute("data-title");
+                document.getElementById("loading").style.display = "none";
 
-                    window.location.href = `../order/order.html?title=${encodeURIComponent(movieTitle)}`;
-
-                }
-            } else {
-                const popup = document.getElementById('loginMain');
-                // Check if the popup is already visible
-                if (popup.style.display !== 'flex') {
-                    const overlay = document.getElementById("overlay");
-
-                    overlay.style.display = "block";
-
-
-                    popup.style.display = 'flex';
-                    document.getElementById("loading").style.display = "none";
-
-                }
             }
-            document.getElementById("loading").style.display = "none";
-
-        }
         });
 
 
@@ -1594,54 +1782,54 @@ const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
 
 // Check if the media query matches
 if (mediaQuery1.matches) {
-  // Code for small screens (mobile/tablet)
-  console.log("Screen is less than 768px wide");
-  const searchDiv = document.getElementById('searchDiv');
-  const searchInput = document.getElementById('search');
- 
-// document.getElementById("trailer").classList.remove("videoStyle");
-// document.getElementById("video-container").classList.remove("videoStyle");
-function movePosterDiv() {
-    const posterDiv = document.getElementById("posterDiv");  // Select the posterDiv
-    const moreDetails = document.getElementById("moreDetails");  // Select the moreDetails div
+    // Code for small screens (mobile/tablet)
+    console.log("Screen is less than 768px wide");
+    const searchDiv = document.getElementById('searchDiv');
+    const searchInput = document.getElementById('search');
 
-    if (posterDiv && moreDetails) {
-        moreDetails.parentNode.insertBefore(posterDiv, moreDetails);  // Insert posterDiv above moreDetails
+    // document.getElementById("trailer").classList.remove("videoStyle");
+    // document.getElementById("video-container").classList.remove("videoStyle");
+    function movePosterDiv() {
+        const posterDiv = document.getElementById("posterDiv");  // Select the posterDiv
+        const moreDetails = document.getElementById("moreDetails");  // Select the moreDetails div
+
+        if (posterDiv && moreDetails) {
+            moreDetails.parentNode.insertBefore(posterDiv, moreDetails);  // Insert posterDiv above moreDetails
+        }
     }
-}
 
-// Call the function to move the divs
-movePosterDiv();
-  const searchIcon = document.getElementById("searchIcon");
-  document.getElementById("posterDiv").classList.remove("col");
-  searchIcon.addEventListener('click', function () {
-    // If the input field is hidden, show it and change the icon
-    if (searchInput.style.display === 'none' || searchInput.style.display === '') {
-      searchInput.style.display = 'inline-block';  // Show the input field
-      searchDiv.style.position = 'absolute';
-      searchDiv.style.left = "20%";
-      searchDiv.style.right = "20%";
-      searchIcon.classList.remove("fa-magnifying-glass");
-      searchIcon.classList.add("fa-arrow-left");
+    // Call the function to move the divs
+    movePosterDiv();
+    const searchIcon = document.getElementById("searchIcon");
+    document.getElementById("posterDiv").classList.remove("col");
+    searchIcon.addEventListener('click', function () {
+        // If the input field is hidden, show it and change the icon
+        if (searchInput.style.display === 'none' || searchInput.style.display === '') {
+            searchInput.style.display = 'inline-block';  // Show the input field
+            searchDiv.style.position = 'absolute';
+            searchDiv.style.left = "20%";
+            searchDiv.style.right = "20%";
+            searchIcon.classList.remove("fa-magnifying-glass");
+            searchIcon.classList.add("fa-arrow-left");
 
-      searchInput.focus();  // Focus on the input field
-    }
-    // If the input field is visible, hide it and change the icon back to the search icon
-    else {
-      searchInput.style.display = 'none';  // Hide the input field
-      searchIcon.classList.remove("fa-arrow-left");
-      searchIcon.classList.add("fa-magnifying-glass");
-      searchDiv.style.right = "";
-      searchDiv.style.left = "";
+            searchInput.focus();  // Focus on the input field
+        }
+        // If the input field is visible, hide it and change the icon back to the search icon
+        else {
+            searchInput.style.display = 'none';  // Hide the input field
+            searchIcon.classList.remove("fa-arrow-left");
+            searchIcon.classList.add("fa-magnifying-glass");
+            searchDiv.style.right = "";
+            searchDiv.style.left = "";
 
-      // Reset the search bar position
-      searchDiv.style.position = '';
-      searchInput.value = ''; // Clear the input field
-    }
-  });
+            // Reset the search bar position
+            searchDiv.style.position = '';
+            searchInput.value = ''; // Clear the input field
+        }
+    });
 } else {
-  // Code for larger screens (desktop)
-  console.log("Screen is wider than 768px");
+    // Code for larger screens (desktop)
+    console.log("Screen is wider than 768px");
 }
 
 
@@ -1650,13 +1838,13 @@ const mediaQuery = window.matchMedia('(max-width: 767px)');
 
 // Check if the media query matches
 if (mediaQuery.matches) {
-  // Code for small screens (mobile/tablet)
+    // Code for small screens (mobile/tablet)
 
-  document.getElementById("rating").classList.remove("gap-5");
-  document.getElementById("rating").classList.add("justify-content-between");
-  
+    document.getElementById("rating").classList.remove("gap-5");
+    document.getElementById("rating").classList.add("justify-content-between");
+
 } else {
-  // Code for larger screens (desktop)
-  console.log("Screen is wider than 768px");
+    // Code for larger screens (desktop)
+    console.log("Screen is wider than 768px");
 }
 
