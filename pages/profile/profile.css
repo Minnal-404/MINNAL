@@ -118,6 +118,10 @@ input:focus{
     box-shadow: 0 0px 20px white;
     transition: transform 0.5s;
 }
+#canvas{
+  position: absolute;
+  z-index: 10;
+}
 .movie {
     position: relative;
       border: 1px solid ;
@@ -238,4 +242,46 @@ a{
   background-color: #0056b3;
   cursor: pointer;
 
+}
+
+#canvas{
+  top: 5rem;
+  position: fixed;
+}
+
+
+
+@media (max-width: 1023px) {
+  *{
+    font-size: 14px;
+  }
+  #canvas{
+    width: 3rem;
+    height: 3rem;
+  }
+  #aside{
+    width: 28rem;
+    top: 4rem;
+  }
+  #content{
+    width: auto;
+    left: 0;
+  }
+  #canvasClose{
+    width: 2rem;
+    height: 2rem;
+    font-size: large;
+  }
+}
+
+@media (max-width: 767px) {
+  *{
+    font-size: 12px;
+  }
+  #user{
+    position: absolute;
+    z-index: 1;
+    height: 3.5rem;    
+    top: 0.7rem;
+  }
 }

@@ -109,6 +109,10 @@ logoutBtn.addEventListener("click", () => {
 
 });
 
+const mediaQuery = window.matchMedia('(max-width: 767px)');
+const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
+
+
 const rentalsSection = document.getElementById("rentalsSection");
 const wishlistSection = document.getElementById("wishlistSection");
 const profileSection = document.getElementById("profileSection");
@@ -117,6 +121,32 @@ const rented = document.getElementById("rented");
 const wishlist = document.getElementById("wishlist");
 
 profileSec.addEventListener("click", () => {
+
+    if (mediaQuery1.matches) {
+        rentalsSection.style.display = "none";
+        wishlistSection.style.display = "none";
+    
+        profileSec.classList.add("text-white");
+        profileSec.classList.remove("border-success");
+        profileSec.classList.remove("border-top-0");
+        profileSec.classList.remove("border-bottom-0");
+        profileSec.classList.remove("border-end-0");
+    
+        wishlist.classList.add("border-success");
+        wishlist.classList.remove("text-white");
+        wishlist.classList.add("border-top");
+    
+        rented.classList.add("border-bottom");
+        rented.classList.remove("border-white");
+        rented.classList.add("border-success");
+        rented.classList.remove("text-white");
+        rented.classList.add("border-top-0");
+    
+    
+    
+        profileSection.style.display = "block";
+    }else{
+
     rentalsSection.style.display = "none";
     wishlistSection.style.display = "none";
 
@@ -138,8 +168,11 @@ profileSec.addEventListener("click", () => {
 
 
     profileSection.style.display = "block";
+    }
 });
 rented.addEventListener("click", () => {
+    if (mediaQuery1.matches) {
+
     wishlistSection.style.display = "none";
     profileSection.style.display = "none";
 
@@ -147,6 +180,28 @@ rented.addEventListener("click", () => {
     rented.classList.remove("border-top-0");
     rented.classList.add("text-white");
     rented.classList.remove("border-bottom-0");
+    rented.classList.remove("border-end-0");
+
+
+    profileSec.classList.remove("text-white");
+    profileSec.classList.add("border-success");
+    profileSec.classList.remove("border-top-0");
+    profileSec.classList.add("border-bottom-0");
+
+    wishlist.classList.add("border-success");
+    wishlist.classList.remove("text-white");
+    wishlist.classList.add("border-top-0");
+
+    rentalsSection.style.display = "flex";
+    }else{
+        wishlistSection.style.display = "none";
+    profileSection.style.display = "none";
+
+    rented.classList.remove("border-success");
+    rented.classList.remove("border-top-0");
+    rented.classList.add("text-white");
+    rented.classList.remove("border-bottom-0");
+    // rented.classList.remove("border-end-0");
 
 
     profileSec.classList.remove("text-white");
@@ -159,9 +214,32 @@ rented.addEventListener("click", () => {
     wishlist.classList.add("border-top-0");
 
     rentalsSection.style.display = "flex";
+    }
 });
 wishlist.addEventListener("click", () => {
+    if (mediaQuery1.matches) {
+
     rentalsSection.style.display = "none";
+    profileSection.style.display = "none";
+
+    profileSec.classList.remove("text-white");
+    profileSec.classList.add("border-success");
+    profileSec.classList.remove("border-top-0");
+    // profileSec.classList.add("border-bottom-0");
+    wishlist.classList.remove("border-success");
+    wishlist.classList.remove("border-top-0");
+    wishlist.classList.add("text-white");
+    wishlist.classList.remove("border-end-0");
+
+
+    rented.classList.add("border-bottom-0");
+    rented.classList.remove("border-white");
+    rented.classList.add("border-success");
+    rented.classList.remove("text-white");
+
+    wishlistSection.style.display = "flex";
+    }else{
+        rentalsSection.style.display = "none";
     profileSection.style.display = "none";
 
     profileSec.classList.remove("text-white");
@@ -171,6 +249,8 @@ wishlist.addEventListener("click", () => {
     wishlist.classList.remove("border-success");
     wishlist.classList.remove("border-top-0");
     wishlist.classList.add("text-white");
+    // wishlist.classList.remove("border-end-0");
+
 
     rented.classList.add("border-bottom-0");
     rented.classList.remove("border-white");
@@ -178,6 +258,7 @@ wishlist.addEventListener("click", () => {
     rented.classList.remove("text-white");
 
     wishlistSection.style.display = "flex";
+    }
 });
 
 // Assuming `loggedInUserId` is the email or ID of the logged-in user
@@ -892,3 +973,58 @@ floatingButton.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+
+
+
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+if (mediaQuery1.matches) {
+    function hideAside() {
+        // Get references to the aside and offcanvas-header
+        var aside = document.getElementById('aside');
+        var offcanvasHeader = document.querySelector('.offcanvas-header');
+    
+        // Move aside after offcanvas-header
+        offcanvasHeader.parentNode.insertBefore(aside, offcanvasHeader.nextSibling);
+    }
+    hideAside()
+    profileSec.setAttribute('data-bs-dismiss', 'offcanvas');
+    profileSec.setAttribute('aria-label', 'Close');
+    rented.setAttribute('data-bs-dismiss', 'offcanvas');
+    rented.setAttribute('aria-label', 'Close');
+    wishlist.setAttribute('data-bs-dismiss', 'offcanvas');
+    wishlist.setAttribute('aria-label', 'Close');
+    profileSec.classList.remove("border-end-0");
+    wishlist.classList.remove("border-end-0");
+    rented.classList.remove("border-end-0");
+
+  // Code for small screens (mobile/tablet)
+
+  document.getElementById("canvas").style.display = 'block';
+  document.getElementById("proBorder").style.display = 'none';
+  document.getElementById("content").style.right = '0';
+} else {
+  // Code for larger screens (desktop)
+  console.log("Screen is wider than 768px");
+}
+
+// const mediaQuery2 = window.matchMedia('(max-width: 767px)');
+
+// Check if the media query matches
+if (mediaQuery.matches) {
+    
+  // Code for small screens (mobile/tablet)
+  var container = document.getElementById('emailContainer');
+  container.innerHTML = container.innerHTML.replace('<h4', '<p').replace('</h4>', '</p>');
+  var container = document.getElementById('profileContainer');
+  container.innerHTML = container.innerHTML.replace('<h4', '<p').replace('</h4>', '</p>');
+  document.getElementById("profName").classList.remove("px-5")
+  document.getElementById("profName").classList.add("px-3")
+  document.getElementById("profEmail").classList.remove("px-5")
+  document.getElementById("profEmail").classList.add("px-3")
+} else {
+  // Code for larger screens (desktop)
+  console.log("Screen is wider than 768px");
+}
+

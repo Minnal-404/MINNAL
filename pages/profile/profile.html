@@ -12,6 +12,8 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script defer type="module" src="profile.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
 
@@ -30,7 +32,7 @@
     <div id="loading">
         <h1 id="loadMessage"></h1>
         <i class="fa-solid fa-spinner fa-spin fa-2xl" style="color: #ffffff;"></i>
-      </div>
+    </div>
     <header class="d-flex align-items-center justify-content-between bg-success position-fixed top-0 start-0 end-0">
         <div id="col1" class="col-3">
             <div id="gap1" class="d-flex align-items-center justify-content-between">
@@ -85,6 +87,17 @@
                 <h2>Wishlist</h2>
             </div>
         </section>
+        <button id="canvas" style="display: none;" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars fa-xl"></i></button>
+
+        <div class="offcanvas offcanvas-start bg-black " data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1"
+            id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <!-- <h5 class="offcanvas-title text-white " id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5> -->
+                <button id="canvasClose" type="button" class="btn-close btn bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            
+        </div>
         <section id="content">
             <div id="profileSection" class=" border-5">
                 <!-- <div class="d-flex justify-content-end ">
@@ -106,8 +119,8 @@
                         <div class="d-flex">
                             <h2>Name :</h2>
                         </div>
-                        <div class="border border-5 border-success">
-                            <h4 class="px-5 py-3 m-0" id="profName"></h4>
+                        <div class="border border-5 border-success" id="profileContainer">
+                            <h4 class="px-5 py-3 m-0 text-wrap" id="profName"></h4>
 
                         </div>
                         <!-- </di -->
@@ -115,8 +128,8 @@
                         <div class="d-flex">
                             <h2 class="m-0">Email :</h2>
                         </div>
-                        <div class="border border-5  border-success">
-                            <h4 class="py-3 px-5 m-0" id="profEmail"></h4>
+                        <div class="border border-5  border-success" id="emailContainer">
+                            <h4 class="py-3 px-5 m-0 text-break" id="profEmail"></h4>
 
                         </div>
                         <!-- </div> -->
@@ -140,7 +153,7 @@
                 <div id="rentalHistory" class="overflow-y-scroll">
                     <h3 class="text-white ">You have no rental history!</h3>
                 </div>
-                
+
             </div>
 
             <div id="wishlistSection" class="section-content p-5 overflow-x-scroll  text-black" style="display: none;">

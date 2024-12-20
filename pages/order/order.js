@@ -167,9 +167,9 @@ document.getElementById('confirmRental').addEventListener('click', function () {
         check = false;
 
     }
-    else if (!validateExpirationDate(expirationDate)) {
+    else if (!validateExpiryDate(expirationDate)) {
         // orderMessageElement.textContent = 'Invalid expiration date. Please check and try again.';
-        showMessage('Invalid expiration date. Please check and try again.', "expirationDateError");
+        // showMessage('Invalid expiration date. Please check and try again.', "expirationDateError");
         check = false;
 
         // return;
@@ -191,6 +191,98 @@ document.getElementById('confirmRental').addEventListener('click', function () {
 
     }
 });
+// document.getElementById("expirationDate").addEventListener("input", formatExpiry)
+// document.getElementById("expirationDate").addEventListener("keydown", handleBackspace)
+const expiryInput = document.getElementById('expirationDate');
+// Add input event listener for formatting the expiry date
+expiryInput.addEventListener('input', () => formatExpiry(expiryInput));
+// Add keydown event listener for handling backspace
+expiryInput.addEventListener('keydown', (event) => handleBackspace(expiryInput, event));
+
+const subExpiryInput = document.getElementById('expirationDate1');
+// Add input event listener for formatting the expiry date
+subExpiryInput.addEventListener('input', () => formatExpiry(subExpiryInput));
+// Add keydown event listener for handling backspace
+subExpiryInput.addEventListener('keydown', (event) => handleBackspace(subExpiryInput, event));
+
+function formatExpiry(input) {
+    let value = input.value.replace(/\D/g, ''); // Remove all non-numeric characters
+    
+    // Add slash after two digits of the month
+    if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
+    input.value = value;
+}
+
+// Handle input to ensure the slash is correctly removed on backspace
+function handleBackspace(input, event) {
+    let value = input.value;
+    
+    // If backspace is pressed and the slash is at the end, remove it
+    if (event.key === "Backspace" && value.charAt(value.length - 1) === '/') {
+        input.value = value.slice(0, -1);  // Remove the slash when backspace is pressed
+    }
+}
+
+function validateExpiryDate(expiryInput) {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Get current month (1-12)
+    const currentYear = currentDate.getFullYear() % 100; // Get last two digits of current year
+    
+    // Regex to check MM/YY format
+    const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+    if (!regex.test(expiryInput)) {
+        showMessage('Please enter a valid expiry date in MM/YY format.', "expirationDateError");
+
+        // alert("Please enter a valid expiry date in MM/YY format.");
+        return false;
+    }
+
+    // Extract the month and year from input
+    const [inputMonth, inputYear] = expiryInput.split('/').map(Number);
+    
+    // Check if the expiry date is in the future
+    if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
+        showMessage('The expiry date must be a future date.', "expirationDateError");
+
+        // alert("The expiry date must be a future date.");
+        return false;
+    }
+
+    // alert("Expiry date is valid.");
+    return true;
+}
+
+function validateExpiryDate1(expiryInput) {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Get current month (1-12)
+    const currentYear = currentDate.getFullYear() % 100; // Get last two digits of current year
+    
+    // Regex to check MM/YY format
+    const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+    if (!regex.test(expiryInput)) {
+        showMessage('Please enter a valid expiry date in MM/YY format.', "expirationDateError1");
+
+        // alert("Please enter a valid expiry date in MM/YY format.");
+        return false;
+    }
+
+    // Extract the month and year from input
+    const [inputMonth, inputYear] = expiryInput.split('/').map(Number);
+    
+    // Check if the expiry date is in the future
+    if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
+        showMessage('The expiry date must be a future date.', "expirationDateError1");
+
+        // alert("The expiry date must be a future date.");
+        return false;
+    }
+
+    // alert("Expiry date is valid.");
+    return true;
+}
+
 function showMessage(message, divId) {
     var messageDiv = document.getElementById(divId);
     const loading = document.getElementById("loading");
@@ -388,9 +480,9 @@ document.getElementById('confirmSub').addEventListener('click', function () {
         sub = false;
 
     }
-    else if (!validateExpirationDate(expirationDate)) {
+    else if (!validateExpiryDate1(expirationDate)) {
         // orderMessageElement.textContent = 'Invalid expiration date. Please check and try again.';
-        showMessage('Invalid expiration date. Please check and try again.', "expirationDateError1");
+        // showMessage('Invalid expiration date. Please check and try again.', "expirationDateError1");
         sub = false;
 
         // return;
@@ -495,4 +587,9 @@ if (mediaQuery1.matches) {
   // Code for larger screens (desktop)
   console.log("Screen is wider than 768px");
 }
+
+
+
+
+
 

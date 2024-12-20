@@ -76,8 +76,12 @@
                 <input type="text" id="cardNumber" placeholder="Enter card number" maxlength="16">
                 <div id="cardNumberError" class="messageDiv"></div>
 
-                <label for="expirationDate">Expiration Date: <span class="text-white bg-secondary">Eg. (January  2024)</span></label>
-                <input type="month" id="expirationDate">
+                <label for="expirationDate">Expiry Date (MM/YY):</label>
+        <input type="text" id="expirationDate" name="expirationDate" maxlength="5" placeholder="MM/YY" required >
+               
+
+                <!-- <label for="expirationDate">Expiration Date: <span class="text-white bg-secondary">Eg. (January  2024)</span></label>
+                <input type="month" id="expirationDate"> -->
                 <div id="expirationDateError" class="messageDiv"></div>
 
                 <label for="cvv">CVV:</label>
@@ -104,8 +108,11 @@
                 <input type="text" id="cardNumber1" placeholder="Enter card number" maxlength="16">
                 <div id="cardNumberError1" class="messageDiv"></div>
 
-                <label for="expirationDate">Expiration Date: <span class="text-white bg-secondary">Eg. (January  2024)</span></label>
-                <input type="month" id="expirationDate1">
+                <label for="expirationDate1">Expiry Date (MM/YY):</label>
+                <input type="text" id="expirationDate1" name="expirationDate1" maxlength="5" placeholder="MM/YY" required >
+                
+                <!-- <label for="expirationDate">Expiration Date: <span class="text-white bg-secondary">Eg. (January  2024)</span></label>
+                <input type="month" id="expirationDate1"> -->
                 <div id="expirationDateError1" class="messageDiv"></div>
 
                 <label for="cvv">CVV:</label>
@@ -118,6 +125,7 @@
         </div>
     </main>
     <script type="module" defer src="order.js"></script>
+
 </body>
 
 </html>
