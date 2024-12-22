@@ -22,7 +22,7 @@ const db = getFirestore();
 
 
 let check = false;
-
+let subscribed = false;
 
 function checkUserExists() {
   // This could be a check for a cookie, local storage, or API request
@@ -54,18 +54,52 @@ if (checkUserExists()) {
               }
               console.log(expiration)
             }
+            
+
             if (userData.subscription.status) {
-              document.getElementById("subscribeBtn").setAttribute('disabled', 'true');
+              subscribed = true
+              // document.getElementById("subscribeBtn").setAttribute('disabled', 'true');
               document.getElementById("subscribeBtn").classList.remove("ball");
               document.getElementById("subscribeBtn").textContent = "Subscribed";
+              document.getElementById("subDetail").innerHTML = `
+              <div class="bg-black">
+              <div class="d-flex justify-content-end ">
+          <button class="close-btn " id="subClose">
+            <i class="fa-solid fa-x "></i>
+          </button>
+        </div>
+              <div id="subContent" class=" p-5 d-flex flex-column gap-5">
+              <h1 class="text-center">Subscription Status</h1>
+              
+              <h3>Subscribed On: ${formatDate(userData.subscription.subscribedOn)}</h3>
+              <h3>Will Expire On: ${formatDate(userData.subscription.expiration)}</h3>
+              
+              </div>
+              </div>`
 
             }
+            
+            document.getElementById("subClose").addEventListener("click", () => {
+              document.getElementById("subDetail").style.display = "none";
+
+            })
           }
           catch(srror){
 
           }finally{
             document.getElementById("logBtn").style.display = "none";
             document.getElementById("signUpBtn").style.display = "none";
+            document.getElementById("subscribeBtn").addEventListener("click", () => {
+              console.log("Button clicked");
+              console.log(subscribed);
+              if (!subscribed) {
+                  window.location.href = 'pages/order/order.html';
+              }
+              else{
+                document.getElementById("subDetail").style.display = "flex";
+
+              }
+            });
           }
 
             profileNameCreator();
@@ -87,6 +121,39 @@ if (checkUserExists()) {
 else {
   document.getElementById("subscribeBtn").style.display = "none";
 }
+
+
+function formatDate(rentedDate) {
+  const rentalDate = new Date(rentedDate);
+
+  // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
+  const day = rentalDate.getDate();
+  const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
+                 (day % 10 === 2 && day !== 12) ? 'nd' :
+                 (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+  const formattedDay = day + suffix;
+
+  // Month as full name (e.g., "December")
+  const month = rentalDate.toLocaleString('en-US', { month: 'long' });
+
+  // Year (e.g., "2024")
+  const year = rentalDate.getFullYear();
+
+  // Full weekday name (e.g., "Monday")
+  const weekday = rentalDate.toLocaleString('en-US', { weekday: 'long' });
+
+  // Time in 24-hour format (e.g., "16:31:41")
+  const hours = rentalDate.getHours().toString().padStart(2, '0');
+  const minutes = rentalDate.getMinutes().toString().padStart(2, '0');
+  const seconds = rentalDate.getSeconds().toString().padStart(2, '0');
+  const time = `${hours}:${minutes}:${seconds}`;
+
+  // Combine all parts into the desired format
+  const formattedDate = `${formattedDay} ${month} ${year} on ${weekday} at ${time}`;
+
+  return formattedDate;
+}
+
 
 document.getElementById("user").addEventListener("click", () => {
   if (check) {
@@ -1271,7 +1338,7 @@ observer2.observe(postersContainer2, { childList: true });
 
 
 
-const mediaQuery1 = window.matchMedia('(max-width: 1024px)');
+const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
 // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
 
 // Check if the media query matches

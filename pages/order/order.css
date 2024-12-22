@@ -189,6 +189,11 @@ h1 {
     h1{
         text-align: start;
     }
+    #subscription{
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
 }
 
 @media (max-width: 767px) {

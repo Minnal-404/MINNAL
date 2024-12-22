@@ -513,10 +513,12 @@ async function updateSubscriptionStatus(userId, status) {
     // userRef.update({
     //     subscription: status // true or false
     // })
+    const subscribedOn = new Date().toISOString();
     const subscriptionExpiration = calculateExpirationDate();
     let subscription = {
         status: status,
-        expiration: subscriptionExpiration
+        expiration: subscriptionExpiration,
+        subscribedOn: subscribedOn
     };
     await updateDoc(userRef, { subscription });
     console.log("Subscription status updated successfully!");
