@@ -1337,7 +1337,6 @@ observer2.observe(postersContainer2, { childList: true });
 
 
 
-
 const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
 // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
 
@@ -1348,6 +1347,9 @@ if (mediaQuery1.matches) {
   const searchDiv = document.getElementById('searchDiv');
   const searchInput = document.getElementById('search');
   const searchIcon = document.getElementById("searchIcon");
+
+  document.getElementById("userDiv").classList.remove("gap-4")
+  document.getElementById("userDiv").classList.remove("justify-content-end")
 
   searchIcon.addEventListener('click', function () {
     // If the input field is hidden, show it and change the icon
@@ -1379,3 +1381,8 @@ if (mediaQuery1.matches) {
   console.log("Screen is wider than 768px");
 }
 
+const mediaQuery = window.matchMedia('(max-width: 767px)');
+if (mediaQuery.matches) {
+
+  document.getElementById("userDiv").classList.add("justify-content-end")
+}

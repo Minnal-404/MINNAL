@@ -497,7 +497,7 @@ body.no-scroll {
 
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   * {
     font-size: 14px;
   }
@@ -542,6 +542,7 @@ header{
     padding: 0 0.5rem;
     position: absolute;
     left: 8rem;
+    z-index: 2;
   }
   #userName{
     display: none;
