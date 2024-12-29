@@ -44,24 +44,24 @@ if (checkUserExists()) {
             localStorage.setItem("name", userData.name);
             document.getElementById("profName").textContent = userData.name;
             document.getElementById("profEmail").textContent = userData.email;
-            try{
-            if (userData.subscription.status) {
-              let present = new Date();
-              let expiration = new Date(userData.subscription.expiration);
-              if (present > expiration) {
-                let subscription = {};
-                updateDoc(docRef, { subscription });
+            try {
+              if (userData.subscription.status) {
+                let present = new Date();
+                let expiration = new Date(userData.subscription.expiration);
+                if (present > expiration) {
+                  let subscription = {};
+                  updateDoc(docRef, { subscription });
+                }
+                console.log(expiration)
               }
-              console.log(expiration)
-            }
-            
 
-            if (userData.subscription.status) {
-              subscribed = true
-              // document.getElementById("subscribeBtn").setAttribute('disabled', 'true');
-              document.getElementById("subscribeBtn").classList.remove("ball");
-              document.getElementById("subscribeBtn").textContent = "Subscribed";
-              document.getElementById("subDetail").innerHTML = `
+
+              if (userData.subscription.status) {
+                subscribed = true
+                // document.getElementById("subscribeBtn").setAttribute('disabled', 'true');
+                document.getElementById("subscribeBtn").classList.remove("ball");
+                document.getElementById("subscribeBtn").textContent = "Subscribed";
+                document.getElementById("subDetail").innerHTML = `
               <div class="bg-black">
               <div class="d-flex justify-content-end ">
           <button class="close-btn " id="subClose">
@@ -77,30 +77,30 @@ if (checkUserExists()) {
               </div>
               </div>`
 
+              }
+
+              document.getElementById("subClose").addEventListener("click", () => {
+                document.getElementById("subDetail").style.display = "none";
+
+              })
             }
-            
-            document.getElementById("subClose").addEventListener("click", () => {
-              document.getElementById("subDetail").style.display = "none";
+            catch (srror) {
 
-            })
-          }
-          catch(srror){
-
-          }finally{
-            document.getElementById("logBtn").style.display = "none";
-            document.getElementById("signUpBtn").style.display = "none";
-            document.getElementById("subscribeBtn").addEventListener("click", () => {
-              console.log("Button clicked");
-              console.log(subscribed);
-              if (!subscribed) {
+            } finally {
+              document.getElementById("logBtn").style.display = "none";
+              document.getElementById("signUpBtn").style.display = "none";
+              document.getElementById("subscribeBtn").addEventListener("click", () => {
+                console.log("Button clicked");
+                console.log(subscribed);
+                if (!subscribed) {
                   window.location.href = 'pages/order/order.html';
-              }
-              else{
-                document.getElementById("subDetail").style.display = "flex";
+                }
+                else {
+                  document.getElementById("subDetail").style.display = "flex";
 
-              }
-            });
-          }
+                }
+              });
+            }
 
             profileNameCreator();
 
@@ -129,8 +129,8 @@ function formatDate(rentedDate) {
   // Day of the month with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th, ..., 31st)
   const day = rentalDate.getDate();
   const suffix = (day % 10 === 1 && day !== 11) ? 'st' :
-                 (day % 10 === 2 && day !== 12) ? 'nd' :
-                 (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+    (day % 10 === 2 && day !== 12) ? 'nd' :
+      (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
   const formattedDay = day + suffix;
 
   // Month as full name (e.g., "December")
@@ -171,30 +171,30 @@ document.getElementById("logBtn").addEventListener("click", () => {
   //   // document.body.classList.add('no-scroll');  // Disable scrolling
   //   // document.getElementById("profileSection").style.display = "block";
   // } else {
-    const popup = document.getElementById('loginMain');
-    // Check if the popup is already visible
-    if (popup.style.display !== 'flex') {
-      const overlay = document.getElementById("overlay");
+  const popup = document.getElementById('loginMain');
+  // Check if the popup is already visible
+  if (popup.style.display !== 'flex') {
+    const overlay = document.getElementById("overlay");
 
-      overlay.style.display = "block";
+    overlay.style.display = "block";
 
-      popup.style.display = 'flex';
-    }
+    popup.style.display = 'flex';
+  }
   // }
 
 });
 
 document.getElementById("signUpBtn").addEventListener("click", () => {
 
-    const popup = document.getElementById('createMain');
-    // Check if the popup is already visible
-    if (popup.style.display !== 'flex') {
-      const overlay = document.getElementById("overlay");
+  const popup = document.getElementById('createMain');
+  // Check if the popup is already visible
+  if (popup.style.display !== 'flex') {
+    const overlay = document.getElementById("overlay");
 
-      overlay.style.display = "block";
+    overlay.style.display = "block";
 
-      popup.style.display = 'flex';
-    }
+    popup.style.display = 'flex';
+  }
 });
 
 document.getElementById("close-Btn").addEventListener("click", () => {
@@ -898,12 +898,16 @@ function displayResults(results) {
       }, 5000);
     }
 
-    document.getElementById("searchResults").style.display = "flex"
+    document.getElementById("searchResults").style.display = "flex";
   });
+  document.getElementById("loading").style.display = "none";
+
 }
 
 // Function to handle search input
 async function handleSearch(event) {
+  document.getElementById("loading").style.display = "flex";
+
   const data = [];
 
   try {
@@ -932,6 +936,7 @@ async function handleSearch(event) {
   if (query.length === 0) {
     searchResultsContainer.innerHTML = ''; // Clear if empty query
     document.getElementById("searchResults").style.display = "none"
+    document.getElementById("loading").style.display = "none";
 
     return;
   }
@@ -1222,118 +1227,175 @@ createBtn.addEventListener("click", (event) => {
 //   });
 // });
 
-const postersContainer = document.getElementById('recommendedDiv');
+// const postersContainer = document.getElementById('recommendedDiv');
 
 
-const observer = new MutationObserver(() => {
-  const posters = document.querySelectorAll('.movie');
-  posters.forEach(poster => {
-    let timeout;
+// const observer = new MutationObserver(() => {
+//   const posters = document.querySelectorAll('.movie');
+//   posters.forEach(poster => {
+//     let timeout;
 
-    // Mouse enter event
-    poster.addEventListener('mouseenter', () => {
-      console.log("Hover started on", poster.id);
+//     // Mouse enter event
+//     poster.addEventListener('mouseenter', () => {
+//       console.log("Hover started on", poster.id);
 
-      const popup = poster.querySelector('.popups');
-      console.log("Popup found:", popup);
+//       const popup = poster.querySelector('.popups');
+//       console.log("Popup found:", popup);
 
-      // Hide all popups immediately when hovering starts
-      document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
+//       // Hide all popups immediately when hovering starts
+//       document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
 
-      // Set a timeout to show the popup after 2 seconds
-      timeout = setTimeout(() => {
-        popup.style.display = 'flex';
-        popup.classList.add("fade");
-        popup.style.opacity = 1;
-      }, 500);
-    });
+//       // Set a timeout to show the popup after 2 seconds
+//       timeout = setTimeout(() => {
+//         popup.style.display = 'flex';
+//         popup.classList.add("fade");
+//         popup.style.opacity = 1;
+//       }, 500);
+//     });
 
-    // Mouse leave event
-    poster.addEventListener('mouseleave', () => {
-      console.log("Hover ended on", poster.id);
-      clearTimeout(timeout);
-      poster.querySelector('.popups').style.display = 'none';
+//     // Mouse leave event
+//     poster.addEventListener('mouseleave', () => {
+//       console.log("Hover ended on", poster.id);
+//       clearTimeout(timeout);
+//       poster.querySelector('.popups').style.display = 'none';
+//     });
+//   });
+// });
+
+// // Start observing the posters container for child changes (new posters added)
+// observer.observe(postersContainer, { childList: true });
+
+// const postersContainer1 = document.getElementById('recentlyDiv');
+
+
+// const observer1 = new MutationObserver(() => {
+//   const posters = document.querySelectorAll('.movie');
+//   posters.forEach(poster => {
+//     let timeout;
+
+//     // Mouse enter event
+//     poster.addEventListener('mouseenter', () => {
+//       console.log("Hover started on", poster.id);
+
+//       const popup = poster.querySelector('.popups');
+//       console.log("Popup found:", popup);
+
+//       // Hide all popups immediately when hovering starts
+//       document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
+
+//       // Set a timeout to show the popup after 2 seconds
+//       timeout = setTimeout(() => {
+//         popup.style.display = 'flex';
+//         popup.classList.add("fade");
+//         popup.style.opacity = 1;
+//       }, 500);
+//     });
+
+//     // Mouse leave event
+//     poster.addEventListener('mouseleave', () => {
+//       console.log("Hover ended on", poster.id);
+//       clearTimeout(timeout);
+//       poster.querySelector('.popups').style.display = 'none';
+//     });
+//   });
+// });
+
+// // Start observing the posters container for child changes (new posters added)
+// observer1.observe(postersContainer1, { childList: true });
+
+// const postersContainer2 = document.getElementById('searchResults');
+// const observer2 = new MutationObserver(() => {
+//   const posters = document.querySelectorAll('.movie');
+//   posters.forEach(poster => {
+//     let timeout;
+
+//     // Mouse enter event
+//     poster.addEventListener('mouseenter', () => {
+//       console.log("Hover started on", poster.id);
+
+//       const popup = poster.querySelector('.popups');
+//       console.log("Popup found:", popup);
+
+//       // Hide all popups immediately when hovering starts
+//       document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
+
+//       // Set a timeout to show the popup after 2 seconds
+//       timeout = setTimeout(() => {
+//         popup.style.display = 'flex';
+//         popup.classList.add("fade");
+//         popup.style.opacity = 1;
+//       }, 500);
+//     });
+
+//     // Mouse leave event
+//     poster.addEventListener('mouseleave', () => {
+//       console.log("Hover ended on", poster.id);
+//       clearTimeout(timeout);
+//       poster.querySelector('.popups').style.display = 'none';
+//     });
+//   });
+// });
+
+// // Start observing the posters container for child changes (new posters added)
+// observer2.observe(postersContainer2, { childList: true });
+
+
+// Function to add hover events to movie posters inside a given container
+function addHoverEventsToPosters(containerId) {
+  const postersContainer = document.getElementById(containerId);
+
+  // Create a MutationObserver to watch for added poster divs
+  const observer = new MutationObserver(() => {
+    const posters = postersContainer.querySelectorAll('.movie');
+    
+    posters.forEach(poster => {
+      // Ensure we're not adding event listeners multiple times (check if already added)
+      if (!poster.hasAttribute('data-hover-events-attached')) {
+        let timeout;
+
+        // Mouse enter event
+        poster.addEventListener('mouseenter', () => {
+          console.log("Hover started on", poster.id);
+
+          // Find the popup element within the poster
+          const popup = poster.querySelector('.popups');
+          console.log("Popup found:", popup);
+
+          // Hide all other popups immediately when hovering starts
+          document.querySelectorAll('.popups').forEach(p => p.style.opacity = 0);
+
+          // Set a timeout to show the popup after 500ms
+          timeout = setTimeout(() => {
+            popup.style.display = 'flex';
+            popup.classList.add("fade");
+            popup.style.opacity = 1;
+          }, 500);
+        });
+
+        // Mouse leave event
+        poster.addEventListener('mouseleave', () => {
+          console.log("Hover ended on", poster.id);
+          clearTimeout(timeout);
+          // Hide the popup when the mouse leaves the poster
+          const popup = poster.querySelector('.popups');
+          if (popup) popup.style.display = 'none';
+        });
+
+        // Mark this poster as having events attached to prevent re-adding event listeners
+        poster.setAttribute('data-hover-events-attached', 'true');
+      }
     });
   });
-});
 
-// Start observing the posters container for child changes (new posters added)
-observer.observe(postersContainer, { childList: true });
+  // Start observing the posters container for new children
+  observer.observe(postersContainer, { childList: true });
+}
 
-const postersContainer1 = document.getElementById('recentlyDiv');
-
-
-const observer1 = new MutationObserver(() => {
-  const posters = document.querySelectorAll('.movie');
-  posters.forEach(poster => {
-    let timeout;
-
-    // Mouse enter event
-    poster.addEventListener('mouseenter', () => {
-      console.log("Hover started on", poster.id);
-
-      const popup = poster.querySelector('.popups');
-      console.log("Popup found:", popup);
-
-      // Hide all popups immediately when hovering starts
-      document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
-
-      // Set a timeout to show the popup after 2 seconds
-      timeout = setTimeout(() => {
-        popup.style.display = 'flex';
-        popup.classList.add("fade");
-        popup.style.opacity = 1;
-      }, 500);
-    });
-
-    // Mouse leave event
-    poster.addEventListener('mouseleave', () => {
-      console.log("Hover ended on", poster.id);
-      clearTimeout(timeout);
-      poster.querySelector('.popups').style.display = 'none';
-    });
-  });
-});
-
-// Start observing the posters container for child changes (new posters added)
-observer1.observe(postersContainer1, { childList: true });
-
-const postersContainer2 = document.getElementById('searchResults');
-const observer2 = new MutationObserver(() => {
-  const posters = document.querySelectorAll('.movie');
-  posters.forEach(poster => {
-    let timeout;
-
-    // Mouse enter event
-    poster.addEventListener('mouseenter', () => {
-      console.log("Hover started on", poster.id);
-
-      const popup = poster.querySelector('.popups');
-      console.log("Popup found:", popup);
-
-      // Hide all popups immediately when hovering starts
-      document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
-
-      // Set a timeout to show the popup after 2 seconds
-      timeout = setTimeout(() => {
-        popup.style.display = 'flex';
-        popup.classList.add("fade");
-        popup.style.opacity = 1;
-      }, 500);
-    });
-
-    // Mouse leave event
-    poster.addEventListener('mouseleave', () => {
-      console.log("Hover ended on", poster.id);
-      clearTimeout(timeout);
-      poster.querySelector('.popups').style.display = 'none';
-    });
-  });
-});
-
-// Start observing the posters container for child changes (new posters added)
-observer2.observe(postersContainer2, { childList: true });
-
+// Call the function for different containers
+addHoverEventsToPosters('searchResults');
+addHoverEventsToPosters('recentlyDiv'); // Another container with different posters
+addHoverEventsToPosters('recommendedDiv'); // Yet another container with posters
+addHoverEventsToPosters('filterResult'); // Yet another container with posters
 
 
 
@@ -1386,3 +1448,110 @@ if (mediaQuery.matches) {
 
   document.getElementById("userDiv").classList.add("justify-content-end")
 }
+
+
+async function filterComedyGenresFromFirestore(genre) {
+  // Replace 'yourCollection' with the actual collection name
+  document.getElementById("filterResult").innerHTML = ``
+
+  const querySnapshot = await getDocs(collection(db, 'movies'));
+
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+
+    // Check if the genre array contains 'comedy'
+    if (data.genre && data.genre.includes(`${genre}`)) {
+      // comedyMovies.push(data);  // Push matching data to the result array
+
+      const movieDiv = document.createElement('div');
+      movieDiv.className = 'movie';
+
+      // Create a link for each movie poster (ensure the query parameter is 'title')
+      // const movieLink = document.createElement('a');
+      // movieLink.href = `pages/details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
+
+      // Insert the movie poster and title inside the link
+      movieDiv.innerHTML = `<img src="${data.poster}" alt="${data.title}"><h2>${data.title}</h2><p>${data.year}</p>
+      <div class="popups flex-column" >
+      <div class="p-0">
+          <img src="${data.thumbnails}" alt="${data.title}"></div>
+          <div class="p-3 d-flex flex-column gap-3">
+          <h2>${data.title}</h2>
+          <div class="d-flex gap-4 justify-content-between">
+          <a href="pages/details/details.html?title=${encodeURIComponent(data.title)}">
+          <button id="watch" class="btn btn-success">More details</button>
+          </a>
+          <button id="add" class="add-to-wishlist btn btn-success" data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+          </div>
+          <p id="wishlistError" class="m-0 text- wishlist-error"></p>
+          <div class="d-flex justify-content-evenly">
+          <p class="m-0">${data.year}</p> <p class="m-0">•</p> <p class="m-0">${data.duration}</p> <p class="m-0">•</p> <p class="m-0 bg-success px-2 rounded-1"><strong>${data.rating}/5</strong></p>
+          </div>
+    <p class="m-0">${data.description}</p>  
+    </div>
+  </div>`;
+
+      // Append the movie link div to the container
+      // movieDiv.appendChild(movieLink);
+      document.getElementById("filterResult").appendChild(movieDiv);
+      document.getElementById("genreTitle").textContent = `${genre}`;
+      document.getElementById("loading").style.display = "none";
+
+    }
+  });
+
+}
+
+// Example usage:
+// filterComedyGenresFromFirestore().then(comedyMovies => {
+//   console.log(comedyMovies); // The filtered movies
+// }).catch(error => {
+//   console.error("Error fetching documents: ", error);
+// });
+
+// document.getElementById("action").addEventListener("click", filterComedyGenresFromFirestore('Action'))
+
+const divs = document.querySelectorAll('.nav-link');
+
+// Variable to keep track of the previously clicked div
+let selectedDiv = null;
+
+// Add click event listeners to each div
+divs.forEach(div => {
+  div.addEventListener('click', function () {
+    // If the clicked div is the same as the previously selected div
+    if (selectedDiv === div) {
+      // Toggle the 'bg-success' class (add if not present, remove if present)
+      if (div.classList.contains('bg-success')) {
+        div.classList.remove('bg-success');
+        document.getElementById("genreResult").style.display = 'none'
+
+      }
+      // If it doesn't have the 'bg-success' class, add it
+      else {
+        document.getElementById("loading").style.display = "flex";
+        filterComedyGenresFromFirestore(div.textContent);
+        document.getElementById("genreResult").style.display = 'block'
+        div.classList.add('bg-success');
+      }
+    } else {
+      // If there is a previously selected div, remove the 'bg-success' class
+      if (selectedDiv) {
+        selectedDiv.classList.remove('bg-success');
+        document.getElementById("genreResult").style.display = 'none'
+
+      }
+
+      // Add the 'bg-success' class to the clicked div
+      document.getElementById("loading").style.display = "flex";
+      filterComedyGenresFromFirestore(div.textContent);
+      div.classList.add('bg-success');
+      document.getElementById("genreResult").style.display = 'block'
+
+    }
+
+    // Update the selectedDiv to the current div
+    selectedDiv = div;
+  });
+});

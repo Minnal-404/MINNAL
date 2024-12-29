@@ -487,8 +487,23 @@ body.no-scroll {
   
 }
 
-
-
+#genreResult{
+  position: absolute;
+  /* bottom: 0; */
+  left: 0;
+  right: 0;
+  top: 11rem;
+  z-index: 2;
+  margin: 0 0 0 5%;
+  bottom: 0;
+  display: none;
+}
+.nav-link{
+  border: 1px solid black;
+}
+.nav-link:hover{
+  border: 1px solid #28a745;
+}
 
 
 
