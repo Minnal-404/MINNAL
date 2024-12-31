@@ -151,5 +151,269 @@
       "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
       "trailer": "https://www.youtube-nocookie.com/embed/5PSNL1qE6VY?si=374X7OSedidoorDA"
     }
+    {
+      "thumbnails": "https://example.com/inception_thumb.jpg",
+      "poster": "https://example.com/inception_poster.jpg",
+      "title": "Inception",
+      "year": 2010,
+      "genre": [
+        "Sci-Fi",
+        "Action"
+      ],
+      "description": "A skilled thief is given a chance to erase his criminal history if he can successfully perform inception on a target.",
+      "rating": 4.8,
+      "duration": "2h 28m",
+      "details": {
+        "cast": [
+          "Leonardo DiCaprio",
+          "Joseph Gordon-Levitt",
+          "Ellen Page",
+          "Tom Hardy"
+        ],
+        "producer": ["Emma Thomas"],
+        "music": ["Hans Zimmer"],
+        "director": ["Christopher Nolan"]
+      },
+      "languages": ["English", "Hindi", "Tamil", "Telugu"],
+      "video": "https://example.com/inception_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/8hP9D6kZseM"
+    },
+    {
+      "thumbnails": "https://example.com/interstellar_thumb.jpg",
+      "poster": "https://example.com/interstellar_poster.jpg",
+      "title": "Interstellar",
+      "year": 2014,
+      "genre": [
+        "Sci-Fi",
+        "Adventure"
+      ],
+      "description": "A group of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.",
+      "rating": 4.7,
+      "duration": "2h 49m",
+      "details": {
+        "cast": [
+          "Matthew McConaughey",
+          "Anne Hathaway",
+          "Jessica Chastain"
+        ],
+        "producer": ["Emma Thomas", "Christopher Nolan"],
+        "music": ["Hans Zimmer"],
+        "director": ["Christopher Nolan"]
+      },
+      "languages": ["English", "Hindi", "Tamil", "Telugu"],
+      "video": "https://example.com/interstellar_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/zSWdZVtXT7E"
+    },
+    {
+      "thumbnails": "https://example.com/the_dark_knight_thumb.jpg",
+      "poster": "https://example.com/the_dark_knight_poster.jpg",
+      "title": "The Dark Knight",
+      "year": 2008,
+      "genre": [
+        "Action",
+        "Crime",
+        "Drama"
+      ],
+      "description": "Batman must face his greatest psychological and physical tests as he confronts a dangerous new villain, the Joker.",
+      "rating": 5,
+      "duration": "2h 32m",
+      "details": {
+        "cast": [
+          "Christian Bale",
+          "Heath Ledger",
+          "Aaron Eckhart"
+        ],
+        "producer": ["Emma Thomas"],
+        "music": ["Hans Zimmer", "James Newton Howard"],
+        "director": ["Christopher Nolan"]
+      },
+      "languages": ["English", "Hindi", "Tamil", "Telugu"],
+      "video": "https://example.com/the_dark_knight_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/LDG9bisJEaI"
+    },
+    {
+      "thumbnails": "https://example.com/matrix_thumb.jpg",
+      "poster": "https://example.com/matrix_poster.jpg",
+      "title": "The Matrix",
+      "year": 1999,
+      "genre": [
+        "Sci-Fi",
+        "Action"
+      ],
+      "description": "A computer hacker learns about the true nature of his reality and his role in the war against its controllers.",
+      "rating": 5,
+      "duration": "2h 16m",
+      "details": {
+        "cast": [
+          "Keanu Reeves",
+          "Laurence Fishburne",
+          "Carrie-Anne Moss"
+        ],
+        "producer": ["Joel Silver"],
+        "music": ["Don Davis"],
+        "director": ["The Wachowskis"]
+      },
+      "languages": ["English", "Hindi", "Tamil", "Telugu"],
+      "video": "https://example.com/the_matrix_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/m8e-FF8MsqU"
+    },
+    {
+      "thumbnails": "https://example.com/the_notebook_thumb.jpg",
+      "poster": "https://example.com/the_notebook_poster.jpg",
+      "title": "The Notebook",
+      "year": 2004,
+      "genre": [
+        "Romance",
+        "Drama"
+      ],
+      "description": "A young couple falls in love during the early years of World War II, but their love faces many obstacles over time.",
+      "rating": 4.7,
+      "duration": "2h 3m",
+      "details": {
+        "cast": [
+          "Ryan Gosling",
+          "Rachel McAdams",
+          "James Marsden"
+        ],
+        "producer": ["Nick Cassavetes"],
+        "music": ["Aaron Zigman"],
+        "director": ["Nick Cassavetes"]
+      },
+      "languages": ["English", "Spanish", "French"],
+      "video": "https://example.com/the_notebook_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/FC6biTjEyZo"
+    },
+    {
+      "thumbnails": "https://example.com/titanic_thumb.jpg",
+      "poster": "https://example.com/titanic_poster.jpg",
+      "title": "Titanic",
+      "year": 1997,
+      "genre": [
+        "Romance",
+        "Drama"
+      ],
+      "description": "A young couple from different social classes fall in love aboard the ill-fated ship, Titanic, leading to a tragic end.",
+      "rating": 4.8,
+      "duration": "3h 14m",
+      "details": {
+        "cast": [
+          "Leonardo DiCaprio",
+          "Kate Winslet",
+          "Billy Zane"
+        ],
+        "producer": ["James Cameron", "Jon Landau"],
+        "music": ["James Horner"],
+        "director": ["James Cameron"]
+      },
+      "languages": ["English", "Spanish", "French"],
+      "video": "https://example.com/titanic_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/2e-e1jz9fDQ"
+    },
+    {
+      "thumbnails": "https://example.com/avengers_thumb.jpg",
+      "poster": "https://example.com/avengers_poster.jpg",
+      "title": "The Avengers",
+      "year": 2012,
+      "genre": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "description": "Earth's mightiest heroes come together to fight an alien invasion threatening to destroy the world.",
+      "rating": 4.7,
+      "duration": "2h 23m",
+      "details": {
+        "cast": [
+          "Robert Downey Jr.",
+          "Chris Hemsworth",
+          "Mark Ruffalo",
+          "Chris Evans"
+        ],
+        "producer": ["Kevin Feige"],
+        "music": ["Alan Silvestri"],
+        "director": ["Joss Whedon"]
+      },
+      "languages": ["English", "Hindi", "Spanish"],
+      "video": "https://example.com/avengers_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/eOrNdBpGMv8"
+    },
+    {
+      "thumbnails": "https://example.com/ironman_thumb.jpg",
+      "poster": "https://example.com/ironman_poster.jpg",
+      "title": "Iron Man",
+      "year": 2008,
+      "genre": [
+        "Action",
+        "Sci-Fi"
+      ],
+      "description": "Tony Stark, a genius billionaire, becomes the armored hero Iron Man to fight terrorism and threats against humanity.",
+      "rating": 4.6,
+      "duration": "2h 6m",
+      "details": {
+        "cast": [
+          "Robert Downey Jr.",
+          "Gwyneth Paltrow",
+          "Jeff Bridges"
+        ],
+        "producer": ["Kevin Feige"],
+        "music": ["Ramin Djawadi"],
+        "director": ["Jon Favreau"]
+      },
+      "languages": ["English", "Spanish"],
+      "video": "https://example.com/ironman_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/8hYlB38k9h0"
+    },
+    {
+      "thumbnails": "https://example.com/jaws_thumb.jpg",
+      "poster": "https://example.com/jaws_poster.jpg",
+      "title": "Jaws",
+      "year": 1975,
+      "genre": [
+        "Horror",
+        "Thriller"
+      ],
+      "description": "A great white shark terrorizes a small resort town, and a police chief, marine biologist, and shark hunter try to catch it.",
+      "rating": 4.8,
+      "duration": "2h 4m",
+      "details": {
+        "cast": [
+          "Roy Scheider",
+          "Robert Shaw",
+          "Richard Dreyfuss"
+        ],
+        "producer": ["Steven Spielberg"],
+        "music": ["John Williams"],
+        "director": ["Steven Spielberg"]
+      },
+      "languages": ["English", "German", "French"],
+      "video": "https://example.com/jaws_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/U1fu_sA7XhE"
+    },
+    {
+      "thumbnails": "https://example.com/the_conjuring_thumb.jpg",
+      "poster": "https://example.com/the_conjuring_poster.jpg",
+      "title": "The Conjuring",
+      "year": 2013,
+      "genre": [
+        "Horror",
+        "Thriller"
+      ],
+      "description": "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark force in their farmhouse.",
+      "rating": 4.7,
+      "duration": "1h 52m",
+      "details": {
+        "cast": [
+          "Vera Farmiga",
+          "Patrick Wilson",
+          "Lili Taylor"
+        ],
+        "producer": ["James Wan", "Peter Safran"],
+        "music": ["Joseph Bishara"],
+        "director": ["James Wan"]
+      },
+      "languages": ["English", "Spanish"],
+      "video": "https://example.com/the_conjuring_video.m3u8",
+      "trailer": "https://www.youtube.com/embed/k10ETZ41b3I"
+    }
   ]
 }

@@ -248,7 +248,35 @@ a{
   top: 5rem;
   position: fixed;
 }
-
+#icon{
+  /* height: 2rem;
+  width: 2rem;
+  background: green; */
+  position: relative;
+}
+#input{
+  /* display: inline; */
+  height: 0;
+  width: 0;
+  position: absolute;
+  bottom: -8rem;
+  z-index: -1;
+}
+#yes, #no{
+  border:  5px solid white;
+  border-radius: 100%;
+}
+#yes:hover{
+  border: 5px solid #28a745;
+  color: #28a745;
+}
+#no:hover{
+  border: 5px solid red;
+  color: red;
+}
+#icon:hover{
+  color: #28a745;
+}
 
 
 @media (max-width: 1023px) {

@@ -42,6 +42,7 @@ if (checkUserExists()) {
           if (docSnap.exists()) {
             const userData = docSnap.data();
             localStorage.setItem("name", userData.name);
+            localStorage.setItem("color", userData.color);
             document.getElementById("profName").textContent = userData.name;
             document.getElementById("profEmail").textContent = userData.email;
             try {

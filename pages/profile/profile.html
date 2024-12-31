@@ -88,15 +88,17 @@
             </div>
         </section>
         <button id="canvas" style="display: none;" class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars fa-xl"></i></button>
+            data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i
+                class="fa-solid fa-bars fa-xl"></i></button>
 
         <div class="offcanvas offcanvas-start bg-black " data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1"
             id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
             <div class="offcanvas-header">
                 <!-- <h5 class="offcanvas-title text-white " id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5> -->
-                <button id="canvasClose" type="button" class="btn-close btn bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button id="canvasClose" type="button" class="btn-close btn bg-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
             </div>
-            
+
         </div>
         <section id="content">
             <div id="profileSection" class=" border-5">
@@ -107,12 +109,26 @@
                     </button>
                 </div> -->
                 <div id="pro" class="bg-black border-white border-5">
-                    <div class="d-flex justify-content-around p-5  border-white border-bottom border-5">
+                    <div class="d-flex flex-column align-items-center gap-5 p-5  border-white border-bottom border-5">
                         <div id="prof"
                             class=" rounded-circle border border-5 border-white text-center d-flex justify-content-center align-items-center p-3">
                             <!-- <i class="fa-solid fa-user fa-xl p-4 text-white"></i> -->
                             <h1 id="profile" class="text-white p-0 m-0 fw-bold"></h1>
                         </div>
+
+                        <div id="confirmColorContainer" class=" flex-column gap-4" style="display: none;">
+                            <h3>Do you want to set this color?</h3>
+                            <div class="d-flex justify-content-evenly">
+                                <div id="yes" class=" p-2"><i class="fa-solid fa-check fa-2xl"></i></div>
+                                <div id="no" class=" p-2"><i class="fa-solid fa-xmark fa-2xl"></i></div>
+                            </div>
+                        </div>
+                        <i id="icon" class="fa-solid fa-palette fa-2xl">
+                            <input type="color" id="input" style='display: none;'>
+                        </i>
+                        <!-- Color Picker -->
+
+                        <!-- Color Picker Input (Hidden by default) -->
                     </div>
                     <div id="profileContent" class=" d-flex flex-column justify-content-evenly p-5 ">
                         <!-- <div class=""> -->
