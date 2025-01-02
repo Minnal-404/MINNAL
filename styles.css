@@ -138,7 +138,7 @@ a {
 }
 
 .content,
-#searchResults {
+#searchResults, #nav {
   overflow-x: scroll;
   white-space: nowrap;
   scrollbar-width: none;
@@ -535,6 +535,9 @@ body.no-scroll {
   .one {
     padding: 0;
   }
+  #genreResult{
+    top: 10rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -572,4 +575,5 @@ header{
     position: absolute;
     right: 6rem;
   }
+  
 }
