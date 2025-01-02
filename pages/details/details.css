@@ -284,7 +284,7 @@ img {
 .background-overlay img {
   height: 100%;
   position: absolute;
-  padding: 4% 0 0 0;
+  padding: 5rem 0 0 0;
   top: 0;
   right: 0;
   left: 0;
@@ -676,6 +676,10 @@ body.no-scroll {
 #trailer {
   display: none;
 }
+#my-video{
+  width: 640px;
+  height: 360px;
+}
 
 
 
@@ -684,8 +688,7 @@ body.no-scroll {
 
 
 
-
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   *{
     font-size: 14px;
   }
@@ -715,7 +718,10 @@ body.no-scroll {
     transform: translate(-50%, -50%);
     width: 100%;
   }
-
+  #searchDiv {
+    padding: 0;
+    z-index: 2;
+  }
   .video-js{
     width: 100%;
   }

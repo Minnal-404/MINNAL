@@ -679,7 +679,7 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="310" data-setup="{}" poster="${movie.thumbnails}">
+              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
                 <source src="${movie.video}" type="video/mp4">
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -804,7 +804,7 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="640" height="310" data-setup="{}" poster="${movie.thumbnails}">
+              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
                 <source src="${movie.video}" type="video/mp4">
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
