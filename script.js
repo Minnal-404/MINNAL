@@ -172,6 +172,8 @@ document.getElementById("logBtn").addEventListener("click", () => {
   //   // document.body.classList.add('no-scroll');  // Disable scrolling
   //   // document.getElementById("profileSection").style.display = "block";
   // } else {
+    document.body.classList.add('no-scroll');  // Enable scrolling
+
   const popup = document.getElementById('loginMain');
   // Check if the popup is already visible
   if (popup.style.display !== 'flex') {
@@ -186,6 +188,7 @@ document.getElementById("logBtn").addEventListener("click", () => {
 });
 
 document.getElementById("signUpBtn").addEventListener("click", () => {
+  document.body.classList.add('no-scroll');  // Enable scrolling
 
   const popup = document.getElementById('createMain');
   // Check if the popup is already visible
@@ -708,10 +711,16 @@ function displayResults(results) {
   searchResultsContainer.innerHTML = ''; // Clear previous results
 
   if (results.length === 0) {
-    document.getElementById("searchResults").style.display = "flex"
-    searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
+    document.getElementById("searchResultsContainer").style.display = "block"
+
+    document.getElementById("searchTitle").textContent = 'No results found';
+    
+    document.getElementById("loading").style.display = "none";
+
     return;
   }
+  document.getElementById("searchTitle").textContent = 'Search Results';
+
   const movieContainer = document.getElementById("searchResults");
 
   results.forEach(movie => {
@@ -899,14 +908,16 @@ function displayResults(results) {
       }, 5000);
     }
 
-    document.getElementById("searchResults").style.display = "flex";
   });
+  document.getElementById("searchResultsContainer").style.display = "block"
   document.getElementById("loading").style.display = "none";
 
 }
 
 // Function to handle search input
 async function handleSearch(event) {
+  document.body.classList.add('no-scroll');  // Enable scrolling
+
   document.getElementById("loading").style.display = "flex";
 
   const data = [];
@@ -936,8 +947,9 @@ async function handleSearch(event) {
 
   if (query.length === 0) {
     searchResultsContainer.innerHTML = ''; // Clear if empty query
-    document.getElementById("searchResults").style.display = "none"
+    document.getElementById("searchResultsContainer").style.display = "none"
     document.getElementById("loading").style.display = "none";
+    document.body.classList.remove('no-scroll');  // Enable scrolling
 
     return;
   }
@@ -1053,6 +1065,8 @@ document.getElementById("createNavigator").addEventListener("click", () => {
 });
 
 document.getElementById('createCloseBtn').addEventListener('click', function (event) {
+  document.body.classList.remove('no-scroll');  // Enable scrolling
+
   event.stopPropagation(); // Prevent triggering the body click event
   document.getElementById('name').value = '';
   document.getElementById('newEmail').value = '';
@@ -1093,6 +1107,8 @@ document.getElementById("newEye").addEventListener("click", () => {
 });
 document.getElementById('closeBtn').addEventListener('click', function (event) {
   event.stopPropagation(); // Prevent triggering the body click event
+  document.body.classList.remove('no-scroll');  // Enable scrolling
+
   document.getElementById('name').value = '';
   document.getElementById('newEmail').value = '';
   document.getElementById('newPassword').value = '';
@@ -1452,6 +1468,9 @@ if (mediaQuery.matches) {
 
 
 async function filterComedyGenresFromFirestore(genre) {
+  
+  document.body.classList.add('no-scroll');  // Enable scrolling
+
   // Replace 'yourCollection' with the actual collection name
   document.getElementById("filterResult").innerHTML = ``
 
@@ -1527,6 +1546,7 @@ divs.forEach(div => {
       if (div.classList.contains('bg-success')) {
         div.classList.remove('bg-success');
         document.getElementById("genreResult").style.display = 'none'
+        document.body.classList.remove('no-scroll');  // Enable scrolling
 
       }
       // If it doesn't have the 'bg-success' class, add it
@@ -1541,6 +1561,7 @@ divs.forEach(div => {
       if (selectedDiv) {
         selectedDiv.classList.remove('bg-success');
         document.getElementById("genreResult").style.display = 'none'
+        document.body.classList.remove('no-scroll');  // Enable scrolling
 
       }
 

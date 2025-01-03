@@ -299,7 +299,7 @@ function fetchWishlist(loggedInUserId) {
 function displayWishlist(wishlist) {
     const wishlistSection = document.getElementById("wishlistSection");
     wishlistSection.innerHTML = "";  // Clear previous content
-
+    
     // Loop through the wishlist and fetch details for each movie
     wishlist.forEach(async (movieTitle) => {
         console.log(movieTitle, "Fetching details...");
@@ -1052,6 +1052,8 @@ document.getElementById("no").addEventListener("click", () => {
 })
 
 function setColor() {
+    document.getElementById("loading").style.display = "flex";
+
     document.getElementById("user").style.backgroundColor = color1; // Example: setting random background color
     document.getElementById("prof").style.backgroundColor = color1;
     localStorage.removeItem("color");
@@ -1074,4 +1076,6 @@ function setColor() {
         .catch((error) => {
             console.error(error);
         });
+    document.getElementById("loading").style.display = "none";
+
 }

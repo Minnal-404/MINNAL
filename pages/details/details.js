@@ -23,6 +23,8 @@ const db = getFirestore(); // Firestore instead of Realtime Database
 const loggedInUserId = localStorage.getItem("loggedInUserId");
 let subCheck = false;
 let userCheck = false;
+let suggestions = [];
+let suggested = [];
 
 if (loggedInUserId) {
     const docRef = doc(db, "users", loggedInUserId);
@@ -172,10 +174,12 @@ if (!movieTitle) {
         // Append the image element to the "backgroundOverlay" element
         bg.appendChild(img);
         let genres = '';
+
         for (let i = 0; i < movie.genre.length; i++) {
             genres += `<h5 class="mx-4 ms-0 m-0">${movie.genre[i]}</h5><h5 class="mx-4 ms-0 m-0 h5-0">•</h5>`;
+            suggestions.push(movie.genre[i])
         }
-        console.log(genres)
+        console.log(suggestions)
         genres = genres.slice(0, -24);
         document.getElementById("genre").innerHTML =
             `<h5 class="mb-5">${genres}</h5>`;
@@ -217,10 +221,17 @@ if (!movieTitle) {
         <div class="d-flex flex-wrap gap-4">${casts}</div>
         <h2 class="text-start text-success">Music</h2>
         <div class="d-flex flex-wrap gap-4">${music}</div>
+        <h1 class=" text-white" id="suggestionH1">More Like This</h1>
+
+    <div id="suggestionDiv" class="d-flex content"></div>
         
 `
         // document.getElementById("duration").innerHTML = `<p class="col-2 p-2">${movie.duration}</p>`;
         // document.getElementById("year").innerHTML = `<p class="col-2 p-2">${movie.year}</p>`;
+        for (let suggestion of suggestions){
+            filterComedyGenresFromFirestore(suggestion)
+        }
+        addHoverEventsToPosters('suggestionDiv');
 
         // const poster = `<img src="${movie.poster}" alt="${movie.title}" style="width: 300px; height: auto;">`;
         // posterDiv.innerHTML = poster;
@@ -679,7 +690,7 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
+              <video id="my-video" class="video-js vjs-default-skin" controls loop="loop" autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
                 <source src="${movie.video}" type="video/mp4">
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -804,7 +815,7 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-              <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
+              <video id="my-video" class="video-js vjs-default-skin" controls loop="loop" autoplay preload="auto" width="600" height="310" data-setup="{}" poster="${movie.thumbnails}">
                 <source src="${movie.video}" type="video/mp4">
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -924,7 +935,7 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-          <video id="my-video" class="video-js vjs-default-skin" controls autoplay preload="auto"  data-setup="{}" poster="${movie.thumbnails}">
+          <video id="my-video" class="video-js vjs-default-skin" controls loop="loop" autoplay preload="auto"  data-setup="{}" poster="${movie.thumbnails}">
             <source src="${movie.video}" type="video/mp4">
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
@@ -1100,10 +1111,14 @@ function displayResults(results) {
     searchResultsContainer.innerHTML = ''; // Clear previous results
 
     if (results.length === 0) {
-        document.getElementById("searchResults").style.display = "flex";
-        searchResultsContainer.innerHTML = '<h1 class="text-white">No results found</h1>';
-        return;
+        document.getElementById("searchResultsContainer").style.display = "block"
+
+    document.getElementById("searchTitle").textContent = 'No results found';
+    
+    document.getElementById("loading").style.display = "none";
+           return;
     }
+    document.getElementById("searchTitle").textContent = 'Search Results';
 
     const movieContainer = document.getElementById("searchResults");
 
@@ -1112,8 +1127,8 @@ function displayResults(results) {
         movieDiv.className = 'movie';
 
         movieDiv.innerHTML = `<img src="${movie.poster}" alt="${movie.title}">
-        <h2>${movie.title}</h2>
-        <p>${movie.year}</p>
+        <h2 class='text-black'>${movie.title}</h2>
+        <p class='text-black'>${movie.year}</p>
         <div class="popups flex-column">
           <div class="p-0">
             <img src="${movie.thumbnails}" alt="${movie.title}">
@@ -1301,12 +1316,16 @@ function displayResults(results) {
         }, 5000);
     }
 
-    document.getElementById("searchResults").style.display = "flex"
+    document.getElementById("searchResultsContainer").style.display = "block"
+    document.getElementById("loading").style.display = "none";
+
 };
 
 
 // Function to handle search input
 async function handleSearch(event) {
+    document.body.classList.add('no-scroll');  // Enable scrolling
+
     const data = [];
 
     try {
@@ -1334,7 +1353,9 @@ async function handleSearch(event) {
 
     if (query.length === 0) {
         searchResultsContainer.innerHTML = ''; // Clear if empty query
-        document.getElementById("searchResults").style.display = "none"
+        document.getElementById("searchResultsContainer").style.display = "none"
+        document.getElementById("loading").style.display = "none";
+        document.body.classList.remove('no-scroll');  // Enable scrolling
 
         return;
     }
@@ -1741,43 +1762,94 @@ createBtn.addEventListener("click", (event) => {
 });
 
 
-const postersContainer = document.getElementById('searchResults');
-const observer = new MutationObserver(() => {
-    const posters = document.querySelectorAll('.movie');
-    posters.forEach(poster => {
-        let timeout;
+// const postersContainer = document.getElementById('searchResults');
+// const observer = new MutationObserver(() => {
+//     const posters = document.querySelectorAll('.movie');
+//     posters.forEach(poster => {
+//         let timeout;
 
-        // Mouse enter event
-        poster.addEventListener('mouseenter', () => {
+//         // Mouse enter event
+//         poster.addEventListener('mouseenter', () => {
+//             console.log("Hover started on", poster.id);
+
+//             const popup = poster.querySelector('.popups');
+//             console.log("Popup found:", popup);
+
+//             // Hide all popups immediately when hovering starts
+//             document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
+
+//             // Set a timeout to show the popup after 2 seconds
+//             timeout = setTimeout(() => {
+//                 popup.style.display = 'flex';
+//                 popup.classList.add("fade");
+//                 popup.style.opacity = 1;
+//             }, 500);
+//         });
+
+//         // Mouse leave event
+//         poster.addEventListener('mouseleave', () => {
+//             console.log("Hover ended on", poster.id);
+//             clearTimeout(timeout);
+//             poster.querySelector('.popups').style.display = 'none';
+//         });
+//     });
+// });
+
+// // Start observing the posters container for child changes (new posters added)
+// observer.observe(postersContainer, { childList: true });
+
+function addHoverEventsToPosters(containerId) {
+    const postersContainer = document.getElementById(containerId);
+  
+    // Create a MutationObserver to watch for added poster divs
+    const observer = new MutationObserver(() => {
+      const posters = postersContainer.querySelectorAll('.movie');
+      
+      posters.forEach(poster => {
+        // Ensure we're not adding event listeners multiple times (check if already added)
+        if (!poster.hasAttribute('data-hover-events-attached')) {
+          let timeout;
+  
+          // Mouse enter event
+          poster.addEventListener('mouseenter', () => {
             console.log("Hover started on", poster.id);
-
+  
+            // Find the popup element within the poster
             const popup = poster.querySelector('.popups');
             console.log("Popup found:", popup);
-
-            // Hide all popups immediately when hovering starts
-            document.querySelectorAll('.popups').forEach(popup => popup.style.opacity = 0);
-
-            // Set a timeout to show the popup after 2 seconds
+  
+            // Hide all other popups immediately when hovering starts
+            document.querySelectorAll('.popups').forEach(p => p.style.opacity = 0);
+  
+            // Set a timeout to show the popup after 500ms
             timeout = setTimeout(() => {
-                popup.style.display = 'flex';
-                popup.classList.add("fade");
-                popup.style.opacity = 1;
+              popup.style.display = 'flex';
+              popup.classList.add("fade");
+              popup.style.opacity = 1;
             }, 500);
-        });
-
-        // Mouse leave event
-        poster.addEventListener('mouseleave', () => {
+          });
+  
+          // Mouse leave event
+          poster.addEventListener('mouseleave', () => {
             console.log("Hover ended on", poster.id);
             clearTimeout(timeout);
-            poster.querySelector('.popups').style.display = 'none';
-        });
+            // Hide the popup when the mouse leaves the poster
+            const popup = poster.querySelector('.popups');
+            if (popup) popup.style.display = 'none';
+          });
+  
+          // Mark this poster as having events attached to prevent re-adding event listeners
+          poster.setAttribute('data-hover-events-attached', 'true');
+        }
+      });
     });
-});
-
-// Start observing the posters container for child changes (new posters added)
-observer.observe(postersContainer, { childList: true });
-
-
+  
+    // Start observing the posters container for new children
+    observer.observe(postersContainer, { childList: true });
+  }
+  
+  // Call the function for different containers
+  addHoverEventsToPosters('searchResults');
 
 const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
 // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
@@ -1850,3 +1922,56 @@ if (mediaQuery.matches) {
     console.log("Screen is wider than 768px");
 }
 
+async function filterComedyGenresFromFirestore(genre) {
+  // Replace 'yourCollection' with the actual collection name
+//   document.getElementById("filterResult").innerHTML = ``
+
+  const querySnapshot = await getDocs(collection(db, 'movies'));
+
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    
+
+    // Check if the genre array contains 'comedy'
+    if (data.genre && data.genre.includes(`${genre}`) && !suggested.includes(`${data.title}`) && data.title != movieTitle) {
+        
+      // comedyMovies.push(data);  // Push matching data to the result array
+      suggested.push(data.title)
+      const movieDiv = document.createElement('div');
+      movieDiv.className = 'movie';
+
+      // Create a link for each movie poster (ensure the query parameter is 'title')
+      // const movieLink = document.createElement('a');
+      // movieLink.href = `pages/details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
+
+      // Insert the movie poster and title inside the link
+      movieDiv.innerHTML = `<img src="${data.poster}" alt="${data.title}"><h2 class="text-black">${data.title}</h2><p class="text-black">${data.year}</p>
+      <div class="popups flex-column" >
+      <div class="p-0">
+          <img src="${data.thumbnails}" alt="${data.title}"></div>
+          <div class="p-3 d-flex flex-column gap-3">
+          <h2>${data.title}</h2>
+          <div class="d-flex gap-4 justify-content-between">
+          <a href="details.html?title=${encodeURIComponent(data.title)}">
+          <button id="watch" class="btn btn-success">More details</button>
+          </a>
+          <button id="add" class="add-to-wishlist btn btn-success" data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+          </div>
+          <p id="wishlistError" class="m-0 text- wishlist-error"></p>
+          <div class="d-flex justify-content-evenly">
+          <p class="m-0">${data.year}</p> <p class="m-0">•</p> <p class="m-0">${data.duration}</p> <p class="m-0">•</p> <p class="m-0 bg-success px-2 rounded-1"><strong>${data.rating}/5</strong></p>
+          </div>
+    <p class="m-0">${data.description}</p>  
+    </div>
+  </div>`;
+
+      // Append the movie link div to the container
+      // movieDiv.appendChild(movieLink);
+      document.getElementById("suggestionDiv").appendChild(movieDiv);
+      document.getElementById("loading").style.display = "none";
+
+    }
+  });
+
+}
