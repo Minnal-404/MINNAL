@@ -42,7 +42,9 @@ if (checkUserExists()) {
           if (docSnap.exists()) {
             const userData = docSnap.data();
             localStorage.setItem("name", userData.name);
-            localStorage.setItem("color", userData.color);
+            if (userData.color){
+              localStorage.setItem("color", userData.color);
+            }
             document.getElementById("profName").textContent = userData.name;
             document.getElementById("profEmail").textContent = userData.email;
             try {
@@ -1014,7 +1016,7 @@ loginBtn.addEventListener("click", (event) => {
       // Change the location to the next page
 
       // window.location.replace("pages/home/home.html");
-      getRandomRgbColor();
+      // getRandomRgbColor();
       window.location.reload();
 
       document.getElementById('name').value = '';
