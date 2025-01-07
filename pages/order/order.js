@@ -1,4 +1,4 @@
-// document.getElementById("loading").style.display = "flex";
+document.getElementById("loading").style.display = "flex";
 document.getElementById("loadMessage").textContent = "Please Wait...";
 
 
@@ -126,8 +126,11 @@ document.getElementById('confirmRental').addEventListener('click', function () {
     const orderMessageElement = document.getElementById('orderMessage');
 
     // Credit Card Validation
-    const cardNumber = document.getElementById('cardNumber').value.trim();
-    const expirationDate = document.getElementById('expirationDate').value;
+    const input1 = document.getElementById("cardNumber1").value;
+    const input2 = document.getElementById("cardNumber2").value;
+    const input3 = document.getElementById("cardNumber3").value;
+    const input4 = document.getElementById("cardNumber4").value;
+    const cardNumber = input1+input2+input3+input4;    const expirationDate = document.getElementById('expirationDate').value;
     const cvv = document.getElementById('cvv').value.trim();
     let check = true;
     if (!cardNumber) {
