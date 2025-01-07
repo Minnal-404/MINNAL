@@ -178,7 +178,22 @@ h1 {
   #rental{
     width: 100%;
   }
-
+#cardNumber1, #cardNumber2, #cardNumber3, #cardNumber5, #cardNumber6, #cardNumber7{
+    width: 10%;
+    border: none;
+}
+#cardNumber4, #cardNumber8{
+    width: 70%;
+    border: none;
+}
+#cardNumber1:focus, #cardNumber2:focus, #cardNumber3:focus, #cardNumber4:focus, #cardNumber5:focus, #cardNumber6:focus, #cardNumber7:focus, #cardNumber8:focus{
+    outline: none;
+}
+#bigCardNumber{
+    background: white;
+    display: flex;
+    /* gap: 2%; */
+}
 
 
 

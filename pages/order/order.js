@@ -1,4 +1,4 @@
-document.getElementById("loading").style.display = "flex";
+// document.getElementById("loading").style.display = "flex";
 document.getElementById("loadMessage").textContent = "Please Wait...";
 
 
@@ -314,7 +314,13 @@ function validateCardNumber(cardNumber) {
 
     return sum % 10 === 0;
 }
+const inputField = document.getElementById('cardNumber1');
 
+        inputField.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space after every 4 digits
+            e.target.value = value; // Update the input value with spaces
+        });
 // Validate CVV (3 digits)
 function validateCVV(cvv) {
     return /^\d{3}$/.test(cvv);
@@ -439,9 +445,15 @@ document.getElementById('confirmSub').addEventListener('click', function () {
     // const orderMessageElement = document.getElementById('orderMessage');
 
     // Credit Card Validation
-    const cardNumber = document.getElementById('cardNumber1').value.trim();
+    // const cardNumber = document.getElementById('cardNumber1').value.trim();
     const expirationDate = document.getElementById('expirationDate1').value;
     const cvv = document.getElementById('cvv1').value.trim();
+    const input1 = document.getElementById("cardNumber5").value;
+    const input2 = document.getElementById("cardNumber6").value;
+    const input3 = document.getElementById("cardNumber7").value;
+    const input4 = document.getElementById("cardNumber8").value;
+    const cardNumber = input1+input2+input3+input4;
+
     let sub = true;
     if (!cardNumber) {
         // orderMessageElement.textContent = 'Please fill in all the credit card details.';
@@ -590,8 +602,134 @@ if (mediaQuery1.matches) {
   console.log("Screen is wider than 768px");
 }
 
+const cardNumber1 = document.getElementById("cardNumber1");
+const cardNumber2 = document.getElementById("cardNumber2");
+const cardNumber3 = document.getElementById("cardNumber3");
+const cardNumber4 = document.getElementById("cardNumber4");
+cardNumber1.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber2');
+});
+
+cardNumber2.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber3');
+});
+
+cardNumber3.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber4');
+
+    // Optionally, you can loop or reset focus here.
+    // In this case, no action is needed as it's the last input field.
+});
+function moveToNext(event, nextInputId) {
+    const currentInput = event.target;
+    if (currentInput.value.length === 4) {
+        const nextInput = document.getElementById(nextInputId);
+        if (nextInput) {
+            nextInput.focus(); // Move focus to next input
+        }
+    }
+}
+
+function moveFocus(event, currentInputId, nextInputId, prevInputId) {
+    const currentInput = event.target;
+
+    // Check if the input reached max length or if the backspace is pressed and the field is empty
+    if (currentInput.value.length === 4) {
+        const nextInput = document.getElementById(nextInputId);
+        if (nextInput) {
+            nextInput.focus(); // Move focus to next input
+        }
+    } else if (currentInput.value.length === 0 && event.inputType === 'deleteContentBackward') {
+        const prevInput = document.getElementById(prevInputId);
+        if (prevInput) {
+            prevInput.focus(); // Move focus to previous input when backspace is pressed on an empty field
+        }
+    }
+}
+
+function handleFocus(event) {
+    const inputs = document.querySelectorAll('input');
+    const allEmpty = Array.from(inputs).every(input => input.value === '');
+
+    if (allEmpty) {
+        document.getElementById('cardNumber1').focus(); // Focus on the first input field if all are empty
+    }
+}
+
+function handleFocus1(event) {
+    const inputs = document.querySelectorAll('input');
+    const allEmpty = Array.from(inputs).every(input => input.value === '');
+
+    if (allEmpty) {
+        document.getElementById('cardNumber5').focus(); // Focus on the first input field if all are empty
+    }
+}
+
+cardNumber1.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber1', 'cardNumber2', null);
+});
+
+// Input 2
+cardNumber2.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber2', 'cardNumber3', 'cardNumber1');
+});
+
+// Input 3
+cardNumber3.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber3', 'cardNumber4', 'cardNumber2');
+});
+
+// Input 4
+cardNumber4.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber4', null, 'cardNumber3');
+});
+
+const cardNumber5 = document.getElementById("cardNumber5");
+const cardNumber6 = document.getElementById("cardNumber6");
+const cardNumber7 = document.getElementById("cardNumber7");
+const cardNumber8 = document.getElementById("cardNumber8");
+cardNumber1.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber6');
+});
+
+cardNumber6.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber7');
+});
+
+cardNumber7.addEventListener('input', function(event) {
+    moveToNext(event, 'cardNumber8');
+
+    // Optionally, you can loop or reset focus here.
+    // In this case, no action is needed as it's the last input field.
+});
 
 
+cardNumber5.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber5', 'cardNumber6', null);
+});
+
+// Input 2
+cardNumber6.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber6', 'cardNumber7', 'cardNumber5');
+});
+
+// Input 3
+cardNumber7.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber7', 'cardNumber8', 'cardNumber6');
+});
+
+// Input 4
+cardNumber8.addEventListener('input', function(event) {
+    moveFocus(event, 'cardNumber8', null, 'cardNumber7');
+});
 
 
+cardNumber1.addEventListener('focus', handleFocus);
+cardNumber2.addEventListener('focus', handleFocus);
+cardNumber3.addEventListener('focus', handleFocus);
+cardNumber4.addEventListener('focus', handleFocus);
 
+cardNumber5.addEventListener('focus', handleFocus1);
+cardNumber6.addEventListener('focus', handleFocus1);
+cardNumber7.addEventListener('focus', handleFocus1);
+cardNumber8.addEventListener('focus', handleFocus1);
