@@ -1187,10 +1187,14 @@ createBtn.addEventListener("click", (event) => {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
+        getRandomRgbColor();
+        let color =   localStorage.getItem("color");
+
         const userData = {
           name: name,
           password: password,
-          email: email
+          email: email,
+          color: color
         };
 
         greenMessage("Account Created Successfully", "signUpMessage");
@@ -1201,7 +1205,7 @@ createBtn.addEventListener("click", (event) => {
           .then(() => {
             document.getElementById('createMain').style.display = 'none';
             document.getElementById('loginMain').style.display = 'none';
-            getRandomRgbColor();
+
             window.location.reload();
           })
           .catch((error) => {
