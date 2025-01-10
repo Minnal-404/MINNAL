@@ -55,7 +55,7 @@ input:focus{
 
 }
 #user{
-    width: 3.5rem;
+    width: 3rem;
     cursor: pointer;
 }
 #userDiv{
@@ -108,15 +108,22 @@ input:focus{
 }
 #watch, #add{
     background-image: linear-gradient(to bottom right , green, black);
+    border-radius: 5px;
 
 }
 #watch{
     width: 15rem;
 }
- #logoutBtn:hover, #watch:hover, #add:hover{
-    transform: scale(1.05); /* Slightly enlarge the image */
-    box-shadow: 0 0px 20px white;
+ #logoutBtn:hover, #watch:hover, #add:hover, #profileSec:hover, #rented:hover, #wishlist:hover{
+    transform: scale(1.02); /* Slightly enlarge the image */
+    box-shadow: 0 0px 10px white;
     transition: transform 0.5s;
+}
+#profileSec:hover, #rented:hover, #wishlist:hover{
+  box-shadow: 0 0px 0px white;
+  color: white !important;
+  background-image: linear-gradient(to bottom right , black, green);
+
 }
 #canvas{
   position: absolute;

@@ -242,9 +242,9 @@ function profileNameCreator() {
   document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
   document.getElementById("user").classList.add("border");
   document.getElementById("user").classList.add("border-white");
-  document.getElementById("user").classList.add("border-5");
+  document.getElementById("user").classList.add("border-4");
   document.getElementById("user").classList.add("rounded-circle");
-  document.getElementById("user").style.width = "3.5rem";
+  document.getElementById("user").style.width = "3rem";
   document.getElementById("user").classList.add("justify-content-center");
 
 
@@ -452,7 +452,7 @@ async function fetchMovies(container, head, text) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+          <button id="add" class="add-to-wishlist btn " data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-regular fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <div class="d-flex justify-content-evenly">
@@ -465,9 +465,9 @@ async function fetchMovies(container, head, text) {
       // Append the movie link div to the container
       // movieDiv.appendChild(movieLink);
       movieContainer.appendChild(movieDiv);
+      
       const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
       const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
 
 
 
@@ -516,18 +516,21 @@ async function fetchMovies(container, head, text) {
 
             // If the movie is in the wishlist, set the button to 'minus' (remove)
             if (currentWishlist.includes(movieTitle)) {
-              buttonIcon.classList.remove('fa-plus');
-              buttonIcon.classList.add('fa-minus');
+              buttonIcon.classList.remove('fa-regular');
+              buttonIcon.style.color = 'red';
+              buttonIcon.classList.add('fa-solid');
             } else {
               // If the movie is not in the wishlist, set the button to 'plus' (add)
-              buttonIcon.classList.remove('fa-minus');
-              buttonIcon.classList.add('fa-plus');
+              buttonIcon.classList.remove('fa-solid');
+              buttonIcon.style.color = 'white';
+              buttonIcon.classList.add('fa-regular');
             }
           } else {
             // If the user document doesn't exist, initialize with 'plus' icon
             console.error("User document does not exist. Creating a new document...");
-            buttonIcon.classList.remove('fa-minus');
-            buttonIcon.classList.add('fa-plus');
+            buttonIcon.classList.remove('fa-solid');
+            buttonIcon.style.color = 'white';
+            buttonIcon.classList.add('fa-regular');
           }
         }).catch((error) => {
           console.error("Error fetching user document: ", error);
@@ -560,8 +563,9 @@ async function fetchMovies(container, head, text) {
                   showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
 
                   // Change the button icon to plus after removal
-                  buttonIcon.classList.remove('fa-minus');
-                  buttonIcon.classList.add('fa-plus');
+                  buttonIcon.classList.remove('fa-solid');
+                  buttonIcon.style.color = 'white';
+                  buttonIcon.classList.add('fa-regular');
                 })
                 .catch((error) => {
                   console.error("Error removing from wishlist: ", error);
@@ -577,8 +581,9 @@ async function fetchMovies(container, head, text) {
                   showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
 
                   // Change the button icon to minus after adding
-                  buttonIcon.classList.remove('fa-plus');
-                  buttonIcon.classList.add('fa-minus');
+                  buttonIcon.classList.remove('fa-regular');
+                  buttonIcon.style.color = 'red';
+                  buttonIcon.classList.add('fa-solid');
                 })
                 .catch((error) => {
                   console.error("Error adding to wishlist: ", error);
@@ -597,8 +602,9 @@ async function fetchMovies(container, head, text) {
                 showMessage("New user document created with wishlist!", errorMessageElement, "green");
 
                 // Change the button icon to minus after adding
-                buttonIcon.classList.remove('fa-plus');
-                buttonIcon.classList.add('fa-minus');
+                buttonIcon.classList.remove('fa-regular');
+                buttonIcon.style.color = 'red';
+                buttonIcon.classList.add('fa-solid');
               })
               .catch((error) => {
                 console.error("Error creating new user document: ", error);
@@ -744,7 +750,7 @@ function displayResults(results) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+          <button id="add" class="add-to-wishlist btn" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
@@ -803,18 +809,21 @@ function displayResults(results) {
 
           // If the movie is in the wishlist, set the button to 'minus' (remove)
           if (currentWishlist.includes(movieTitle)) {
-            buttonIcon.classList.remove('fa-plus');
-            buttonIcon.classList.add('fa-minus');
+            buttonIcon.classList.remove('fa-regular');
+            buttonIcon.style.color = 'red';
+            buttonIcon.classList.add('fa-solid');
           } else {
             // If the movie is not in the wishlist, set the button to 'plus' (add)
-            buttonIcon.classList.remove('fa-minus');
-            buttonIcon.classList.add('fa-plus');
+            buttonIcon.classList.remove('fa-solid');
+            buttonIcon.style.color = 'white';
+            buttonIcon.classList.add('fa-regular');
           }
         } else {
           // If the user document doesn't exist, initialize with 'plus' icon
           console.error("User document does not exist. Creating a new document...");
-          buttonIcon.classList.remove('fa-minus');
-          buttonIcon.classList.add('fa-plus');
+          buttonIcon.classList.remove('fa-solid');
+          buttonIcon.style.color = 'white';
+          buttonIcon.classList.add('fa-regular');
         }
       }).catch((error) => {
         console.error("Error fetching user document: ", error);
@@ -847,8 +856,9 @@ function displayResults(results) {
                 showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
 
                 // Change the button icon to plus after removal
-                buttonIcon.classList.remove('fa-minus');
-                buttonIcon.classList.add('fa-plus');
+                buttonIcon.classList.remove('fa-solid');
+                buttonIcon.style.color = 'white';
+                buttonIcon.classList.add('fa-regular');
               })
               .catch((error) => {
                 console.error("Error removing from wishlist: ", error);
@@ -864,8 +874,9 @@ function displayResults(results) {
                 showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
 
                 // Change the button icon to minus after adding
-                buttonIcon.classList.remove('fa-plus');
-                buttonIcon.classList.add('fa-minus');
+                buttonIcon.classList.remove('fa-regular');
+                buttonIcon.style.color = 'red';
+                buttonIcon.classList.add('fa-solid');
               })
               .catch((error) => {
                 console.error("Error adding to wishlist: ", error);
@@ -884,8 +895,9 @@ function displayResults(results) {
               showMessage("New user document created with wishlist!", errorMessageElement, "green");
 
               // Change the button icon to minus after adding
-              buttonIcon.classList.remove('fa-plus');
-              buttonIcon.classList.add('fa-minus');
+              buttonIcon.classList.remove('fa-regular');
+              buttonIcon.style.color = 'red';
+              buttonIcon.classList.add('fa-solid');
             })
             .catch((error) => {
               console.error("Error creating new user document: ", error);
@@ -1508,7 +1520,7 @@ async function filterComedyGenresFromFirestore(genre) {
           <a href="pages/details/details.html?title=${encodeURIComponent(data.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+          <button id="add" class="add-to-wishlist btn " data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <div class="d-flex justify-content-evenly">
@@ -1518,6 +1530,8 @@ async function filterComedyGenresFromFirestore(genre) {
     </div>
   </div>`;
 
+
+  
       // Append the movie link div to the container
       // movieDiv.appendChild(movieLink);
       document.getElementById("filterResult").appendChild(movieDiv);
@@ -1526,7 +1540,165 @@ async function filterComedyGenresFromFirestore(genre) {
 
     }
   });
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+
+  const buttons = document.querySelectorAll('.add-to-wishlist');
+
+      // Adding event listeners to each button
+      buttons.forEach(button => {
+        const movieTitle = button.getAttribute('data-title');
+        const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
+        const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
+
+        // Check if loggedInUserId is available
+        if (loggedInUserId) {
+          // Check the wishlist on page load and set the button icon accordingly
+          checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+
+          // Adding click event listener to toggle the movie in the wishlist
+          button.addEventListener('click', function () {
+            document.getElementById("loading").style.display = "flex";
+            toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+          });
+        } else {
+          // Handle case when loggedInUserId is not defined
+          button.addEventListener('click', function () {
+            showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
+
+          });
+
+          console.error("User not logged in. Please log in to add movies to the wishlist.");
+          // errorMessageElement.textContent = "Please log in to add movies to the wishlist.";
+          // errorMessageElement.style.color = "red";
+        }
+      });
+
+      // Function to check the wishlist status for each movie
+      function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+        // Get the current wishlist array from Firestore
+        getDoc(userDocRef).then(docSnapshot => {
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            const currentWishlist = userData.wishlist || [];
+
+            // If the movie is in the wishlist, set the button to 'minus' (remove)
+            if (currentWishlist.includes(movieTitle)) {
+              buttonIcon.classList.remove('fa-regular');
+              buttonIcon.style.color = 'red';
+              buttonIcon.classList.add('fa-solid');
+            } else {
+              // If the movie is not in the wishlist, set the button to 'plus' (add)
+              buttonIcon.classList.remove('fa-solid');
+              buttonIcon.style.color = 'white';
+              buttonIcon.classList.add('fa-regular');
+            }
+          } else {
+            // If the user document doesn't exist, initialize with 'plus' icon
+            console.error("User document does not exist. Creating a new document...");
+            buttonIcon.classList.remove('fa-solid');
+            buttonIcon.style.color = 'white';
+            buttonIcon.classList.add('fa-regular');
+          }
+        }).catch((error) => {
+          console.error("Error fetching user document: ", error);
+        });
+      }
+
+      // Function to add or remove the movie title to/from the Firestore wishlist array
+      function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+        // Clear previous error message
+        errorMessageElement.textContent = "";
+
+        // Get the current wishlist array from Firestore
+        getDoc(userDocRef).then(docSnapshot => {
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            const currentWishlist = userData.wishlist || [];
+
+            console.log("Current Wishlist: ", currentWishlist);
+
+            // Check if the movie title is already in the wishlist
+            if (currentWishlist.includes(movieTitle)) {
+              // Movie is already in the wishlist, remove it
+              updateDoc(userDocRef, {
+                wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+              })
+                .then(() => {
+                  console.log(`${movieTitle} removed from wishlist in Firestore!`);
+                  showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+                  // Change the button icon to plus after removal
+                  buttonIcon.classList.remove('fa-solid');
+                  buttonIcon.style.color = 'white';
+                  buttonIcon.classList.add('fa-regular');
+                })
+                .catch((error) => {
+                  console.error("Error removing from wishlist: ", error);
+                  showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+                });
+            } else {
+              // If movie is not in the wishlist, add it using arrayUnion
+              updateDoc(userDocRef, {
+                wishlist: arrayUnion(movieTitle)
+              })
+                .then(() => {
+                  console.log(`${movieTitle} added to wishlist in Firestore!`);
+                  showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+
+                  // Change the button icon to minus after adding
+                  buttonIcon.classList.remove('fa-regular');
+                  buttonIcon.style.color = 'red';
+                  buttonIcon.classList.add('fa-solid');
+                })
+                .catch((error) => {
+                  console.error("Error adding to wishlist: ", error);
+                  showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+                });
+            }
+          } else {
+            // If the user document doesn't exist, create a new one with the wishlist field
+            console.error("User document does not exist. Creating a new document...");
+            showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+            // Create a new document with the wishlist containing the movie title
+            setDoc(userDocRef, { wishlist: [movieTitle] })
+              .then(() => {
+                console.log("New user document created with wishlist!");
+                showMessage("New user document created with wishlist!", errorMessageElement, "green");
+
+                // Change the button icon to minus after adding
+                buttonIcon.classList.remove('fa-regular');
+                buttonIcon.style.color = 'red';
+                buttonIcon.classList.add('fa-solid');
+              })
+              .catch((error) => {
+                console.error("Error creating new user document: ", error);
+                showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+              });
+          }
+        }).catch((error) => {
+          console.error("Error fetching user document: ", error);
+          showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+        });
+      }
+
+      // Helper function to display messages in the error container (specific for each poster)
+      function showMessage(message, messageElement, color) {
+        document.getElementById("loading").style.display = "none";
+        messageElement.textContent = message;  // Set the message text
+        messageElement.style.color = color;    // Set color (red for errors, green for success)
+
+        // Hide the message after 5 seconds
+        setTimeout(() => {
+          messageElement.textContent = "";
+        }, 5000);
+      }
 }
 
 // Example usage:

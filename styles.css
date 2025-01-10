@@ -320,7 +320,6 @@ body.no-scroll {
 #loginBtn,
 #createBtn,
 #watch,
-#add,
 #subscribeBtn,#signUpBtn, #logBtn {
   background-image: linear-gradient(to bottom right, green, black);
 
@@ -329,7 +328,6 @@ body.no-scroll {
 #loginBtn:hover,
 #createBtn:hover,
 #watch:hover,
-#add:hover,
 #subscribeBtn:hover, #signUpBtn:hover, #logBtn:hover {
   transform: scale(1.05);
   box-shadow: 0 0px 20px white;

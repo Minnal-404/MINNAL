@@ -152,15 +152,15 @@ if (!movieTitle) {
         const movieHTML = `          <div class="d-flex flex-wrap gap-4">
     <button id="playButton" class="btn btn-success" data-title="${movie.title}">Watch Now</button>
     <button id="trailerPlay" class="play-button btn btn-success text-white">Watch Trailer</button>
-                  <button id="add" class="add-to-wishlist btn btn-success border-black" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
+                  <button id="add" class="add-to-wishlist btn  border-black" data-title="${movie.title}" title='Wishlist'><i class="fa-regular fa-heart fa-2xl"></i></button>
                   </div>
                   <p id="wishlistError" class="m-0 wishlist-error"></p>`;
 
         movieDetailContainer.innerHTML += movieHTML;  // Inject HTML into the page
         // document.getElementById("backgroundOverlay").style.background = `url(${movie.thumbnails})`;
         let bg = document.getElementById("backgroundOverlay");
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        // const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        // const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         // Create a new image element
         let img = document.createElement("img");
 
@@ -188,39 +188,39 @@ if (!movieTitle) {
         document.getElementById("rating").innerHTML = `<h5 class="ms-0  m-0 text-success"> ${movie.duration}</h5><h5 class="ms-0  m-0 text-success">${movie.year}</h5><h5 class="ms-0  m-0 bg-success px-2 rounded-1">${movie.rating}/5</h5><h5 id="rentedTag" class="px-2 rounded-1 bg-warning m-0 " style="display: none;">Rented</h5>`;
         let languages = "";
         for (let i of movie.languages) {
-            languages += `<h5>${i},</h5>`
+            languages += `<h5>${i},&nbsp</h5>`
         }
-        languages = languages.replace(/,(?=[^,]*$)/, '.'); let casts = "";
+        languages = languages.replace(/,(?=[^,]*$)/, ''); let casts = "";
         for (let i of movie.details.cast) {
             casts += `<h5>${i},</h5>`
         }
-        casts = casts.replace(/,(?=[^,]*$)/, '.');
+        casts = casts.replace(/,(?=[^,]*$)/, '');
         let producers = "";
         for (let i of movie.details.producer) {
             producers += `<h5>${i},</h5>`
         }
-        producers = producers.replace(/,(?=[^,]*$)/, '.');
+        producers = producers.replace(/,(?=[^,]*$)/, '');
         let music = "";
         for (let i of movie.details.music) {
             music += `<h5>${i},</h5>`
         }
-        music = music.replace(/,(?=[^,]*$)/, '.');
+        music = music.replace(/,(?=[^,]*$)/, '');
         let directors = "";
         for (let i of movie.details.director) {
             directors += `<h5>${i},</h5>`
         }
-        directors = directors.replace(/,(?=[^,]*$)/, '.');
+        directors = directors.replace(/,(?=[^,]*$)/, '');
         document.getElementById("moreDetails").innerHTML = `<h1>More Info  <i class="fa-solid fa-sm fa-arrow-down fa-bounce"></i> </h1>
         <h2 class="text-start text-success">Languages</h2>
-        <div class="d-flex flex-wrap gap-4">${languages}</div>
+        <div class="d-flex flex-wrap">${languages}</div>
         <h2 class="text-start text-success">Directors</h2>
-        <div class="d-flex flex-wrap gap-4">${directors}</div>
+        <div class="d-flex flex-wrap gap-2">${directors}</div>
         <h2 class="text-start text-success">Producers</h2>
-        <div class="d-flex flex-wrap gap-4">${producers}</div>
+        <div class="d-flex flex-wrap gap-2">${producers}</div>
         <h2 class="text-start text-success">Cast</h2>
-        <div class="d-flex flex-wrap gap-4">${casts}</div>
+        <div class="d-flex flex-wrap gap-2">${casts}</div>
         <h2 class="text-start text-success">Music</h2>
-        <div class="d-flex flex-wrap gap-4">${music}</div>
+        <div class="d-flex flex-wrap gap-2">${music}</div>
         <h1 class=" text-white" id="suggestionH1">More Like This</h1>
 
     <div id="suggestionDiv" class="d-flex content"></div>
@@ -228,7 +228,7 @@ if (!movieTitle) {
 `
         // document.getElementById("duration").innerHTML = `<p class="col-2 p-2">${movie.duration}</p>`;
         // document.getElementById("year").innerHTML = `<p class="col-2 p-2">${movie.year}</p>`;
-        for (let suggestion of suggestions){
+        for (let suggestion of suggestions) {
             filterComedyGenresFromFirestore(suggestion)
         }
         addHoverEventsToPosters('suggestionDiv');
@@ -295,7 +295,7 @@ if (!movieTitle) {
                     }
                 }
             })
-        }else if (mediaQuery1.matches) {
+        } else if (mediaQuery1.matches) {
             // Code for small screens (mobile/tablet)
             console.log("Screen is less than 768px wide");
 
@@ -362,6 +362,8 @@ if (!movieTitle) {
 
                 // Show the iframe
                 if (iframe.style.display == 'block') {
+                    document.getElementById("row").style.height = '90%';
+                    document.getElementById("backgroundOverlay").style.display = 'block';
                     iframe.style.display = 'none';
                     document.getElementById("trailerPlay").textContent = "Watch Trailer";
                     document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
@@ -371,7 +373,8 @@ if (!movieTitle) {
                 } else {
                     iframe.style.display = 'block';
                     // Initialize the video player
-
+                    document.getElementById("row").style.height = '60%';
+                    document.getElementById("backgroundOverlay").style.display = 'none';
                     // Check if the video is currently playing, and pause it if it is
                     try {
                         videojs('my-video').pause();
@@ -461,11 +464,13 @@ if (!movieTitle) {
 
                     // If the movie is in the wishlist, show the minus icon (fa-minus)
                     if (currentWishlist.includes(movieTitle)) {
-                        buttonIcon.classList.remove('fa-plus');
-                        buttonIcon.classList.add('fa-minus');
+                        buttonIcon.classList.remove('fa-regular');
+                        buttonIcon.style.color = 'red';
+                        buttonIcon.classList.add('fa-solid');
                     } else {
-                        buttonIcon.classList.remove('fa-minus');
-                        buttonIcon.classList.add('fa-plus');
+                        buttonIcon.classList.remove('fa-solid');
+                        buttonIcon.style.color = 'white';
+                        buttonIcon.classList.add('fa-regular');
                     }
                 } else {
                     // If the document doesn't exist, create a new one with the wishlist field
@@ -475,8 +480,9 @@ if (!movieTitle) {
                             console.log("New user document created with wishlist!");
                             showMessage("New user document created with wishlist!", errorMessageElement, "green");
                             // Change the button icon to "Remove" (fa-minus)
-                            buttonIcon.classList.remove('fa-plus');
-                            buttonIcon.classList.add('fa-minus');
+                            buttonIcon.classList.remove('fa-regular');
+                            buttonIcon.style.color = 'red';
+                            buttonIcon.classList.add('fa-solid');
                         })
                         .catch((error) => {
                             console.error("Error creating new user document: ", error);
@@ -512,8 +518,9 @@ if (!movieTitle) {
                                 console.log(`${movieTitle} removed from wishlist!`);
                                 showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
                                 // Change the button icon to "Add" (fa-plus)
-                                buttonIcon.classList.remove('fa-minus');
-                                buttonIcon.classList.add('fa-plus');
+                                buttonIcon.classList.remove('fa-solid');
+                                buttonIcon.style.color = 'white';
+                                buttonIcon.classList.add('fa-regular');
                             })
                             .catch((error) => {
                                 console.error("Error removing from wishlist: ", error);
@@ -528,8 +535,9 @@ if (!movieTitle) {
                                 console.log(`${movieTitle} added to wishlist!`);
                                 showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
                                 // Change the button icon to "Remove" (fa-minus)
-                                buttonIcon.classList.remove('fa-plus');
-                                buttonIcon.classList.add('fa-minus');
+                                buttonIcon.classList.remove('fa-regular');
+                                buttonIcon.style.color = 'red';
+                                buttonIcon.classList.add('fa-solid');
                             })
                             .catch((error) => {
                                 console.error("Error adding to wishlist: ", error);
@@ -544,8 +552,9 @@ if (!movieTitle) {
                             console.log("New user document created with wishlist!");
                             showMessage("New user document created with wishlist!", errorMessageElement, "green");
                             // Change the button icon to "Remove" (fa-minus)
-                            buttonIcon.classList.remove('fa-plus');
-                            buttonIcon.classList.add('fa-minus');
+                            buttonIcon.classList.remove('fa-regular');
+                            buttonIcon.style.color = 'red';
+                            buttonIcon.classList.add('fa-solid');
                         })
                         .catch((error) => {
                             console.error("Error creating new user document: ", error);
@@ -791,7 +800,7 @@ if (!movieTitle) {
                 }
                 document.getElementById("loading").style.display = "none";
 
-            }else if (mediaQuery1.matches) {
+            } else if (mediaQuery1.matches) {
                 // Code for small screens (mobile/tablet)
                 console.log("Screen is less than 768px wide");
 
@@ -924,7 +933,9 @@ if (!movieTitle) {
                         document.getElementById("trailerPlay").textContent = "Watch Trailer";
                         document.getElementById("trailerPlay").style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
                         document.getElementById('trailer').src = "";
-
+                        document.getElementById("row").style.height = '60%';
+                        document.getElementById("backgroundOverlay").style.display = 'none';
+    
                         renderVideoPlayer(movie);
                         changeVideoSource(movie);
                         const closeBtn = document.getElementById("clsBtn");
@@ -935,12 +946,18 @@ if (!movieTitle) {
                         function renderVideoPlayer(movie) {
                             // Create the video element dynamically
                             const videoHTML = `
-          <video id="my-video" class="video-js vjs-default-skin" controls loop="loop" autoplay preload="auto"  data-setup="{}" poster="${movie.thumbnails}">
-            <source src="${movie.video}" type="video/mp4">
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
-            </p>
-          </video>        <button id="clsBtn" style="display: ;">                    <i class="fa-solid fa-x "></i>
+         <video id="my-video" class="video-js vjs-default-skin" controls loop autoplay preload="auto"
+  data-setup='{
+    "techOrder": ["html5"],
+    "playbackRates": [0.5, 1, 1.5, 2],
+    "muted": false,
+    "poster": "${movie.thumbnails}"
+  }' poster="${movie.thumbnails}">
+    <source src="${movie.video}" type="video/mp4">
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video.
+    </p>
+</video>        <button id="clsBtn" style="display: ;">                    <i class="fa-solid fa-x "></i>
     </button>
     
         `;
@@ -1113,10 +1130,10 @@ function displayResults(results) {
     if (results.length === 0) {
         document.getElementById("searchResultsContainer").style.display = "block"
 
-    document.getElementById("searchTitle").textContent = 'No results found';
-    
-    document.getElementById("loading").style.display = "none";
-           return;
+        document.getElementById("searchTitle").textContent = 'No results found';
+
+        document.getElementById("loading").style.display = "none";
+        return;
     }
     document.getElementById("searchTitle").textContent = 'Search Results';
 
@@ -1139,8 +1156,8 @@ function displayResults(results) {
               <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
                 <button id="watch" class="btn btn-success">More details</button>
               </a>
-              <button id="add" class="add-to-wishlist btn btn-success" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist">
-                <i class="fa-solid fa-plus fa-xl"></i>
+              <button id="add" class="add-to-wishlist btn" data-title="${movie.title}" title='Wishlist'>
+                <i class="fa-regular fa-heart fa-2xl"></i>
               </button>
             </div>
             <p id="wishlistError" class="m-0 text- wishlist-error"></p>
@@ -1158,8 +1175,7 @@ function displayResults(results) {
 
         // Append movie div to container
         movieContainer.appendChild(movieDiv);
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
         // Log the buttons to ensure they're there
 
         const buttons = movieDiv.querySelectorAll('.add-to-wishlist');
@@ -1191,9 +1207,11 @@ function displayResults(results) {
                 console.error('User not logged in. Please log in to add movies to the wishlist.');
             }
         });
+
     });
 
-
+    // const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    // const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
 
@@ -1209,18 +1227,21 @@ function displayResults(results) {
 
                 // If the movie is in the wishlist, set the button to 'minus' (remove)
                 if (currentWishlist.includes(movieTitle)) {
-                    buttonIcon.classList.remove('fa-plus');
-                    buttonIcon.classList.add('fa-minus');
+                    buttonIcon.classList.remove('fa-regular');
+                    buttonIcon.style.color = 'red';
+                    buttonIcon.classList.add('fa-solid');
                 } else {
                     // If the movie is not in the wishlist, set the button to 'plus' (add)
-                    buttonIcon.classList.remove('fa-minus');
-                    buttonIcon.classList.add('fa-plus');
+                    buttonIcon.classList.remove('fa-solid');
+                    buttonIcon.style.color = 'white';
+                    buttonIcon.classList.add('fa-regular');
                 }
             } else {
                 // If the user document doesn't exist, initialize with 'plus' icon
                 console.error("User document does not exist. Creating a new document...");
-                buttonIcon.classList.remove('fa-minus');
-                buttonIcon.classList.add('fa-plus');
+                buttonIcon.classList.remove('fa-solid');
+                buttonIcon.style.color = 'white';
+                buttonIcon.classList.add('fa-regular');
             }
         }).catch((error) => {
             console.error("Error fetching user document: ", error);
@@ -1253,8 +1274,9 @@ function displayResults(results) {
                             showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
 
                             // Change the button icon to plus after removal
-                            buttonIcon.classList.remove('fa-minus');
-                            buttonIcon.classList.add('fa-plus');
+                            buttonIcon.classList.remove('fa-solid');
+                            buttonIcon.style.color = 'white';
+                            buttonIcon.classList.add('fa-regular');
                         })
                         .catch((error) => {
                             console.error("Error removing from wishlist: ", error);
@@ -1270,8 +1292,9 @@ function displayResults(results) {
                             showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
 
                             // Change the button icon to minus after adding
-                            buttonIcon.classList.remove('fa-plus');
-                            buttonIcon.classList.add('fa-minus');
+                            buttonIcon.classList.remove('fa-regular');
+                            buttonIcon.style.color = 'red';
+                            buttonIcon.classList.add('fa-solid');
                         })
                         .catch((error) => {
                             console.error("Error adding to wishlist: ", error);
@@ -1290,8 +1313,9 @@ function displayResults(results) {
                         showMessage("New user document created with wishlist!", errorMessageElement, "green");
 
                         // Change the button icon to minus after adding
-                        buttonIcon.classList.remove('fa-plus');
-                        buttonIcon.classList.add('fa-minus');
+                        buttonIcon.classList.remove('fa-regular');
+                        buttonIcon.style.color = 'red';
+                        buttonIcon.classList.add('fa-solid');
                     })
                     .catch((error) => {
                         console.error("Error creating new user document: ", error);
@@ -1408,7 +1432,7 @@ if (checkUserExists()) {
                     if (docSnap.exists()) {
                         const userData = docSnap.data();
                         localStorage.setItem("name", userData.name);
-                        if (userData.color){
+                        if (userData.color) {
                             localStorage.setItem("color", userData.color);
                         }
 
@@ -1489,9 +1513,9 @@ function profileNameCreator() {
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
-    document.getElementById("user").classList.add("border-5");
+    document.getElementById("user").classList.add("border-4");
     document.getElementById("user").classList.add("rounded-circle");
-    document.getElementById("user").style.width = "3.5rem";
+    document.getElementById("user").style.width = "3rem";
     document.getElementById("user").classList.add("justify-content-center");
 
     // rounded-circle border-white border border-5
@@ -1802,56 +1826,56 @@ createBtn.addEventListener("click", (event) => {
 
 function addHoverEventsToPosters(containerId) {
     const postersContainer = document.getElementById(containerId);
-  
+
     // Create a MutationObserver to watch for added poster divs
     const observer = new MutationObserver(() => {
-      const posters = postersContainer.querySelectorAll('.movie');
-      
-      posters.forEach(poster => {
-        // Ensure we're not adding event listeners multiple times (check if already added)
-        if (!poster.hasAttribute('data-hover-events-attached')) {
-          let timeout;
-  
-          // Mouse enter event
-          poster.addEventListener('mouseenter', () => {
-            console.log("Hover started on", poster.id);
-  
-            // Find the popup element within the poster
-            const popup = poster.querySelector('.popups');
-            console.log("Popup found:", popup);
-  
-            // Hide all other popups immediately when hovering starts
-            document.querySelectorAll('.popups').forEach(p => p.style.opacity = 0);
-  
-            // Set a timeout to show the popup after 500ms
-            timeout = setTimeout(() => {
-              popup.style.display = 'flex';
-              popup.classList.add("fade");
-              popup.style.opacity = 1;
-            }, 500);
-          });
-  
-          // Mouse leave event
-          poster.addEventListener('mouseleave', () => {
-            console.log("Hover ended on", poster.id);
-            clearTimeout(timeout);
-            // Hide the popup when the mouse leaves the poster
-            const popup = poster.querySelector('.popups');
-            if (popup) popup.style.display = 'none';
-          });
-  
-          // Mark this poster as having events attached to prevent re-adding event listeners
-          poster.setAttribute('data-hover-events-attached', 'true');
-        }
-      });
+        const posters = postersContainer.querySelectorAll('.movie');
+
+        posters.forEach(poster => {
+            // Ensure we're not adding event listeners multiple times (check if already added)
+            if (!poster.hasAttribute('data-hover-events-attached')) {
+                let timeout;
+
+                // Mouse enter event
+                poster.addEventListener('mouseenter', () => {
+                    console.log("Hover started on", poster.id);
+
+                    // Find the popup element within the poster
+                    const popup = poster.querySelector('.popups');
+                    console.log("Popup found:", popup);
+
+                    // Hide all other popups immediately when hovering starts
+                    document.querySelectorAll('.popups').forEach(p => p.style.opacity = 0);
+
+                    // Set a timeout to show the popup after 500ms
+                    timeout = setTimeout(() => {
+                        popup.style.display = 'flex';
+                        popup.classList.add("fade");
+                        popup.style.opacity = 1;
+                    }, 500);
+                });
+
+                // Mouse leave event
+                poster.addEventListener('mouseleave', () => {
+                    console.log("Hover ended on", poster.id);
+                    clearTimeout(timeout);
+                    // Hide the popup when the mouse leaves the poster
+                    const popup = poster.querySelector('.popups');
+                    if (popup) popup.style.display = 'none';
+                });
+
+                // Mark this poster as having events attached to prevent re-adding event listeners
+                poster.setAttribute('data-hover-events-attached', 'true');
+            }
+        });
     });
-  
+
     // Start observing the posters container for new children
     observer.observe(postersContainer, { childList: true });
-  }
-  
-  // Call the function for different containers
-  addHoverEventsToPosters('searchResults');
+}
+
+// Call the function for different containers
+addHoverEventsToPosters('searchResults');
 
 const mediaQuery1 = window.matchMedia('(max-width: 1023px)');
 // const mediaQuery2 = window.matchMedia('(max-width: 767px)');
@@ -1925,55 +1949,189 @@ if (mediaQuery.matches) {
 }
 
 async function filterComedyGenresFromFirestore(genre) {
-  // Replace 'yourCollection' with the actual collection name
-//   document.getElementById("filterResult").innerHTML = ``
+    const querySnapshot = await getDocs(collection(db, 'movies'));
 
-  const querySnapshot = await getDocs(collection(db, 'movies'));
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
 
+        // Check if the movie's genre includes the specified genre, 
+        // the movie title isn't already suggested, and it isn't the current movie title
+        if (data.genre && data.genre.includes(`${genre}`) && !suggested.includes(`${data.title}`) && data.title !== movieTitle) {
+            suggested.push(data.title);
+            const movieDiv = document.createElement('div');
+            movieDiv.className = 'movie';
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    
+            // Ensure the movie Div is properly populated with the correct content
+            movieDiv.innerHTML = `
+                <img src="${data.poster}" alt="${data.title}">
+                <h2 class="text-black">${data.title}</h2>
+                <p class="text-black">${data.year}</p>
+                <div class="popups flex-column">
+                    <div class="p-0">
+                        <img src="${data.thumbnails}" alt="${data.title}">
+                    </div>
+                    <div class="p-3 d-flex flex-column gap-3">
+                        <h2>${data.title}</h2>
+                        <div class="d-flex gap-4 justify-content-between">
+                            <a href="details.html?title=${encodeURIComponent(data.title)}">
+                                <button id="watch" class="btn btn-success">More details</button>
+                            </a>
+                            <button id="add" class="add-to-wishlist btn btn-black text-white" data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist">
+                                <i class="fa-regular fa-heart fa-2xl"></i>
+                            </button>
+                        </div>
+                        <p class="m-0 text- wishlist-error"></p>
+                        <div class="d-flex justify-content-evenly">
+                            <p class="m-0">${data.year}</p>
+                            <p class="m-0">•</p>
+                            <p class="m-0">${data.duration}</p>
+                            <p class="m-0">•</p>
+                            <p class="m-0 bg-success px-2 rounded-1"><strong>${data.rating}/5</strong></p>
+                        </div>
+                        <p class="m-0">${data.description}</p>
+                    </div>
+                </div>`;
 
-    // Check if the genre array contains 'comedy'
-    if (data.genre && data.genre.includes(`${genre}`) && !suggested.includes(`${data.title}`) && data.title != movieTitle) {
-        
-      // comedyMovies.push(data);  // Push matching data to the result array
-      suggested.push(data.title)
-      const movieDiv = document.createElement('div');
-      movieDiv.className = 'movie';
+            // Append the movieDiv to the suggestions container
+            document.getElementById("suggestionDiv").appendChild(movieDiv);
 
-      // Create a link for each movie poster (ensure the query parameter is 'title')
-      // const movieLink = document.createElement('a');
-      // movieLink.href = `pages/details/details.html?title=${encodeURIComponent(movie.title)}`;  // Correctly passing 'title'
+            // Hide loading spinner once the movieDiv is appended
+            document.getElementById("loading").style.display = "none";
+        }
+    });
 
-      // Insert the movie poster and title inside the link
-      movieDiv.innerHTML = `<img src="${data.poster}" alt="${data.title}"><h2 class="text-black">${data.title}</h2><p class="text-black">${data.year}</p>
-      <div class="popups flex-column" >
-      <div class="p-0">
-          <img src="${data.thumbnails}" alt="${data.title}"></div>
-          <div class="p-3 d-flex flex-column gap-3">
-          <h2>${data.title}</h2>
-          <div class="d-flex gap-4 justify-content-between">
-          <a href="details.html?title=${encodeURIComponent(data.title)}">
-          <button id="watch" class="btn btn-success">More details</button>
-          </a>
-          <button id="add" class="add-to-wishlist btn btn-success" data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-plus fa-xl"></i></button>
-          </div>
-          <p id="wishlistError" class="m-0 text- wishlist-error"></p>
-          <div class="d-flex justify-content-evenly">
-          <p class="m-0">${data.year}</p> <p class="m-0">•</p> <p class="m-0">${data.duration}</p> <p class="m-0">•</p> <p class="m-0 bg-success px-2 rounded-1"><strong>${data.rating}/5</strong></p>
-          </div>
-    <p class="m-0">${data.description}</p>  
-    </div>
-  </div>`;
+    // Add event listeners for all wishlist buttons after they are appended
+    const buttons = document.querySelectorAll('.add-to-wishlist');
 
-      // Append the movie link div to the container
-      // movieDiv.appendChild(movieLink);
-      document.getElementById("suggestionDiv").appendChild(movieDiv);
-      document.getElementById("loading").style.display = "none";
+    buttons.forEach(button => {
+        const movieTitle = button.getAttribute('data-title');
+        const buttonIcon = button.querySelector('i');
+        const errorMessageElement = button.closest('.movie')?.querySelector('.wishlist-error'); // Safe query
 
+        if (loggedInUserId) {
+            checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+
+            button.addEventListener('click', function () {
+                document.getElementById("loading").style.display = "flex";
+                toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+            });
+        } else {
+            button.addEventListener('click', function () {
+                if (errorMessageElement) {
+                    showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
+                }
+            });
+
+            console.error("User not logged in. Please log in to add movies to the wishlist.");
+        }
+    });
+
+    function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId);
+
+        getDoc(userDocRef).then(docSnapshot => {
+            if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                const currentWishlist = userData.wishlist || [];
+
+                if (currentWishlist.includes(movieTitle)) {
+                    buttonIcon.classList.remove('fa-regular');
+                    buttonIcon.style.color = 'red';
+                    buttonIcon.classList.add('fa-solid');
+                } else {
+                    buttonIcon.classList.remove('fa-solid');
+                    buttonIcon.style.color = 'white';
+                    buttonIcon.classList.add('fa-regular');
+                }
+            } else {
+                console.error("User document does not exist. Creating a new document...");
+                buttonIcon.classList.remove('fa-solid');
+                buttonIcon.style.color = 'white';
+                buttonIcon.classList.add('fa-regular');
+            }
+        }).catch((error) => {
+            console.error("Error fetching user document: ", error);
+        });
     }
-  });
 
+    function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+        const userDocRef = doc(db, "users", loggedInUserId);
+
+        // Clear previous error message
+        if (errorMessageElement) errorMessageElement.textContent = "";
+
+        getDoc(userDocRef).then(docSnapshot => {
+            if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                const currentWishlist = userData.wishlist || [];
+
+                if (currentWishlist.includes(movieTitle)) {
+                    updateDoc(userDocRef, {
+                        wishlist: arrayRemove(movieTitle)
+                    })
+                    .then(() => {
+                        console.log(`${movieTitle} removed from wishlist in Firestore!`);
+                        showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+                        buttonIcon.classList.remove('fa-solid');
+                        buttonIcon.style.color = 'white';
+                        buttonIcon.classList.add('fa-regular');
+                    })
+                    .catch((error) => {
+                        console.error("Error removing from wishlist: ", error);
+                        showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+                    });
+                } else {
+                    updateDoc(userDocRef, {
+                        wishlist: arrayUnion(movieTitle)
+                    })
+                    .then(() => {
+                        console.log(`${movieTitle} added to wishlist in Firestore!`);
+                        showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+
+                        buttonIcon.classList.remove('fa-regular');
+                        buttonIcon.style.color = 'red';
+                        buttonIcon.classList.add('fa-solid');
+                    })
+                    .catch((error) => {
+                        console.error("Error adding to wishlist: ", error);
+                        showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+                    });
+                }
+            } else {
+                console.error("User document does not exist. Creating a new document...");
+                showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+                setDoc(userDocRef, { wishlist: [movieTitle] })
+                    .then(() => {
+                        console.log("New user document created with wishlist!");
+                        showMessage("New user document created with wishlist!", errorMessageElement, "green");
+
+                        buttonIcon.classList.remove('fa-regular');
+                        buttonIcon.style.color = 'red';
+                        buttonIcon.classList.add('fa-solid');
+                    })
+                    .catch((error) => {
+                        console.error("Error creating new user document: ", error);
+                        showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+                    });
+            }
+        }).catch((error) => {
+            console.error("Error fetching user document: ", error);
+            showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+        });
+    }
+
+    function showMessage(message, messageElement, color) {
+        document.getElementById("loading").style.display = "none";
+        if (messageElement) {
+            messageElement.textContent = message;
+            messageElement.style.color = color;
+
+            setTimeout(() => {
+                messageElement.textContent = "";
+            }, 5000);
+        }
+    }
 }
+

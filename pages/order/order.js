@@ -416,7 +416,7 @@ function profileNameCreator() {
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
-    document.getElementById("user").classList.add("border-5");
+    document.getElementById("user").classList.add("border-4");
 
     // rounded-circle border-white border border-5
     let profileName = localStorage.getItem("name");

@@ -66,7 +66,7 @@ function profileNameCreator() {
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
-    document.getElementById("user").classList.add("border-5");
+    document.getElementById("user").classList.add("border-4");
 
     // rounded-circle border-white border border-5
     let profileName = localStorage.getItem("name");
@@ -120,6 +120,9 @@ const profileSec = document.getElementById("profileSec");
 const rented = document.getElementById("rented");
 const wishlist = document.getElementById("wishlist");
 
+profileSec.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+
+
 profileSec.addEventListener("click", () => {
 
     if (mediaQuery1.matches) {
@@ -151,21 +154,24 @@ profileSec.addEventListener("click", () => {
         wishlistSection.style.display = "none";
 
         profileSec.classList.add("text-white");
-        profileSec.classList.remove("border-success");
-        profileSec.classList.remove("border-top-0");
-        profileSec.classList.remove("border-bottom-0");
+        // profileSec.classList.remove("border-success");
+        // profileSec.classList.remove("border-top-0");
+        // profileSec.classList.remove("border-bottom-0");
 
-        wishlist.classList.add("border-success");
+        // wishlist.classList.add("border-success");
         wishlist.classList.remove("text-white");
-        wishlist.classList.add("border-top");
+        
+        // wishlist.classList.add("border-top");
 
-        rented.classList.add("border-bottom");
-        rented.classList.remove("border-white");
-        rented.classList.add("border-success");
+        // rented.classList.add("border-bottom");
+        // rented.classList.remove("border-white");
+        // rented.classList.add("border-success");
         rented.classList.remove("text-white");
-        rented.classList.add("border-top-0");
+        // rented.classList.add("border-top-0");
 
-
+        profileSec.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        wishlist.style.background = '';
+        rented.style.background = '';
 
         profileSection.style.display = "block";
     }
@@ -197,21 +203,26 @@ rented.addEventListener("click", () => {
         wishlistSection.style.display = "none";
         profileSection.style.display = "none";
 
-        rented.classList.remove("border-success");
-        rented.classList.remove("border-top-0");
+        // rented.classList.remove("border-success");
+        // rented.classList.remove("border-top-0");
         rented.classList.add("text-white");
-        rented.classList.remove("border-bottom-0");
-        // rented.classList.remove("border-end-0");
+        // rented.classList.remove("border-bottom-0");
+        // // rented.classList.remove("border-end-0");
 
 
         profileSec.classList.remove("text-white");
-        profileSec.classList.add("border-success");
-        profileSec.classList.add("border-top-0");
-        profileSec.classList.add("border-bottom-0");
+        // profileSec.classList.add("border-success");
+        // profileSec.classList.add("border-top-0");
+        // profileSec.classList.add("border-bottom-0");
 
-        wishlist.classList.add("border-success");
+        // wishlist.classList.add("border-success");
         wishlist.classList.remove("text-white");
-        wishlist.classList.add("border-top-0");
+        // wishlist.classList.add("border-top-0");
+
+        rented.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        profileSec.style.background = '';
+        wishlist.style.background = '';
+
 
         rentalsSection.style.display = "flex";
     }
@@ -243,19 +254,24 @@ wishlist.addEventListener("click", () => {
         profileSection.style.display = "none";
 
         profileSec.classList.remove("text-white");
-        profileSec.classList.add("border-success");
-        profileSec.classList.add("border-top-0");
-        // profileSec.classList.add("border-bottom-0");
-        wishlist.classList.remove("border-success");
-        wishlist.classList.remove("border-top-0");
+        // profileSec.classList.add("border-success");
+        // profileSec.classList.add("border-top-0");
+        // // profileSec.classList.add("border-bottom-0");
+        // wishlist.classList.remove("border-success");
+        // wishlist.classList.remove("border-top-0");
         wishlist.classList.add("text-white");
-        // wishlist.classList.remove("border-end-0");
+        // // wishlist.classList.remove("border-end-0");
 
 
-        rented.classList.add("border-bottom-0");
-        rented.classList.remove("border-white");
-        rented.classList.add("border-success");
+        // rented.classList.add("border-bottom-0");
+        // rented.classList.remove("border-white");
+        // rented.classList.add("border-success");
         rented.classList.remove("text-white");
+
+        wishlist.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        profileSec.style.background = '';
+        rented.style.background = '';
+
 
         wishlistSection.style.display = "flex";
     }

@@ -160,7 +160,6 @@ input:focus {
 
 #playButton:hover,
 #logoutBtn:hover,
-#add:hover,
 #watch:hover,
 #trailerPlay:hover,
 #logBtn:hover,
@@ -591,7 +590,6 @@ body.no-scroll {
 #loginBtn,
 #createBtn,
 #watch,
-#add,
 #trailerPlay,
 #signUpBtn,
 #logBtn {
@@ -680,7 +678,7 @@ body.no-scroll {
 .videoStyle {
   /* display: none; */
   position: absolute;
-  top: 50%;
+  top: 10rem;
   left: 50%;
   /* transform: translate(-50%, -50%); */
   /* width: 100%;
