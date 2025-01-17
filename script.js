@@ -452,7 +452,7 @@ async function fetchMovies(container, head, text) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn " data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-regular fa-heart fa-2xl"></i></button>
+          <button id="add" class="add-to-wishlist p-0 btn " data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-regular fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <div class="d-flex justify-content-evenly">
@@ -750,7 +750,7 @@ function displayResults(results) {
           <a href="pages/details/details.html?title=${encodeURIComponent(movie.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-heart fa-2xl"></i></button>
+          <button id="add" class="add-to-wishlist p-0 btn" data-title="${movie.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-regular fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
@@ -1520,7 +1520,7 @@ async function filterComedyGenresFromFirestore(genre) {
           <a href="pages/details/details.html?title=${encodeURIComponent(data.title)}">
           <button id="watch" class="btn btn-success">More details</button>
           </a>
-          <button id="add" class="add-to-wishlist btn " data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-solid fa-heart fa-2xl"></i></button>
+          <button id="add" class="add-to-wishlist p-0 btn " data-title="${data.title}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wishlist"><i class="fa-regular fa-heart fa-2xl"></i></button>
           </div>
           <p id="wishlistError" class="m-0 text- wishlist-error"></p>
           <div class="d-flex justify-content-evenly">

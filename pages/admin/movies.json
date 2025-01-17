@@ -27,7 +27,7 @@
         "director": ["Christopher Nolan"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "video": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/movies%2FInception%2Fplaylist.m3u8?alt=media&token=435785ea-375c-49df-ab0d-a103eb6130fe",
       "trailer": "https://www.youtube-nocookie.com/embed/8hP9D6kZseM?si=HEWHV5ri6vlOjYA5"
     },
     {
@@ -58,7 +58,7 @@
         "director": ["Christopher Nolan"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "video": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/movies%2FThe%20Dark%20Knight%2Fplaylist.m3u8?alt=media&token=6750945a-00f7-4472-8b80-cdc690421a87",
       "trailer": "https://www.youtube-nocookie.com/embed/LDG9bisJEaI?si=k7PiTgsxSHmO5_nC"
     },
     {
@@ -117,7 +117,7 @@
         "director": ["The Wachowskis"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "video": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/movies%2FThe%20Matrix%2Fplaylist.m3u8?alt=media&token=93567874-2d35-4839-afd5-417bb807c8a9",
       "trailer": "https://www.youtube-nocookie.com/embed/m8e-FF8MsqU?si=VPKTNrIQPpx7QdVb"
     },
     {
@@ -148,7 +148,7 @@
         "director": ["James Cameron"]
       },
       "languages": ["English", "Hindi", "Tamil", "Telugu", "Kannada"],
-      "video": "https://stream-akamai.castr.com/5b9352dbda7b8c769937e459/live_2361c920455111ea85db6911fe397b9e/index.fmp4.m3u8",
+      "video": "https://firebasestorage.googleapis.com/v0/b/login-9207d.appspot.com/o/movies%2FAvatar%2Fplaylist.m3u8?alt=media&token=b72a0f03-fa6d-426d-89db-9034e4a2e038",
       "trailer": "https://www.youtube-nocookie.com/embed/5PSNL1qE6VY?si=374X7OSedidoorDA"
     }
     

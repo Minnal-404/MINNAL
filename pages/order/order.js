@@ -3,7 +3,7 @@ document.getElementById("loadMessage").textContent = "Please Wait...";
 
 
 
-import { getAuth,  onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 // import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
@@ -130,7 +130,7 @@ document.getElementById('confirmRental').addEventListener('click', function () {
     const input2 = document.getElementById("cardNumber2").value;
     const input3 = document.getElementById("cardNumber3").value;
     const input4 = document.getElementById("cardNumber4").value;
-    const cardNumber = input1+input2+input3+input4;    const expirationDate = document.getElementById('expirationDate').value;
+    const cardNumber = input1 + input2 + input3 + input4; const expirationDate = document.getElementById('expirationDate').value;
     const cvv = document.getElementById('cvv').value.trim();
     let check = true;
     if (!cardNumber) {
@@ -148,14 +148,14 @@ document.getElementById('confirmRental').addEventListener('click', function () {
 
     }
 
-    if ( !cvv) {
+    if (!cvv) {
         // orderMessageElement.textContent = 'Please fill in all the credit card details.';
         showMessage('Please fill in all the credit card details.', "cvvError");
         // return;
         check = false;
 
     }
-    else if(!validateCVV(cvv)) {
+    else if (!validateCVV(cvv)) {
         // orderMessageElement.textContent = 'Invalid CVV. Please check and try again.';
         showMessage('Invalid CVV. Please check and try again.', "cvvError");
         check = false;
@@ -185,12 +185,13 @@ document.getElementById('confirmRental').addEventListener('click', function () {
         showMessage('Please select a rental duration before confirming.', "rentalDurationError");
         check = false;
         // Add rental to Firestore (assuming a Firestore function to update the user's rentals)
-    } 
+    }
 
-    if (check){
-            orderMessageElement.textContent = `Successfully rented ${movieTitle} for ${rentalDuration} day(s)!`;
-        addRentalToUserOrder(loggedInUserId, movieTitle, rentalDuration, rentalPrice);
+    if (check) {
+        document.getElementById("confirmRental").setAttribute('disabled', 'true');
         document.getElementById("loading").style.display = "flex";
+        addRentalToUserOrder(loggedInUserId, movieTitle, rentalDuration, rentalPrice);
+
 
     }
 });
@@ -210,7 +211,7 @@ subExpiryInput.addEventListener('keydown', (event) => handleBackspace(subExpiryI
 
 function formatExpiry(input) {
     let value = input.value.replace(/\D/g, ''); // Remove all non-numeric characters
-    
+
     // Add slash after two digits of the month
     if (value.length >= 2) {
         value = value.slice(0, 2) + '/' + value.slice(2, 4);
@@ -221,7 +222,7 @@ function formatExpiry(input) {
 // Handle input to ensure the slash is correctly removed on backspace
 function handleBackspace(input, event) {
     let value = input.value;
-    
+
     // If backspace is pressed and the slash is at the end, remove it
     if (event.key === "Backspace" && value.charAt(value.length - 1) === '/') {
         input.value = value.slice(0, -1);  // Remove the slash when backspace is pressed
@@ -232,7 +233,7 @@ function validateExpiryDate(expiryInput) {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Get current month (1-12)
     const currentYear = currentDate.getFullYear() % 100; // Get last two digits of current year
-    
+
     // Regex to check MM/YY format
     const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
     if (!regex.test(expiryInput)) {
@@ -244,7 +245,7 @@ function validateExpiryDate(expiryInput) {
 
     // Extract the month and year from input
     const [inputMonth, inputYear] = expiryInput.split('/').map(Number);
-    
+
     // Check if the expiry date is in the future
     if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
         showMessage('The expiry date must be a future date.', "expirationDateError");
@@ -261,7 +262,7 @@ function validateExpiryDate1(expiryInput) {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Get current month (1-12)
     const currentYear = currentDate.getFullYear() % 100; // Get last two digits of current year
-    
+
     // Regex to check MM/YY format
     const regex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
     if (!regex.test(expiryInput)) {
@@ -273,7 +274,7 @@ function validateExpiryDate1(expiryInput) {
 
     // Extract the month and year from input
     const [inputMonth, inputYear] = expiryInput.split('/').map(Number);
-    
+
     // Check if the expiry date is in the future
     if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
         showMessage('The expiry date must be a future date.', "expirationDateError1");
@@ -295,9 +296,9 @@ function showMessage(message, divId) {
     messageDiv.style.opacity = 1;
     setTimeout(function () {
         messageDiv.innerHTML = "";
-      messageDiv.style.opacity = 0;
+        messageDiv.style.opacity = 0;
     }, 5000);
-  }
+}
 // Validate credit card number using Luhn algorithm
 function validateCardNumber(cardNumber) {
     let sum = 0;
@@ -319,11 +320,11 @@ function validateCardNumber(cardNumber) {
 }
 const inputField = document.getElementById('cardNumber1');
 
-        inputField.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
-            value = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space after every 4 digits
-            e.target.value = value; // Update the input value with spaces
-        });
+inputField.addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+    value = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space after every 4 digits
+    e.target.value = value; // Update the input value with spaces
+});
 // Validate CVV (3 digits)
 function validateCVV(cvv) {
     return /^\d{3}$/.test(cvv);
@@ -351,7 +352,7 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
             if (duration === '24') {
                 rentalDurationInDays = 1;  // Treat 24 hours as 1 day
             }
-        
+
             // Get the current date as rentalDate
             const rentalDate = new Date();
             function calculateExpirationDate(rentalDurationInDays) {
@@ -361,7 +362,7 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
             }
             // Calculate the rental expiration date
             const rentalExpiration = calculateExpirationDate(rentalDurationInDays);
-        
+
             // Add the rental info to the user's rentals array
             rentals.push({
                 title: movieTitle,
@@ -385,15 +386,20 @@ async function addRentalToUserOrder(userId, movieTitle, duration, rentalPrice) {
                 rentedDuration: rentalDurationInDays + " Days",
                 title: movieTitle
             };
-        
+
             // Use arrayUnion to add the new rental entry to the rentalHistory array
             await updateDoc(userRef, {
                 rentalHistory: arrayUnion(newRentalEntry)
             });
-        
-            window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
-            window.location.replace( `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
-            window.location.href = `../details/details.html?title=${encodeURIComponent(movieTitle)}`;
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("orderMessage").textContent = `Successfully rented ${movieTitle} for ${rentalDurationInDays} day(s)!`;
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "flex";
+                window.history.replaceState(null, null, `../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+                window.location.replace(`../details/details.html?title=${encodeURIComponent(movieTitle)}`);
+                window.location.href = `../details/details.html?title=${encodeURIComponent(movieTitle)}`;
+            }, 2000);
+
             console.log('Rental added to user order list');
         } else {
             throw new Error("User document not found.");
@@ -445,7 +451,7 @@ document.getElementById('confirmSub').addEventListener('click', function () {
     // const rentalPriceElement = document.getElementById('rentalPrice').textContent;
     // const rentalPrice = parseFloat(rentalPriceElement.replace('Price: $', '').trim());
 
-    // const orderMessageElement = document.getElementById('orderMessage');
+    // const document.getElementById("orderMessage") = document.getElementById('orderMessage');
 
     // Credit Card Validation
     // const cardNumber = document.getElementById('cardNumber1').value.trim();
@@ -455,7 +461,7 @@ document.getElementById('confirmSub').addEventListener('click', function () {
     const input2 = document.getElementById("cardNumber6").value;
     const input3 = document.getElementById("cardNumber7").value;
     const input4 = document.getElementById("cardNumber8").value;
-    const cardNumber = input1+input2+input3+input4;
+    const cardNumber = input1 + input2 + input3 + input4;
 
     let sub = true;
     if (!cardNumber) {
@@ -473,14 +479,14 @@ document.getElementById('confirmSub').addEventListener('click', function () {
 
     }
 
-    if ( !cvv) {
+    if (!cvv) {
         // orderMessageElement.textContent = 'Please fill in all the credit card details.';
         showMessage('Please fill in all the credit card details.', "cvvError1");
         // return;
         sub = false;
 
     }
-    else if(!validateCVV(cvv)) {
+    else if (!validateCVV(cvv)) {
         // orderMessageElement.textContent = 'Invalid CVV. Please check and try again.';
         showMessage('Invalid CVV. Please check and try again.', "cvvError1");
         sub = false;
@@ -512,39 +518,46 @@ document.getElementById('confirmSub').addEventListener('click', function () {
     //     // Add rental to Firestore (assuming a Firestore function to update the user's rentals)
     // } 
 
-    if (sub){
+    if (sub) {
         //     orderMessageElement.textContent = `Successfully rented ${movieTitle} for ${rentalDuration} day(s)!`;
         // addRentalToUserOrder(loggedInUserId, movieTitle, rentalDuration, rentalPrice);
+        document.getElementById("confirmSub").setAttribute('disabled', 'true');
         document.getElementById("loading").style.display = "flex";
         updateSubscriptionStatus(loggedInUserId, true);
     }
 });
 
 async function updateSubscriptionStatus(userId, status) {
-    try{
-    const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
+    try {
+        const userRef = doc(db, "users", userId);  // Reference to user's document in Firestore
 
-    // Update the subscription field
-    // userRef.update({
-    //     subscription: status // true or false
-    // })
-    const subscribedOn = new Date().toISOString();
-    const subscriptionExpiration = calculateExpirationDate();
-    let subscription = {
-        status: status,
-        expiration: subscriptionExpiration,
-        subscribedOn: subscribedOn
-    };
-    await updateDoc(userRef, { subscription });
-    console.log("Subscription status updated successfully!");
-    window.history.replaceState(null, null, `../../index.html`);
-    window.location.replace( `../../index.html`);
-    window.location.href = `../../index.html`;
+        // Update the subscription field
+        // userRef.update({
+        //     subscription: status // true or false
+        // })
+        const subscribedOn = new Date().toISOString();
+        const subscriptionExpiration = calculateExpirationDate();
+        let subscription = {
+            status: status,
+            expiration: subscriptionExpiration,
+            subscribedOn: subscribedOn
+        };
+        await updateDoc(userRef, { subscription });
+        console.log("Subscription status updated successfully!");
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("subMessage").textContent = `Successfully subscribed for 1 month!`;
+        setTimeout(() => {
+            document.getElementById("loading").style.display = "flex";
+            window.history.replaceState(null, null, `../../index.html`);
+            window.location.replace(`../../index.html`);
+            window.location.href = `../../index.html`;
+        }, 2000);
+
     }
     catch (error) {
-            console.error(error);
+        console.error(error);
     }
-    
+
 }
 
 // try {
@@ -560,13 +573,13 @@ async function updateSubscriptionStatus(userId, status) {
 //         if (duration === '24') {
 //             rentalDurationInDays = 1;  // Treat 24 hours as 1 day
 //         }
-    
+
 //         // Get the current date as rentalDate
 //         const rentalDate = new Date();
-    
+
 //         // Calculate the rental expiration date
 //         const rentalExpiration = calculateExpirationDate(rentalDurationInDays);
-    
+
 //         // Add the rental info to the user's rentals array
 //         rentals.push({
 //             title: movieTitle,
@@ -596,28 +609,28 @@ const mediaQuery1 = window.matchMedia('(max-width: 767px)');
 
 // Check if the media query matches
 if (mediaQuery1.matches) {
-  // Code for small screens (mobile/tablet)
-  document.getElementById("rental").classList.remove("row");
-  document.getElementById("container").classList.remove("p-5");
-  document.getElementById("container").classList.remove("p-5");
+    // Code for small screens (mobile/tablet)
+    document.getElementById("rental").classList.remove("row");
+    document.getElementById("container").classList.remove("p-5");
+    document.getElementById("container").classList.remove("p-5");
 } else {
-  // Code for larger screens (desktop)
-  console.log("Screen is wider than 768px");
+    // Code for larger screens (desktop)
+    console.log("Screen is wider than 768px");
 }
 
 const cardNumber1 = document.getElementById("cardNumber1");
 const cardNumber2 = document.getElementById("cardNumber2");
 const cardNumber3 = document.getElementById("cardNumber3");
 const cardNumber4 = document.getElementById("cardNumber4");
-cardNumber1.addEventListener('input', function(event) {
+cardNumber1.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber2');
 });
 
-cardNumber2.addEventListener('input', function(event) {
+cardNumber2.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber3');
 });
 
-cardNumber3.addEventListener('input', function(event) {
+cardNumber3.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber4');
 
     // Optionally, you can loop or reset focus here.
@@ -668,22 +681,22 @@ function handleFocus1(event) {
     }
 }
 
-cardNumber1.addEventListener('input', function(event) {
+cardNumber1.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber1', 'cardNumber2', null);
 });
 
 // Input 2
-cardNumber2.addEventListener('input', function(event) {
+cardNumber2.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber2', 'cardNumber3', 'cardNumber1');
 });
 
 // Input 3
-cardNumber3.addEventListener('input', function(event) {
+cardNumber3.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber3', 'cardNumber4', 'cardNumber2');
 });
 
 // Input 4
-cardNumber4.addEventListener('input', function(event) {
+cardNumber4.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber4', null, 'cardNumber3');
 });
 
@@ -691,15 +704,15 @@ const cardNumber5 = document.getElementById("cardNumber5");
 const cardNumber6 = document.getElementById("cardNumber6");
 const cardNumber7 = document.getElementById("cardNumber7");
 const cardNumber8 = document.getElementById("cardNumber8");
-cardNumber1.addEventListener('input', function(event) {
+cardNumber1.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber6');
 });
 
-cardNumber6.addEventListener('input', function(event) {
+cardNumber6.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber7');
 });
 
-cardNumber7.addEventListener('input', function(event) {
+cardNumber7.addEventListener('input', function (event) {
     moveToNext(event, 'cardNumber8');
 
     // Optionally, you can loop or reset focus here.
@@ -707,22 +720,22 @@ cardNumber7.addEventListener('input', function(event) {
 });
 
 
-cardNumber5.addEventListener('input', function(event) {
+cardNumber5.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber5', 'cardNumber6', null);
 });
 
 // Input 2
-cardNumber6.addEventListener('input', function(event) {
+cardNumber6.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber6', 'cardNumber7', 'cardNumber5');
 });
 
 // Input 3
-cardNumber7.addEventListener('input', function(event) {
+cardNumber7.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber7', 'cardNumber8', 'cardNumber6');
 });
 
 // Input 4
-cardNumber8.addEventListener('input', function(event) {
+cardNumber8.addEventListener('input', function (event) {
     moveFocus(event, 'cardNumber8', null, 'cardNumber7');
 });
 

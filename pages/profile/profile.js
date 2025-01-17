@@ -342,7 +342,7 @@ function displayWishlist(wishlist) {
                   <a href="../details/details.html?title=${encodeURIComponent(movieDetails.title)}">
                   <button id="watch" class="btn btn-success">Watch Now</button>
                   </a>
-                  <button id="add" class="add-to-wishlist btn btn-success" data-title="${movieDetails.title}"><i class="fa-solid fa-plus fa-xl"></i></button>
+                  <button id="add" class="add-to-wishlist btn " data-title="${movieDetails.title}"><i class="fa-regular fa-heart fa-2xl"></i></button>
                   </div>
                   <p id="wishlistError" class="m-0 text- wishlist-error"></p>
                   <p id="wishlistSuccess" class="m-0 text-success wishlist-"></p>
@@ -386,11 +386,13 @@ function displayWishlist(wishlist) {
 
                         // If the movie is in the wishlist, show the minus icon (fa-minus)
                         if (currentWishlist.includes(movieTitle)) {
-                            buttonIcon.classList.remove('fa-plus');
-                            buttonIcon.classList.add('fa-minus');
+                            buttonIcon.classList.remove('fa-regular');
+                            buttonIcon.style.color = 'red';
+                            buttonIcon.classList.add('fa-solid');
                         } else {
-                            buttonIcon.classList.remove('fa-minus');
-                            buttonIcon.classList.add('fa-plus');
+                            buttonIcon.classList.remove('fa-solid');
+                            buttonIcon.style.color = 'white';
+                            buttonIcon.classList.add('fa-regular');
                         }
                     }
                 }).catch((error) => {
@@ -426,8 +428,9 @@ function displayWishlist(wishlist) {
                                     showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
 
                                     // Change the button icon to plus after removal
-                                    buttonIcon.classList.remove('fa-minus');
-                                    buttonIcon.classList.add('fa-plus');
+                                    buttonIcon.classList.remove('fa-solid');
+                                    buttonIcon.style.color = 'white';
+                                    buttonIcon.classList.add('fa-regular');
 
                                     // Remove the movie element from the DOM
                                     button.closest('.movie').remove();  // Remove the movie div from the page
@@ -449,8 +452,9 @@ function displayWishlist(wishlist) {
                                     showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
 
                                     // Change the button icon to minus after adding
-                                    buttonIcon.classList.remove('fa-plus');
-                                    buttonIcon.classList.add('fa-minus');
+                                    buttonIcon.classList.remove('fa-regular');
+                                    buttonIcon.style.color = 'red';
+                                    buttonIcon.classList.add('fa-solid');
 
                                 })
                                 .catch((error) => {
@@ -470,8 +474,9 @@ function displayWishlist(wishlist) {
                                 showMessage("New user document created with wishlist!", errorMessageElement, "green");
 
                                 // Change the button icon to minus after adding
-                                buttonIcon.classList.remove('fa-plus');
-                                buttonIcon.classList.add('fa-minus');
+                                buttonIcon.classList.remove('fa-regular');
+                                buttonIcon.style.color = 'red';
+                                buttonIcon.classList.add('fa-solid');
                             })
                             .catch((error) => {
                                 console.error("Error creating new user document: ", error);

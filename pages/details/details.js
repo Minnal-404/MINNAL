@@ -423,7 +423,7 @@ if (!movieTitle) {
                     showMessage("Please log in to manage your wishlist.", errorMessageElement, "red");
 
                 });
-                document.getElementById("loading").style.display = "none";
+                // document.getElementById("loading").style.display = "none";
 
                 return; // Exit early if no logged-in user
             }
@@ -443,10 +443,10 @@ if (!movieTitle) {
 
             // Add click event listener to toggle the button icon
             button.addEventListener('click', function () {
-                document.getElementById("loading").style.display = "flex"; // Show loading spinner
 
                 // Add or remove the movie from the wishlist
                 toggleWishlist(loggedInUserId, movieTitle, button, buttonIcon, errorMessageElement);
+                // document.getElementById("loading").style.display = "flex"; // Show loading spinner
             });
         });
 
@@ -565,6 +565,7 @@ if (!movieTitle) {
                 console.error("Error fetching user document: ", error);
                 if (errorMessageElement) showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
             });
+            document.getElementById("loading").style.display = 'none';
         }
 
         // Helper function to display messages in the wishlistError p tag (specific for each poster)
@@ -646,7 +647,7 @@ if (!movieTitle) {
 
         if (subCheck) {
             console.log("hi")
-            document.getElementById("loading").style.display = "none";
+            // document.getElementById("loading").style.display = "none";
 
         } else {
             if (loggedInUserId) {

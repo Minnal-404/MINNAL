@@ -106,7 +106,7 @@ input:focus{
     width: 10rem;
     
 }
-#watch, #add{
+#watch{
     background-image: linear-gradient(to bottom right , green, black);
     border-radius: 5px;
 
@@ -114,7 +114,7 @@ input:focus{
 #watch{
     width: 15rem;
 }
- #logoutBtn:hover, #watch:hover, #add:hover, #profileSec:hover, #rented:hover, #wishlist:hover{
+ #logoutBtn:hover, #watch:hover, #profileSec:hover, #rented:hover, #wishlist:hover{
     transform: scale(1.02); /* Slightly enlarge the image */
     box-shadow: 0 0px 10px white;
     transition: transform 0.5s;
