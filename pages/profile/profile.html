@@ -143,6 +143,14 @@
                             </div>
                         </div>
 
+                        <div id="confirmImageContainer" class="d-none flex-column gap-4" >
+                            <h3>Do you really want to remove this image?</h3>
+                            <div class="d-flex justify-content-evenly">
+                                <div id="yesRemove" class=" p-2"><i class="fa-solid fa-check fa-2xl"></i></div>
+                                <div id="noRemove" class=" p-2"><i class="fa-solid fa-xmark fa-2xl"></i></div>
+                            </div>
+                        </div>
+
                         <div id="cropContainer" class="border-5 border border-white p-5 d-none">
                             <div class="img-container">
                                 <img id="image" src="" alt="Upload an Image" />
@@ -162,6 +170,9 @@
                             <input type="file" id="uploadImage" accept="image/*">
                             <!-- <div class="button-container"> -->
                             <!-- </div> -->
+                             <div id="removeIcon" class="d-none">
+                                <i  class="fa-solid fa-trash fa-2xl"></i>
+                             </div>
                             <div id="colorIcon" class="align-items-center d-flex">
                                 <i id="icon" class="fa-solid fa-palette fa-2xl">
                                     <input type="color" id="input" style='display: none;'>

@@ -5,7 +5,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 // import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, setDoc, getDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, setDoc, getDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteField } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
 
@@ -73,6 +73,8 @@ function profileNameCreator() {
     document.getElementById("preview").style.display = "block";
     document.getElementById("profileImage").style.display = "block";
     document.getElementById("profileName").style.display = "none";
+    document.getElementById("removeIcon").classList.remove('d-none')
+    document.getElementById("colorIcon").classList.add('d-none')
 
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
@@ -1135,6 +1137,7 @@ document.getElementById("uploadImage").addEventListener("change", function (even
     if (file && validateImage(file)) {
         document.getElementById("cropContainer").classList.remove('d-none')
         document.getElementById("btnContainer").classList.add('d-none')
+        document.getElementById("colorIcon").classList.add('d-none')
         isImageValid = true;
         const reader = new FileReader();
 
@@ -1186,6 +1189,7 @@ function validateImage(file) {
 document.getElementById("saveImage").addEventListener("click", function () {
     if (!isImageValid) return;
     document.getElementById("loading").style.display = 'flex';
+    document.getElementById("removeIcon").classList.remove('d-none')
     document.getElementById("cropContainer").classList.add('d-none');
     document.getElementById("btnContainer").classList.remove('d-none')
     document.getElementById("profile").style.display = 'none'
@@ -1265,5 +1269,46 @@ function deletePreviousImage(imagePath) {
 document.getElementById("closeImage").addEventListener('click', () => {
     document.getElementById("cropContainer").classList.add('d-none');
     document.getElementById("btnContainer").classList.remove('d-none')
+    document.getElementById("colorIcon").classList.remove('d-none')
+})
 
+document.getElementById("yesRemove").addEventListener('click', () => {
+    const userRef = doc(db, "users", loggedInUserId);
+    document.getElementById("loading").style.display = 'flex';
+
+
+    getDoc(userRef).then(docSnapshot => {
+        const userData = docSnapshot.data();
+        const previousImagePath = userData?.profileImagePath; // Assuming you store the image path here
+        if (previousImagePath) {
+            deletePreviousImage(previousImagePath);
+        }
+        updateDoc(userRef, {
+            profileImage: deleteField()  // This will **delete** the field from Firestore
+          })
+          .then(() => {
+            console.log("Field 'profileImagePath' deleted from Firestore.");
+          })
+    })
+    localStorage.removeItem("profileImage");
+    document.getElementById("profile").style.display = 'block'
+    document.getElementById("preview").style.display = 'none'
+    document.getElementById("profileName").style.display = 'block'
+    document.getElementById("profileImage").style.display = 'none'
+    profileNameCreator()
+    document.getElementById("colorIcon").classList.remove('d-none')
+    // document.getElementById("removeIcon").classList.add('d-none')
+    document.getElementById("confirmImageContainer").classList.add('d-none')
+    document.getElementById("loading").style.display = 'none';
+})
+
+document.getElementById("removeIcon").addEventListener("click", () => {
+    document.getElementById("removeIcon").classList.add('d-none')
+    document.getElementById("confirmImageContainer").classList.remove('d-none')
+
+})
+
+document.getElementById("noRemove").addEventListener("click", () => {
+    document.getElementById("confirmImageContainer").classList.add('d-none')
+    document.getElementById("removeIcon").classList.remove('d-none')
 })

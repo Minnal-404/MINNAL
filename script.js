@@ -499,7 +499,7 @@ async function fetchMovies(container, head, text) {
 
 
 
-function handleWishlistClick(event, movieTitle) {
+function handleWishlistClick( movieTitle) {
   // const movieTitle = event.target.getAttribute('data-title');
 
   // Find all add buttons and update the clicked one
@@ -697,7 +697,7 @@ buttons.forEach(button => {
     // Adding click event listener to toggle the movie in the wishlist
     button.addEventListener('click', function (event) {
       document.getElementById("loading").style.display = "flex";
-      handleWishlistClick(event, movieTitle);
+      handleWishlistClick( movieTitle);
       toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
 
     });
@@ -850,6 +850,8 @@ function displayResults(results) {
         // Adding click event listener to toggle the movie in the wishlist
         button.addEventListener('click', function () {
           document.getElementById("loading").style.display = "flex";
+          handleWishlistClick( movieTitle);
+
           toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
         });
       } else {
@@ -1628,6 +1630,7 @@ async function filterComedyGenresFromFirestore(genre) {
       // Adding click event listener to toggle the movie in the wishlist
       button.addEventListener('click', function () {
         document.getElementById("loading").style.display = "flex";
+        handleWishlistClick( movieTitle);
         toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
       });
     } else {

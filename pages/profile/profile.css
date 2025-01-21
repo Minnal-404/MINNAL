@@ -274,19 +274,19 @@ a{
   bottom: -8rem;
   z-index: -1;
 }
-#yes, #no{
+#yes, #no, #yesRemove, #noRemove{
   border:  5px solid white;
   border-radius: 100%;
 }
-#yes:hover{
+#yes:hover, #yesRemove:hover{
   border: 5px solid #28a745;
   color: #28a745;
 }
-#no:hover{
+#no:hover, #noRemove:hover{
   border: 5px solid red;
   color: red;
 }
-#icon:hover, #uploadImageIcon:hover{
+#icon:hover, #uploadImageIcon:hover, #removeIcon:hover{
   color: #28a745;
 }
 input[type="file"] {
