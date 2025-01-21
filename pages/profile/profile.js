@@ -1298,6 +1298,7 @@ document.getElementById("yesRemove").addEventListener('click', () => {
     profileNameCreator()
     document.getElementById("colorIcon").classList.remove('d-none')
     // document.getElementById("removeIcon").classList.add('d-none')
+    document.getElementById("btnContainer").classList.remove('d-none')
     document.getElementById("confirmImageContainer").classList.add('d-none')
     document.getElementById("loading").style.display = 'none';
 })
@@ -1305,10 +1306,12 @@ document.getElementById("yesRemove").addEventListener('click', () => {
 document.getElementById("removeIcon").addEventListener("click", () => {
     document.getElementById("removeIcon").classList.add('d-none')
     document.getElementById("confirmImageContainer").classList.remove('d-none')
+    document.getElementById("btnContainer").classList.add('d-none')
 
 })
 
 document.getElementById("noRemove").addEventListener("click", () => {
     document.getElementById("confirmImageContainer").classList.add('d-none')
+    document.getElementById("btnContainer").classList.remove('d-none')
     document.getElementById("removeIcon").classList.remove('d-none')
 })
