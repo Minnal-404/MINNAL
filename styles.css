@@ -46,9 +46,13 @@ input:focus {
   padding-left: 0.2rem;
   padding-right: 0.4rem;
 }
-
+#preview{
+  border-radius: 100%;
+  display: none;
+}
 #user {
   /* width: 100%; */
+  
   cursor: pointer;
 }
 

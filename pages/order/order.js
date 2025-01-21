@@ -419,10 +419,24 @@ function calculateExpirationDate() {
 
 function profileNameCreator() {
     // document.getElementById("search").value = "";
+    let profileImage = localStorage.getItem("profileImage");
+
+    if (profileImage){
+      document.getElementById("preview").style.display = "block";
+  
+      document.getElementById("user").classList.add("border");
+      document.getElementById("user").classList.add("border-white");
+      document.getElementById("user").classList.add("border-4");
+      document.getElementById("user").classList.add("rounded-circle");
+      document.getElementById("user").style.width = "3rem";
+      // document.getElementById("user").classList.add("justify-content-center");
+      document.getElementById("preview").src = profileImage;
+    } else{
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
     document.getElementById("user").classList.add("border-4");
+    document.getElementById("user").classList.add("justify-content-center");
 
     // rounded-circle border-white border border-5
     let profileName = localStorage.getItem("name");
@@ -443,7 +457,7 @@ function profileNameCreator() {
         document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
     }
     // document.getElementById("loading").style.display = "none";
-
+    }
 }
 
 document.getElementById('confirmSub').addEventListener('click', function () {

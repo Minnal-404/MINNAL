@@ -1436,7 +1436,9 @@ if (checkUserExists()) {
                         if (userData.color) {
                             localStorage.setItem("color", userData.color);
                         }
-
+                        if (userData.profileImage){
+                            localStorage.setItem("profileImage", userData.profileImage);
+                        }
                         document.getElementById("profName").textContent = userData.name;
                         document.getElementById("profEmail").textContent = userData.email;
                         profileNameCreator();
@@ -1510,6 +1512,19 @@ function getRandomRgbColor() {
 };
 
 function profileNameCreator() {
+    let profileImage = localStorage.getItem("profileImage");
+
+  if (profileImage){
+    document.getElementById("preview").style.display = "block";
+
+    document.getElementById("user").classList.add("border");
+    document.getElementById("user").classList.add("border-white");
+    document.getElementById("user").classList.add("border-4");
+    document.getElementById("user").classList.add("rounded-circle");
+    document.getElementById("user").style.width = "3rem";
+    // document.getElementById("user").classList.add("justify-content-center");
+    document.getElementById("preview").src = profileImage;
+  }else{
     document.getElementById("search").value = "";
     document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
     document.getElementById("user").classList.add("border");
@@ -1537,6 +1552,7 @@ function profileNameCreator() {
         document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
         document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
     }
+}
 }
 
 function showMessage(message, divId) {

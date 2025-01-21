@@ -7,6 +7,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/fireba
 // import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, setDoc, getDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
+
 const firebaseConfig = {
     apiKey: "AIzaSyBGsxpj36xgkU9wCSILp7LZlyA6DRlbU5Q",
     authDomain: "login-9207d.firebaseapp.com",
@@ -17,6 +19,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const auth = getAuth();
 const db = getFirestore();
@@ -63,28 +66,46 @@ if (checkUserExists()) {
 
 function profileNameCreator() {
     // document.getElementById("search").value = "";
-    document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
+    // const userData = docSnapshot.data();
+    let profileImage = localStorage.getItem("profileImage");
+
+  if (profileImage){
+    document.getElementById("preview").style.display = "block";
+    document.getElementById("profileImage").style.display = "block";
+    document.getElementById("profileName").style.display = "none";
+
     document.getElementById("user").classList.add("border");
     document.getElementById("user").classList.add("border-white");
     document.getElementById("user").classList.add("border-4");
+    document.getElementById("user").classList.add("rounded-circle");
+    document.getElementById("user").style.width = "3rem";
+    // document.getElementById("user").classList.add("justify-content-center");
+    document.getElementById("profileImage").src = profileImage;
+    document.getElementById("preview").src = profileImage;
+  } else {
+        document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
+        document.getElementById("user").classList.add("border");
+        document.getElementById("user").classList.add("border-white");
+        document.getElementById("user").classList.add("border-4");
 
-    // rounded-circle border-white border border-5
-    let profileName = localStorage.getItem("name");
-    console.log(profileName)
-    let color = localStorage.getItem("color");
-    console.log(color)
-    // document.getElementById("userIcon").style.display = "none";
-    if (/^[a-zA-Z]/.test(profileName[0])) {
-        document.getElementById("profileName").textContent = profileName[0].toUpperCase();
-        document.getElementById("profile").textContent = profileName[0].toUpperCase();
-        document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
-        document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
+        // rounded-circle border-white border border-5
+        let profileName = localStorage.getItem("name");
+        console.log(profileName)
+        let color = localStorage.getItem("color");
+        console.log(color)
+        // document.getElementById("userIcon").style.display = "none";
+        if (/^[a-zA-Z]/.test(profileName[0])) {
+            document.getElementById("profileName").textContent = profileName[0].toUpperCase();
+            document.getElementById("profile").textContent = profileName[0].toUpperCase();
+            document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+            document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
 
-    } else {
-        document.getElementById("profileName").textContent = "#";
-        document.getElementById("profile").textContent = "#";
-        document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
-        document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+        } else {
+            document.getElementById("profileName").textContent = "#";
+            document.getElementById("profile").textContent = "#";
+            document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
+            document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+        }
     }
     document.getElementById("loading").style.display = "none";
 
@@ -97,9 +118,8 @@ logoutBtn.addEventListener("click", () => {
 
     signOut(auth)
         .then(() => {
-            localStorage.removeItem("loggedInUserId");
-            localStorage.removeItem("name");
-            localStorage.removeItem("color");
+            localStorage.clear();
+
             window.history.replaceState(null, null, "../../index.html"); // Prevent going back
             window.location.replace("../../index.html");
         })
@@ -120,7 +140,7 @@ const profileSec = document.getElementById("profileSec");
 const rented = document.getElementById("rented");
 const wishlist = document.getElementById("wishlist");
 
-profileSec.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+profileSec.style.backgroundImage = 'linear-gradient(to  right, green, black)';
 
 
 profileSec.addEventListener("click", () => {
@@ -160,7 +180,7 @@ profileSec.addEventListener("click", () => {
 
         // wishlist.classList.add("border-success");
         wishlist.classList.remove("text-white");
-        
+
         // wishlist.classList.add("border-top");
 
         // rented.classList.add("border-bottom");
@@ -169,7 +189,7 @@ profileSec.addEventListener("click", () => {
         rented.classList.remove("text-white");
         // rented.classList.add("border-top-0");
 
-        profileSec.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        profileSec.style.backgroundImage = 'linear-gradient(to  right, green, black)';
         wishlist.style.background = '';
         rented.style.background = '';
 
@@ -219,7 +239,7 @@ rented.addEventListener("click", () => {
         wishlist.classList.remove("text-white");
         // wishlist.classList.add("border-top-0");
 
-        rented.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        rented.style.backgroundImage = 'linear-gradient(to  right, green, black)';
         profileSec.style.background = '';
         wishlist.style.background = '';
 
@@ -268,7 +288,7 @@ wishlist.addEventListener("click", () => {
         // rented.classList.add("border-success");
         rented.classList.remove("text-white");
 
-        wishlist.style.backgroundImage = 'linear-gradient(to bottom right, green, black)';
+        wishlist.style.backgroundImage = 'linear-gradient(to  right, green, black)';
         profileSec.style.background = '';
         rented.style.background = '';
 
@@ -315,7 +335,7 @@ function fetchWishlist(loggedInUserId) {
 function displayWishlist(wishlist) {
     const wishlistSection = document.getElementById("wishlistSection");
     wishlistSection.innerHTML = "";  // Clear previous content
-    
+
     // Loop through the wishlist and fetch details for each movie
     wishlist.forEach(async (movieTitle) => {
         console.log(movieTitle, "Fetching details...");
@@ -1100,3 +1120,150 @@ function setColor() {
     document.getElementById("loading").style.display = "none";
 
 }
+
+
+
+let cropper;
+let isImageValid = false;
+let currentCroppedImage = null;
+
+// Handle Image Upload
+document.getElementById("uploadImage").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+
+    // If a file is selected, validate it
+    if (file && validateImage(file)) {
+        document.getElementById("cropContainer").classList.remove('d-none')
+        document.getElementById("btnContainer").classList.add('d-none')
+        isImageValid = true;
+        const reader = new FileReader();
+
+        // Reset the preview and clear the previous cropper instance
+        // document.getElementById("preview").src = currentCroppedImage || ""; // Retain previous preview until a new image is saved
+        document.querySelector(".img-container").style.display = "block"; // Show the image container
+        // document.querySelector(".img-container img").src = ""; // Clear any previous image
+
+        reader.onload = function (e) {
+            document.getElementById("image").src = e.target.result;
+
+            // If a cropper instance exists, destroy it
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            // Initialize cropper with the new image
+            cropper = new Cropper(document.getElementById("image"), {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 0.8,
+                crop(event) {
+                    // You can access crop data here (e.g., get the crop box position)
+                }
+            });
+
+            // Enable the save button after the image is loaded and cropped
+            document.getElementById("saveImage").disabled = false;
+            document.getElementById("error-message").style.display = "none"; // Hide error message
+        };
+
+        reader.readAsDataURL(file);
+
+        // Reset the file input so the change event can trigger again if the user selects the same file
+        document.getElementById("uploadImage").value = "";
+    } else {
+        isImageValid = false;
+        document.getElementById("error-message").style.display = "block"; // Show error message
+    }
+});
+
+// Image validation function (check file types)
+function validateImage(file) {
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    return validTypes.includes(file.type);
+}
+
+// Save Cropped Image
+document.getElementById("saveImage").addEventListener("click", function () {
+    if (!isImageValid) return;
+    document.getElementById("loading").style.display = 'flex';
+    document.getElementById("cropContainer").classList.add('d-none');
+    document.getElementById("btnContainer").classList.remove('d-none')
+    document.getElementById("profile").style.display = 'none'
+    document.getElementById("preview").style.display = 'block'
+    document.getElementById("profileName").style.display = 'none'
+    document.getElementById("profileImage").style.display = 'block'
+    const canvas = cropper.getCroppedCanvas();
+    const croppedImage = canvas.toDataURL();
+
+    // Save the current cropped image
+    currentCroppedImage = croppedImage;
+
+    // Display the cropped image preview
+
+    // Hide the image container after cropping and saving
+    document.querySelector(".img-container").style.display = "none";
+
+    // You can now send the cropped image (croppedImage) to your server via AJAX or fetch
+    console.log(croppedImage); // Example: send this to your backend
+    fetch(croppedImage)
+        .then(res => res.blob())
+        .then(blob => {
+            // Create a reference to Firebase Storage
+            const storageRef = ref(storage, 'profile_images/' + loggedInUserId + Date.now() + '.png');
+
+            // Upload the Blob to Firebase Storage
+            uploadBytes(storageRef, blob).then(snapshot => {
+                // Get the download URL of the uploaded image
+                getDownloadURL(snapshot.ref).then(url => {
+                    // Save the image URL to Firestore (use the user's UID or other identifier)
+                    const userRef = doc(db, "users", loggedInUserId);
+                    localStorage.setItem("profileImage", url);
+                    document.getElementById("profileImage").src = url;
+                    document.getElementById("preview").src = url;
+
+                    // Retrieve the current data of the user
+                    getDoc(userRef).then(docSnapshot => {
+                        const userData = docSnapshot.data();
+                        const previousImagePath = userData?.profileImagePath; // Assuming you store the image path here
+
+                        // If there's a previous image, delete it from storage
+                        if (previousImagePath) {
+                            deletePreviousImage(previousImagePath);
+                        }
+                        // Update Firestore with the new image URL and image path
+                        updateDoc(userRef, {
+                            profileImage: url,          // Store the new URL
+                            profileImagePath: snapshot.ref.fullPath  // Store the image path
+                        })
+                            .then(() => {
+                                console.log("Image URL and path saved to Firestore");
+                                document.getElementById("loading").style.display = 'none';
+
+                            })
+                            .catch(error => {
+                                console.error("Error saving image URL: ", error);
+                            });
+                    });
+                });
+            });
+        });
+
+});
+
+function deletePreviousImage(imagePath) {
+    // Create a reference to the previous image in Firebase Storage
+    const storageRef = ref(storage, imagePath);
+
+    // Delete the file
+    deleteObject(storageRef).then(() => {
+        console.log("Previous image deleted successfully.");
+    }).catch((error) => {
+        console.error("Error deleting previous image: ", error);
+    });
+}
+
+document.getElementById("closeImage").addEventListener('click', () => {
+    document.getElementById("cropContainer").classList.add('d-none');
+    document.getElementById("btnContainer").classList.remove('d-none')
+
+})

@@ -42,8 +42,11 @@ if (checkUserExists()) {
           if (docSnap.exists()) {
             const userData = docSnap.data();
             localStorage.setItem("name", userData.name);
-            if (userData.color){
+            if (userData.color) {
               localStorage.setItem("color", userData.color);
+            }
+            if (userData.profileImage) {
+              localStorage.setItem("profileImage", userData.profileImage);
             }
             document.getElementById("profName").textContent = userData.name;
             document.getElementById("profEmail").textContent = userData.email;
@@ -174,7 +177,7 @@ document.getElementById("logBtn").addEventListener("click", () => {
   //   // document.body.classList.add('no-scroll');  // Disable scrolling
   //   // document.getElementById("profileSection").style.display = "block";
   // } else {
-    document.body.classList.add('no-scroll');  // Enable scrolling
+  document.body.classList.add('no-scroll');  // Enable scrolling
 
   const popup = document.getElementById('loginMain');
   // Check if the popup is already visible
@@ -238,33 +241,47 @@ function getRandomRgbColor() {
 };
 
 function profileNameCreator() {
-  document.getElementById("search").value = "";
-  document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
-  document.getElementById("user").classList.add("border");
-  document.getElementById("user").classList.add("border-white");
-  document.getElementById("user").classList.add("border-4");
-  document.getElementById("user").classList.add("rounded-circle");
-  document.getElementById("user").style.width = "3rem";
-  document.getElementById("user").classList.add("justify-content-center");
+  let profileImage = localStorage.getItem("profileImage");
 
+  if (profileImage) {
+    document.getElementById("preview").style.display = "block";
 
-  // rounded-circle border-white border border-5
-  let profileName = localStorage.getItem("name");
-  console.log(profileName)
-  let color = localStorage.getItem("color");
-  console.log(color)
-  // document.getElementById("userIcon").style.display = "none";
-  if (/^[a-zA-Z]/.test(profileName[0])) {
-    document.getElementById("profileName").textContent = profileName[0].toUpperCase();
-    document.getElementById("profile").textContent = profileName[0].toUpperCase();
-    document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
-    document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
-
+    document.getElementById("user").classList.add("border");
+    document.getElementById("user").classList.add("border-white");
+    document.getElementById("user").classList.add("border-4");
+    document.getElementById("user").classList.add("rounded-circle");
+    document.getElementById("user").style.width = "3rem";
+    // document.getElementById("user").classList.add("justify-content-center");
+    document.getElementById("preview").src = profileImage;
   } else {
-    document.getElementById("profileName").textContent = "#";
-    document.getElementById("profile").textContent = "#";
-    document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
-    document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+    document.getElementById("search").value = "";
+    document.getElementById("user").classList.remove("bg-black"); // Example: setting random background color
+    document.getElementById("user").classList.add("border");
+    document.getElementById("user").classList.add("border-white");
+    document.getElementById("user").classList.add("border-4");
+    document.getElementById("user").classList.add("rounded-circle");
+    document.getElementById("user").style.width = "3rem";
+    document.getElementById("user").classList.add("justify-content-center");
+
+
+    // rounded-circle border-white border border-5
+    let profileName = localStorage.getItem("name");
+    console.log(profileName)
+    let color = localStorage.getItem("color");
+    console.log(color)
+    // document.getElementById("userIcon").style.display = "none";
+    if (/^[a-zA-Z]/.test(profileName[0])) {
+      document.getElementById("profileName").textContent = profileName[0].toUpperCase();
+      document.getElementById("profile").textContent = profileName[0].toUpperCase();
+      document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+      document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
+
+    } else {
+      document.getElementById("profileName").textContent = "#";
+      document.getElementById("profile").textContent = "#";
+      document.getElementById("prof").style.backgroundColor = color; // Example: setting random background color
+      document.getElementById("user").style.backgroundColor = color; // Example: setting random background color
+    }
   }
 }
 
@@ -465,174 +482,13 @@ async function fetchMovies(container, head, text) {
       // Append the movie link div to the container
       // movieDiv.appendChild(movieLink);
       movieContainer.appendChild(movieDiv);
-      
+
       const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
       const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
-
-      // Select all the 'add-to-wishlist' buttons
-      // Select all the 'add-to-wishlist' buttons
-      const buttons = document.querySelectorAll('.add-to-wishlist');
-
-      // Adding event listeners to each button
-      buttons.forEach(button => {
-        const movieTitle = button.getAttribute('data-title');
-        const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
-        const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
-
-        // Check if loggedInUserId is available
-        if (loggedInUserId) {
-          // Check the wishlist on page load and set the button icon accordingly
-          checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
-
-          // Adding click event listener to toggle the movie in the wishlist
-          button.addEventListener('click', function () {
-            document.getElementById("loading").style.display = "flex";
-            toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
-          });
-        } else {
-          // Handle case when loggedInUserId is not defined
-          button.addEventListener('click', function () {
-            showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
-
-          });
-
-          console.error("User not logged in. Please log in to add movies to the wishlist.");
-          // errorMessageElement.textContent = "Please log in to add movies to the wishlist.";
-          // errorMessageElement.style.color = "red";
-        }
-      });
-
-      // Function to check the wishlist status for each movie
-      function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
-        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
-
-        // Get the current wishlist array from Firestore
-        getDoc(userDocRef).then(docSnapshot => {
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            const currentWishlist = userData.wishlist || [];
-
-            // If the movie is in the wishlist, set the button to 'minus' (remove)
-            if (currentWishlist.includes(movieTitle)) {
-              buttonIcon.classList.remove('fa-regular');
-              buttonIcon.style.color = 'red';
-              buttonIcon.classList.add('fa-solid');
-            } else {
-              // If the movie is not in the wishlist, set the button to 'plus' (add)
-              buttonIcon.classList.remove('fa-solid');
-              buttonIcon.style.color = 'white';
-              buttonIcon.classList.add('fa-regular');
-            }
-          } else {
-            // If the user document doesn't exist, initialize with 'plus' icon
-            console.error("User document does not exist. Creating a new document...");
-            buttonIcon.classList.remove('fa-solid');
-            buttonIcon.style.color = 'white';
-            buttonIcon.classList.add('fa-regular');
-          }
-        }).catch((error) => {
-          console.error("Error fetching user document: ", error);
-        });
-      }
-
-      // Function to add or remove the movie title to/from the Firestore wishlist array
-      function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
-        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
-
-        // Clear previous error message
-        errorMessageElement.textContent = "";
-
-        // Get the current wishlist array from Firestore
-        getDoc(userDocRef).then(docSnapshot => {
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            const currentWishlist = userData.wishlist || [];
-
-            console.log("Current Wishlist: ", currentWishlist);
-
-            // Check if the movie title is already in the wishlist
-            if (currentWishlist.includes(movieTitle)) {
-              // Movie is already in the wishlist, remove it
-              updateDoc(userDocRef, {
-                wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
-              })
-                .then(() => {
-                  console.log(`${movieTitle} removed from wishlist in Firestore!`);
-                  showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
-
-                  // Change the button icon to plus after removal
-                  buttonIcon.classList.remove('fa-solid');
-                  buttonIcon.style.color = 'white';
-                  buttonIcon.classList.add('fa-regular');
-                })
-                .catch((error) => {
-                  console.error("Error removing from wishlist: ", error);
-                  showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
-                });
-            } else {
-              // If movie is not in the wishlist, add it using arrayUnion
-              updateDoc(userDocRef, {
-                wishlist: arrayUnion(movieTitle)
-              })
-                .then(() => {
-                  console.log(`${movieTitle} added to wishlist in Firestore!`);
-                  showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
-
-                  // Change the button icon to minus after adding
-                  buttonIcon.classList.remove('fa-regular');
-                  buttonIcon.style.color = 'red';
-                  buttonIcon.classList.add('fa-solid');
-                })
-                .catch((error) => {
-                  console.error("Error adding to wishlist: ", error);
-                  showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
-                });
-            }
-          } else {
-            // If the user document doesn't exist, create a new one with the wishlist field
-            console.error("User document does not exist. Creating a new document...");
-            showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
-
-            // Create a new document with the wishlist containing the movie title
-            setDoc(userDocRef, { wishlist: [movieTitle] })
-              .then(() => {
-                console.log("New user document created with wishlist!");
-                showMessage("New user document created with wishlist!", errorMessageElement, "green");
-
-                // Change the button icon to minus after adding
-                buttonIcon.classList.remove('fa-regular');
-                buttonIcon.style.color = 'red';
-                buttonIcon.classList.add('fa-solid');
-              })
-              .catch((error) => {
-                console.error("Error creating new user document: ", error);
-                showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
-              });
-          }
-        }).catch((error) => {
-          console.error("Error fetching user document: ", error);
-          showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
-        });
-      }
-
-      // Helper function to display messages in the error container (specific for each poster)
-      function showMessage(message, messageElement, color) {
-        document.getElementById("loading").style.display = "none";
-        messageElement.textContent = message;  // Set the message text
-        messageElement.style.color = color;    // Set color (red for errors, green for success)
-
-        // Hide the message after 5 seconds
-        setTimeout(() => {
-          messageElement.textContent = "";
-        }, 5000);
-      }
-
-
-
     });
-
+    
   } catch (error) {
     console.error("Error fetching movies: ", error);
   }
@@ -640,6 +496,168 @@ async function fetchMovies(container, head, text) {
   // Hide the loading indicator
   document.getElementById("loading").style.display = "none";
 }
+
+
+
+function handleWishlistClick(event, movieTitle) {
+  // const movieTitle = event.target.getAttribute('data-title');
+
+  // Find all add buttons and update the clicked one
+  let allAddButtons = []
+  allAddButtons = document.querySelectorAll(`.add-to-wishlist[data-title="${movieTitle}"]`);
+  console.log(allAddButtons);
+
+  allAddButtons.forEach(button => {
+    const title = button.getAttribute('data-title');
+
+    // If the movie title matches, update the icon and color
+    if (title === movieTitle) {
+      const icon = button.querySelector('i');
+
+      // Check if the icon already has the 'fa-regular' class
+      if (icon.classList.contains('fa-regular')) {
+        // If it has the 'fa-regular' class, update it to 'fa-solid' and change color
+        icon.classList.remove('fa-regular'); // Remove "empty" heart
+        icon.classList.add('fa-solid'); // Add "filled" heart
+        icon.style.color = 'red';
+      } else {
+        icon.classList.remove('fa-solid'); // Remove "empty" heart
+        icon.classList.add('fa-regular'); // Add "filled" heart
+        icon.style.color = '';
+      }
+    }
+  });
+}
+
+
+
+
+function showMessage1(message, messageElement, color) {
+  document.getElementById("loading").style.display = "none";
+  messageElement.textContent = message;  // Set the message text
+  messageElement.style.color = color;    // Set color (red for errors, green for success)
+
+  // Hide the message after 5 seconds
+  setTimeout(() => {
+    messageElement.textContent = "";
+  }, 5000);
+}
+
+// Function to check the wishlist status for each movie
+
+
+// Function to add or remove the movie title to/from the Firestore wishlist array
+function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+  const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+  // Clear previous error message
+  errorMessageElement.textContent = "";
+
+  // Get the current wishlist array from Firestore
+  getDoc(userDocRef).then(docSnapshot => {
+    if (docSnapshot.exists()) {
+      const userData = docSnapshot.data();
+      const currentWishlist = userData.wishlist || [];
+
+      console.log("Current Wishlist: ", currentWishlist);
+
+      // Check if the movie title is already in the wishlist
+      if (currentWishlist.includes(movieTitle)) {
+        // Movie is already in the wishlist, remove it
+        updateDoc(userDocRef, {
+          wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+        })
+          .then(() => {
+            console.log(`${movieTitle} removed from wishlist in Firestore!`);
+            showMessage1(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+            // Change the button icon to plus after removal
+            buttonIcon.classList.remove('fa-solid');
+            buttonIcon.style.color = 'white';
+            buttonIcon.classList.add('fa-regular');
+          })
+          .catch((error) => {
+            console.error("Error removing from wishlist: ", error);
+            showMessage1(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+          });
+      } else {
+        // If movie is not in the wishlist, add it using arrayUnion
+        updateDoc(userDocRef, {
+          wishlist: arrayUnion(movieTitle)
+        })
+          .then(() => {
+            console.log(`${movieTitle} added to wishlist in Firestore!`);
+            showMessage1(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+
+            // Change the button icon to minus after adding
+            buttonIcon.classList.remove('fa-regular');
+            buttonIcon.style.color = 'red';
+            buttonIcon.classList.add('fa-solid');
+          })
+          .catch((error) => {
+            console.error("Error adding to wishlist: ", error);
+            showMessage1(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+          });
+      }
+    } else {
+      // If the user document doesn't exist, create a new one with the wishlist field
+      console.error("User document does not exist. Creating a new document...");
+      showMessage1("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+      // Create a new document with the wishlist containing the movie title
+      setDoc(userDocRef, { wishlist: [movieTitle] })
+        .then(() => {
+          console.log("New user document created with wishlist!");
+          showMessage1("New user document created with wishlist!", errorMessageElement, "green");
+
+          // Change the button icon to minus after adding
+          buttonIcon.classList.remove('fa-regular');
+          buttonIcon.style.color = 'red';
+          buttonIcon.classList.add('fa-solid');
+        })
+        .catch((error) => {
+          console.error("Error creating new user document: ", error);
+          showMessage1(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+        });
+    }
+  }).catch((error) => {
+    console.error("Error fetching user document: ", error);
+    showMessage1(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+  });
+}
+
+function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+  const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+  // Get the current wishlist array from Firestore
+  getDoc(userDocRef).then(docSnapshot => {
+    if (docSnapshot.exists()) {
+      const userData = docSnapshot.data();
+      const currentWishlist = userData.wishlist || [];
+
+      // If the movie is in the wishlist, set the button to 'minus' (remove)
+      if (currentWishlist.includes(movieTitle)) {
+        buttonIcon.classList.remove('fa-regular');
+        buttonIcon.style.color = 'red';
+        buttonIcon.classList.add('fa-solid');
+      } else {
+        // If the movie is not in the wishlist, set the button to 'plus' (add)
+        buttonIcon.classList.remove('fa-solid');
+        buttonIcon.style.color = 'white';
+        buttonIcon.classList.add('fa-regular');
+      }
+    } else {
+      // If the user document doesn't exist, initialize with 'plus' icon
+      console.error("User document does not exist. Creating a new document...");
+      buttonIcon.classList.remove('fa-solid');
+      buttonIcon.style.color = 'white';
+      buttonIcon.classList.add('fa-regular');
+    }
+  }).catch((error) => {
+    console.error("Error fetching user document: ", error);
+  });
+}
+
 
 // Helper function to shuffle an array randomly
 function shuffleArray(arr) {
@@ -651,9 +669,59 @@ function shuffleArray(arr) {
 }
 
 
-fetchMovies("recommendedDiv", "recommendedH1", "Top rated");
-fetchMovies("recentlyDiv", "recentlyH1", "Recently Added");
+async function loadMoviesAndButtons() {
+  try {
+      // Wait for both fetchMovies calls to complete
+      await Promise.all([
+          fetchMovies("recommendedDiv", "recommendedH1", "Top rated"),
+          fetchMovies("recentlyDiv", "recentlyH1", "Recently Added")
+      ]);
 
+      // Now that fetchMovies is complete, select all add-to-wishlist buttons
+      const buttons = document.querySelectorAll('.add-to-wishlist');
+      console.log(buttons); // Log all buttons with the .add-to-wishlist class
+      
+// const buttons = document.querySelectorAll('.add-to-wishlist');
+// console.log(buttons)
+// Adding event listeners to each button
+buttons.forEach(button => {
+  const movieTitle = button.getAttribute('data-title');
+  const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
+  const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
+
+  // Check if loggedInUserId is available
+  if (loggedInUserId) {
+    // Check the wishlist on page load and set the button icon accordingly
+    checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+
+    // Adding click event listener to toggle the movie in the wishlist
+    button.addEventListener('click', function (event) {
+      document.getElementById("loading").style.display = "flex";
+      handleWishlistClick(event, movieTitle);
+      toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+
+    });
+  } else {
+    // Handle case when loggedInUserId is not defined
+    button.addEventListener('click', function () {
+      showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
+
+    });
+
+    console.error("User not logged in. Please log in to add movies to the wishlist.");
+    // errorMessageElement.textContent = "Please log in to add movies to the wishlist.";
+    // errorMessageElement.style.color = "red";
+  }
+});
+  } catch (error) {
+      console.error("Error fetching movies:", error);
+  }
+}
+
+// Call the function to load movies and then fetch the buttons
+loadMoviesAndButtons();
+
+    
 function scrollRecommended() {
   const scrollWidth = recommendedDiv.scrollWidth;
   const scrollLeft = recommendedDiv.scrollLeft;
@@ -722,7 +790,7 @@ function displayResults(results) {
     document.getElementById("searchResultsContainer").style.display = "block"
 
     document.getElementById("searchTitle").textContent = 'No results found';
-    
+
     document.getElementById("loading").style.display = "none";
 
     return;
@@ -1200,7 +1268,7 @@ createBtn.addEventListener("click", (event) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         getRandomRgbColor();
-        let color =   localStorage.getItem("color");
+        let color = localStorage.getItem("color");
 
         const userData = {
           name: name,
@@ -1382,7 +1450,7 @@ function addHoverEventsToPosters(containerId) {
   // Create a MutationObserver to watch for added poster divs
   const observer = new MutationObserver(() => {
     const posters = postersContainer.querySelectorAll('.movie');
-    
+
     posters.forEach(poster => {
       // Ensure we're not adding event listeners multiple times (check if already added)
       if (!poster.hasAttribute('data-hover-events-attached')) {
@@ -1486,7 +1554,7 @@ if (mediaQuery.matches) {
 
 
 async function filterComedyGenresFromFirestore(genre) {
-  
+
   document.body.classList.add('no-scroll');  // Enable scrolling
 
   // Replace 'yourCollection' with the actual collection name
@@ -1531,7 +1599,7 @@ async function filterComedyGenresFromFirestore(genre) {
   </div>`;
 
 
-  
+
       // Append the movie link div to the container
       // movieDiv.appendChild(movieLink);
       document.getElementById("filterResult").appendChild(movieDiv);
@@ -1546,159 +1614,159 @@ async function filterComedyGenresFromFirestore(genre) {
 
   const buttons = document.querySelectorAll('.add-to-wishlist');
 
-      // Adding event listeners to each button
-      buttons.forEach(button => {
-        const movieTitle = button.getAttribute('data-title');
-        const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
-        const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
+  // Adding event listeners to each button
+  buttons.forEach(button => {
+    const movieTitle = button.getAttribute('data-title');
+    const buttonIcon = button.querySelector('i');  // Get the icon (plus or minus) inside the button
+    const errorMessageElement = button.closest('.movie').querySelector('.wishlist-error');
 
-        // Check if loggedInUserId is available
-        if (loggedInUserId) {
-          // Check the wishlist on page load and set the button icon accordingly
-          checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
+    // Check if loggedInUserId is available
+    if (loggedInUserId) {
+      // Check the wishlist on page load and set the button icon accordingly
+      checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon);
 
-          // Adding click event listener to toggle the movie in the wishlist
-          button.addEventListener('click', function () {
-            document.getElementById("loading").style.display = "flex";
-            toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
-          });
-        } else {
-          // Handle case when loggedInUserId is not defined
-          button.addEventListener('click', function () {
-            showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
+      // Adding click event listener to toggle the movie in the wishlist
+      button.addEventListener('click', function () {
+        document.getElementById("loading").style.display = "flex";
+        toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon);
+      });
+    } else {
+      // Handle case when loggedInUserId is not defined
+      button.addEventListener('click', function () {
+        showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
 
-          });
-
-          console.error("User not logged in. Please log in to add movies to the wishlist.");
-          // errorMessageElement.textContent = "Please log in to add movies to the wishlist.";
-          // errorMessageElement.style.color = "red";
-        }
       });
 
-      // Function to check the wishlist status for each movie
-      function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
-        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+      console.error("User not logged in. Please log in to add movies to the wishlist.");
+      // errorMessageElement.textContent = "Please log in to add movies to the wishlist.";
+      // errorMessageElement.style.color = "red";
+    }
+  });
 
-        // Get the current wishlist array from Firestore
-        getDoc(userDocRef).then(docSnapshot => {
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            const currentWishlist = userData.wishlist || [];
+  // Function to check the wishlist status for each movie
+  function checkWishlistStatus(loggedInUserId, movieTitle, buttonIcon) {
+    const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
 
-            // If the movie is in the wishlist, set the button to 'minus' (remove)
-            if (currentWishlist.includes(movieTitle)) {
-              buttonIcon.classList.remove('fa-regular');
-              buttonIcon.style.color = 'red';
-              buttonIcon.classList.add('fa-solid');
-            } else {
-              // If the movie is not in the wishlist, set the button to 'plus' (add)
+    // Get the current wishlist array from Firestore
+    getDoc(userDocRef).then(docSnapshot => {
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+        const currentWishlist = userData.wishlist || [];
+
+        // If the movie is in the wishlist, set the button to 'minus' (remove)
+        if (currentWishlist.includes(movieTitle)) {
+          buttonIcon.classList.remove('fa-regular');
+          buttonIcon.style.color = 'red';
+          buttonIcon.classList.add('fa-solid');
+        } else {
+          // If the movie is not in the wishlist, set the button to 'plus' (add)
+          buttonIcon.classList.remove('fa-solid');
+          buttonIcon.style.color = 'white';
+          buttonIcon.classList.add('fa-regular');
+        }
+      } else {
+        // If the user document doesn't exist, initialize with 'plus' icon
+        console.error("User document does not exist. Creating a new document...");
+        buttonIcon.classList.remove('fa-solid');
+        buttonIcon.style.color = 'white';
+        buttonIcon.classList.add('fa-regular');
+      }
+    }).catch((error) => {
+      console.error("Error fetching user document: ", error);
+    });
+  }
+
+  // Function to add or remove the movie title to/from the Firestore wishlist array
+  function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
+    const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+
+    // Clear previous error message
+    errorMessageElement.textContent = "";
+
+    // Get the current wishlist array from Firestore
+    getDoc(userDocRef).then(docSnapshot => {
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+        const currentWishlist = userData.wishlist || [];
+
+        console.log("Current Wishlist: ", currentWishlist);
+
+        // Check if the movie title is already in the wishlist
+        if (currentWishlist.includes(movieTitle)) {
+          // Movie is already in the wishlist, remove it
+          updateDoc(userDocRef, {
+            wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
+          })
+            .then(() => {
+              console.log(`${movieTitle} removed from wishlist in Firestore!`);
+              showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
+
+              // Change the button icon to plus after removal
               buttonIcon.classList.remove('fa-solid');
               buttonIcon.style.color = 'white';
               buttonIcon.classList.add('fa-regular');
-            }
-          } else {
-            // If the user document doesn't exist, initialize with 'plus' icon
-            console.error("User document does not exist. Creating a new document...");
-            buttonIcon.classList.remove('fa-solid');
-            buttonIcon.style.color = 'white';
-            buttonIcon.classList.add('fa-regular');
-          }
-        }).catch((error) => {
-          console.error("Error fetching user document: ", error);
-        });
+            })
+            .catch((error) => {
+              console.error("Error removing from wishlist: ", error);
+              showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
+            });
+        } else {
+          // If movie is not in the wishlist, add it using arrayUnion
+          updateDoc(userDocRef, {
+            wishlist: arrayUnion(movieTitle)
+          })
+            .then(() => {
+              console.log(`${movieTitle} added to wishlist in Firestore!`);
+              showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
+
+              // Change the button icon to minus after adding
+              buttonIcon.classList.remove('fa-regular');
+              buttonIcon.style.color = 'red';
+              buttonIcon.classList.add('fa-solid');
+            })
+            .catch((error) => {
+              console.error("Error adding to wishlist: ", error);
+              showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
+            });
+        }
+      } else {
+        // If the user document doesn't exist, create a new one with the wishlist field
+        console.error("User document does not exist. Creating a new document...");
+        showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
+
+        // Create a new document with the wishlist containing the movie title
+        setDoc(userDocRef, { wishlist: [movieTitle] })
+          .then(() => {
+            console.log("New user document created with wishlist!");
+            showMessage("New user document created with wishlist!", errorMessageElement, "green");
+
+            // Change the button icon to minus after adding
+            buttonIcon.classList.remove('fa-regular');
+            buttonIcon.style.color = 'red';
+            buttonIcon.classList.add('fa-solid');
+          })
+          .catch((error) => {
+            console.error("Error creating new user document: ", error);
+            showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
+          });
       }
+    }).catch((error) => {
+      console.error("Error fetching user document: ", error);
+      showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
+    });
+  }
 
-      // Function to add or remove the movie title to/from the Firestore wishlist array
-      function toggleWishlist(loggedInUserId, movieTitle, errorMessageElement, buttonIcon) {
-        const userDocRef = doc(db, "users", loggedInUserId); // Reference to the user's document in Firestore
+  // Helper function to display messages in the error container (specific for each poster)
+  function showMessage(message, messageElement, color) {
+    document.getElementById("loading").style.display = "none";
+    messageElement.textContent = message;  // Set the message text
+    messageElement.style.color = color;    // Set color (red for errors, green for success)
 
-        // Clear previous error message
-        errorMessageElement.textContent = "";
-
-        // Get the current wishlist array from Firestore
-        getDoc(userDocRef).then(docSnapshot => {
-          if (docSnapshot.exists()) {
-            const userData = docSnapshot.data();
-            const currentWishlist = userData.wishlist || [];
-
-            console.log("Current Wishlist: ", currentWishlist);
-
-            // Check if the movie title is already in the wishlist
-            if (currentWishlist.includes(movieTitle)) {
-              // Movie is already in the wishlist, remove it
-              updateDoc(userDocRef, {
-                wishlist: arrayRemove(movieTitle) // Remove the movie title from the wishlist array
-              })
-                .then(() => {
-                  console.log(`${movieTitle} removed from wishlist in Firestore!`);
-                  showMessage(`${movieTitle} removed from your wishlist.`, errorMessageElement, "red");
-
-                  // Change the button icon to plus after removal
-                  buttonIcon.classList.remove('fa-solid');
-                  buttonIcon.style.color = 'white';
-                  buttonIcon.classList.add('fa-regular');
-                })
-                .catch((error) => {
-                  console.error("Error removing from wishlist: ", error);
-                  showMessage(`Error removing from wishlist: ${error.message}`, errorMessageElement, "red");
-                });
-            } else {
-              // If movie is not in the wishlist, add it using arrayUnion
-              updateDoc(userDocRef, {
-                wishlist: arrayUnion(movieTitle)
-              })
-                .then(() => {
-                  console.log(`${movieTitle} added to wishlist in Firestore!`);
-                  showMessage(`${movieTitle} added to your wishlist!`, errorMessageElement, "green");
-
-                  // Change the button icon to minus after adding
-                  buttonIcon.classList.remove('fa-regular');
-                  buttonIcon.style.color = 'red';
-                  buttonIcon.classList.add('fa-solid');
-                })
-                .catch((error) => {
-                  console.error("Error adding to wishlist: ", error);
-                  showMessage(`Error adding to wishlist: ${error.message}`, errorMessageElement, "red");
-                });
-            }
-          } else {
-            // If the user document doesn't exist, create a new one with the wishlist field
-            console.error("User document does not exist. Creating a new document...");
-            showMessage("User document does not exist. Creating a new document...", errorMessageElement, "red");
-
-            // Create a new document with the wishlist containing the movie title
-            setDoc(userDocRef, { wishlist: [movieTitle] })
-              .then(() => {
-                console.log("New user document created with wishlist!");
-                showMessage("New user document created with wishlist!", errorMessageElement, "green");
-
-                // Change the button icon to minus after adding
-                buttonIcon.classList.remove('fa-regular');
-                buttonIcon.style.color = 'red';
-                buttonIcon.classList.add('fa-solid');
-              })
-              .catch((error) => {
-                console.error("Error creating new user document: ", error);
-                showMessage(`Error creating new user document: ${error.message}`, errorMessageElement, "red");
-              });
-          }
-        }).catch((error) => {
-          console.error("Error fetching user document: ", error);
-          showMessage(`Error fetching user document: ${error.message}`, errorMessageElement, "red");
-        });
-      }
-
-      // Helper function to display messages in the error container (specific for each poster)
-      function showMessage(message, messageElement, color) {
-        document.getElementById("loading").style.display = "none";
-        messageElement.textContent = message;  // Set the message text
-        messageElement.style.color = color;    // Set color (red for errors, green for success)
-
-        // Hide the message after 5 seconds
-        setTimeout(() => {
-          messageElement.textContent = "";
-        }, 5000);
-      }
+    // Hide the message after 5 seconds
+    setTimeout(() => {
+      messageElement.textContent = "";
+    }, 5000);
+  }
 }
 
 // Example usage:
