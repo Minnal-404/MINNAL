@@ -704,7 +704,7 @@ buttons.forEach(button => {
   } else {
     // Handle case when loggedInUserId is not defined
     button.addEventListener('click', function () {
-      showMessage(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
+      showMessage1(`Please log in to add movies to the wishlist.`, errorMessageElement, "red");
 
     });
 
