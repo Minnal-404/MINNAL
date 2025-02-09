@@ -1514,10 +1514,11 @@ if (mediaQuery1.matches) {
   const searchDiv = document.getElementById('searchDiv');
   const searchInput = document.getElementById('search');
   const searchIcon = document.getElementById("searchIcon");
+  document.getElementById("col1").classList.add('col-1')
+  document.getElementById("greet").classList.remove('col-3')
+  document.getElementById("greet").classList.add('col-5')
 
-  document.getElementById("userDiv").classList.remove("gap-4")
-  document.getElementById("userDiv").classList.remove("justify-content-end")
-
+  document.getElementById("col1").classList.remove('col-3')
   searchIcon.addEventListener('click', function () {
     // If the input field is hidden, show it and change the icon
     if (searchInput.style.display === 'none' || searchInput.style.display === '') {

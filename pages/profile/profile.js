@@ -152,20 +152,26 @@ profileSec.addEventListener("click", () => {
         wishlistSection.style.display = "none";
 
         profileSec.classList.add("text-white");
-        profileSec.classList.remove("border-success");
-        profileSec.classList.remove("border-top-0");
-        profileSec.classList.remove("border-bottom-0");
-        profileSec.classList.remove("border-end-0");
+        profileSec.style.backgroundImage = 'linear-gradient(to  right, green, black)';
 
-        wishlist.classList.add("border-success");
+        // profileSec.classList.remove("border-success");
+        // profileSec.classList.remove("border-top-0");
+        // profileSec.classList.remove("border-bottom-0");
+        // profileSec.classList.remove("border-end-0");
+
+        // wishlist.classList.add("border-success");
         wishlist.classList.remove("text-white");
-        wishlist.classList.add("border-top");
+        wishlist.style.backgroundImage = '';
 
-        rented.classList.add("border-bottom");
-        rented.classList.remove("border-white");
-        rented.classList.add("border-success");
+        // wishlist.classList.add("border-top");
+
+        // rented.classList.add("border-bottom");
+        // rented.classList.remove("border-white");
+        // rented.classList.add("border-success");
         rented.classList.remove("text-white");
-        rented.classList.add("border-top-0");
+        rented.style.background = '';
+
+        // rented.classList.add("border-top-0");
 
 
 
@@ -204,21 +210,27 @@ rented.addEventListener("click", () => {
         wishlistSection.style.display = "none";
         profileSection.style.display = "none";
 
-        rented.classList.remove("border-success");
-        rented.classList.remove("border-top-0");
+        // rented.classList.remove("border-success");
+        // rented.classList.remove("border-top-0");
         rented.classList.add("text-white");
-        rented.classList.remove("border-bottom-0");
-        rented.classList.remove("border-end-0");
+        rented.style.backgroundImage = 'linear-gradient(to  right, green, black)';
+
+        // rented.classList.remove("border-bottom-0");
+        // rented.classList.remove("border-end-0");
 
 
         profileSec.classList.remove("text-white");
-        profileSec.classList.add("border-success");
-        profileSec.classList.remove("border-top-0");
-        profileSec.classList.add("border-bottom-0");
+        profileSec.style.background = '';
 
-        wishlist.classList.add("border-success");
+        // profileSec.classList.add("border-success");
+        // profileSec.classList.remove("border-top-0");
+        // profileSec.classList.add("border-bottom-0");
+
+        // wishlist.classList.add("border-success");
         wishlist.classList.remove("text-white");
-        wishlist.classList.add("border-top-0");
+        wishlist.style.background = '';
+
+        // wishlist.classList.add("border-top-0");
 
         rentalsSection.style.display = "flex";
     } else {
@@ -256,19 +268,26 @@ wishlist.addEventListener("click", () => {
         profileSection.style.display = "none";
 
         profileSec.classList.remove("text-white");
-        profileSec.classList.add("border-success");
-        profileSec.classList.remove("border-top-0");
+        profileSec.style.background = '';
+
+
+        // profileSec.classList.add("border-success");
+        // profileSec.classList.remove("border-top-0");
         // profileSec.classList.add("border-bottom-0");
-        wishlist.classList.remove("border-success");
-        wishlist.classList.remove("border-top-0");
+        // wishlist.classList.remove("border-success");
+        // wishlist.classList.remove("border-top-0");
         wishlist.classList.add("text-white");
-        wishlist.classList.remove("border-end-0");
+        // wishlist.classList.remove("border-end-0");
+        wishlist.style.backgroundImage = 'linear-gradient(to  right, green, black)';
 
 
-        rented.classList.add("border-bottom-0");
-        rented.classList.remove("border-white");
-        rented.classList.add("border-success");
+
+        // rented.classList.add("border-bottom-0");
+        // rented.classList.remove("border-white");
+        // rented.classList.add("border-success");
         rented.classList.remove("text-white");
+        rented.style.background = '';
+
 
         wishlistSection.style.display = "flex";
     } else {
